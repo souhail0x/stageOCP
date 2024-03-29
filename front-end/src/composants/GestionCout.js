@@ -17,86 +17,51 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import Loading from "./loaderSpinner";
 
 
 function GestionCout() {
   const [data, setData] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
-    dateCommande : "" ,
-    id_cout : "",
-    ammonix : "" ,
-    tovex : "" ,
-    detos500ms : "" ,
-    raccord17 : "" ,
-    raccord25 : "" ,
-    raccord42 : "" ,
-    raccord65 : "" ,
-    raccord100 : "" ,
-    lign : "" ,
-    aei : "" ,
-    etatCout : ""
+    dateCommande: "",
+    id_cout: "",
+    ammonix: "",
+    tovex: "",
+    detos500ms: "",
+    raccord17: "",
+    raccord25: "",
+    raccord42: "",
+    raccord65: "",
+    raccord100: "",
+    lign: "",
+    aei: "",
+    etatCout: ""
   });
 
-  const dataChart = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+
+  const dataChart = [];
 
 
   useEffect(() => {
     fetchData();
   }, []);
-
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/couts"); // Remplacez 'url_de_votre_api' par API qui récupère les données
+      // Set isLoaded to true after 2000 milliseconds
+      setTimeout(() => {
+        setIsLoaded(true);
+      }, 750);
+  
+      const response = await axios.get("http://127.0.0.1:8000/api/couts");
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  
 
-  const [editItem, setEditItem] = useState(null); 
+  const [editItem, setEditItem] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -109,56 +74,76 @@ function GestionCout() {
       const response = await axios.post("http://127.0.0.1:8000/api/couts", formData);
       setData([...data, response.data]);
       setFormData({
-        dateCommande : "" ,
-        id_cout : "",
-        ammonix : "" ,
-        tovex : "" ,
-        detos500ms : "" ,
-        raccord17 : "" ,
-        raccord25 : "" ,
-        raccord42 : "" ,
-        raccord65 : "" ,
-        raccord100 : "" ,
-        lign : "" ,
-        aei : "" ,
-        etatCout : ""
+        dateCommande: "",
+        id_cout: "",
+        ammonix: "",
+        tovex: "",
+        detos500ms: "",
+        raccord17: "",
+        raccord25: "",
+        raccord42: "",
+        raccord65: "",
+        raccord100: "",
+        lign: "",
+        aei: "",
+        etatCout: ""
       });
     } catch (error) {
       console.error("Error adding data:", error);
     }
   };
-  
-  const handleUpdate = async (item) => {
+
+  const handleUpdate = async () => {
     try {
       axios.get('http://localhost:8000/sanctum/csrf-cookie');
-      const response = await axios.put(`http://127.0.0.1:8000/api/couts/${item.id}`, item);
-      const updatedData = data.map(dataItem => (dataItem.id === item.id ? response.data : dataItem));
-      setData(updatedData);
+      const response = await axios.put(`http://127.0.0.1:8000/api/couts/${editItem.id}`, formData);
+      setEditItem(null); // Clear editItem after updating
+      setFormData({}); // Clear formData after updating
+      fetchData(); // Fetch data after updating
     } catch (error) {
       console.error("Error updating data:", error);
     }
   };
 
-  
-  
-  
-  const handleDelete = async (id) => {
 
+
+
+  const handleDelete = async (id) => {
     try {
-      axios.get('http://localhost:8000/sanctum/csrf-cookie')
-      await axios.delete(`http://127.0.0.1:8000/api/couts/${id}`);
-      const updatedData = data.filter(item => item.idCout !== id);
-      setData(updatedData);
+      axios.get('http://localhost:8000/sanctum/csrf-cookie');
+      const response = await axios.delete(`http://127.0.0.1:8000/api/couts/${id}`); // Utilisation des backticks
+      fetchData(); // Fetch data after deleting
     } catch (error) {
       console.error("Error deleting data:", error);
     }
   };
   
+  const handleEdit = (item) => {
+    setEditItem(item);
+    setFormData({
+      dateCommande: item.dateCommande,
+      id_cout: item.id_cout,
+      ammonix: item.ammonix,
+      tovex: item.tovex,
+      detos500ms: item.detos500ms,
+      raccord17: item.raccord17,
+      raccord25: item.raccord25,
+      raccord42: item.raccord42,
+      raccord65: item.raccord65,
+      raccord100: item.raccord100,
+      lign: item.lign,
+      aei: item.aei,
+      etatCout: item.etatCout,
+    });
+  };
+
+
+
 
   return (
     <div className="containerGetion">
       <h1
-         style={{
+        style={{
           textAlign: "left",
           color: "rgba(255, 255, 255, 0.95)",
           display: "block",
@@ -177,25 +162,10 @@ function GestionCout() {
         style={{
           width: "100%",
           color: "black",
-        }}
-      >
-        {/* Barre de recherche */}
-        <input
-          placeholder="recherche"
-          className="searchInput"
-          style={{ padding: "3px 10px",height:"30px"}}
-        />
-        <button
-          style={{ padding: "3px 10px" }}
-          type="button"
-          onClick={handleAdd}
-          className="button"
-        >
-          Recherche
-        </button>
+        }}>
       </div>
       <div className="container">
-      <div className="tableContainer">
+        <div className="tableContainer">
           <table className="table">
             <thead className="thead">
               <tr>
@@ -217,7 +187,10 @@ function GestionCout() {
               </tr>
             </thead>
             <tbody>
-            {data.map((item, index) => (
+            {
+              isLoaded?(
+                
+              data.map((item, index) => (
                 <tr key={index}>
                   <td>{item.id_cout}</td>
                   <td>{item.dateCommande}</td>
@@ -233,17 +206,21 @@ function GestionCout() {
                   <td>{item.aei}</td>
                   <td>{item.etatCout}</td>
                   <td>
-                  <button style={{padding:"5px"}} type="button" className="button" onClick={() => handleUpdate(item)} >
-                    Modifier
-                  </button>
-                    </td>
-                    <td>
-                    <button type="button" style={{padding:"5px"}} className="button" onClick={() => handleDelete(item.id)} >
+                    <button style={{ padding: "5px" }} type="button" className="button" onClick={() => handleEdit(item)}>
+                      Modifier
+                    </button>
+
+                  </td>
+                  <td>
+                    <button type="button" style={{ padding: "5px" }} className="button" onClick={() => handleDelete(item.id)} >
                       Supprimer
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+           
+              ):<Loading/>
+            }
             </tbody>
           </table>
         </div>
@@ -365,7 +342,7 @@ function GestionCout() {
                   onChange={handleInputChange}
                 />
               </div>
-              
+
               <div className="formGroup">
                 <label>Prix Ligne:</label>
                 <input
@@ -376,7 +353,7 @@ function GestionCout() {
                 />
               </div>
               <div className="formGroup">
-                <label> etat stock:</label>
+                <label> etat cout:</label>
                 <input
                   type="text"
                   name="etatCout"
@@ -392,38 +369,36 @@ function GestionCout() {
                 Ajouter
               </button>
               {editItem && (
-                  <button type="button" onClick={handleUpdate} className="button">
-                    Mettre à jour
-                  </button>
-                )}
+                <button type="button" onClick={handleUpdate} className="button">
+                  Mettre à jour
+                </button>
+              )}
             </div>
           </form>
         </div>
       </div>
 
       <div className="chart-container">
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              width={100}
-              height={100}
-              data={dataChart}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="pv" fill="#8884d8" />
-              <Bar dataKey="uv" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={[data[data.length - 1]]}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="ammonix" fill="#8884d8" />
+            <Bar dataKey="tovex" fill="#82ca9d" />
+            <Bar dataKey="detos500ms" fill="#8884d8" />
+            <Bar dataKey="raccord17" fill="#82ca9d" />
+            <Bar dataKey="raccord25" fill="#8884d8" />
+            <Bar dataKey="raccord42" fill="#82ca9d" />
+            <Bar dataKey="raccord65" fill="#8884d8" />
+            <Bar dataKey="raccord100" fill="#82ca9d" />
+            <Bar dataKey="lign" fill="#8884d8" />
+            <Bar dataKey="aei" fill="#82ca9d" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

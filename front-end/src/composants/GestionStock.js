@@ -15,9 +15,11 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import Loading from "./loaderSpinner";
 
 function GestionStock() {
   const [data, setData] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
     date_commande: "",
     id: "",
@@ -34,7 +36,7 @@ function GestionStock() {
     etat_stock: "",
   });
 
-  const [editItem, setEditItem] = useState(null); 
+
 
   useEffect(() => {
     fetchData();
@@ -42,13 +44,18 @@ function GestionStock() {
 
   const fetchData = async () => {
     try {
+            // Set isLoaded to true after 2000 milliseconds
+            setTimeout(() => {
+              setIsLoaded(true);
+            }, 750);
       const response = await axios.get("http://localhost:8000/api/gestion-stocks");
-      console.log(response.data)
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  const [editItem, setEditItem] = useState(null); 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,8 +66,22 @@ function GestionStock() {
     try {
       axios.get('http://localhost:8000/sanctum/csrf-cookie')
       const response = await axios.post("http://localhost:8000/api/gestion-stocks", formData);
-      console.log(response.data)
-      fetchData(); // Fetch data after adding
+      setData([...data, response.data]);
+      setFormData({
+        date_commande: "",
+        id: "",
+        ammonix: "",
+        tovex: "",
+        detos_500ms: "",
+        raccord_65: "",
+        raccord_17: "",
+        raccord_25: "",
+        raccord_42: "",
+        raccord_100: "",
+        lign: "",
+        aei: "",
+        etat_stock: "",
+      });
     } catch (error) {
       console.error("Error adding data:", error);
     }
@@ -81,7 +102,7 @@ function GestionStock() {
   const handleDelete = async (id) => {
     try {
       axios.get('http://localhost:8000/sanctum/csrf-cookie');
-      const response = await axios.delete("http://localhost:8000/api/gestion-stocks/${id}");
+      const response = await axios.delete(`http://localhost:8000/api/gestion-stocks/${id}`);
       fetchData(); // Fetch data after deleting
     } catch (error) {
       console.error("Error deleting data:", error);
@@ -90,9 +111,25 @@ function GestionStock() {
 
 
   const handleEdit = (item) => {
-    setEditItem(item);
-    setFormData(item); 
+    setEditItem(item); // Définir l'élément à éditer
+    setFormData({
+      date_commande: item.date_commande,
+      id: item.id,
+      ammonix: item.ammonix,
+      tovex: item.tovex,
+      detos_500ms: item.detos_500ms,
+      raccord_17: item.raccord_17,
+      raccord_25: item.raccord_25,
+      raccord_42: item.raccord_42,
+      raccord_65: item.raccord_65,
+      raccord_100: item.raccord_100,
+      lign: item.lign,
+      aei: item.aei,
+      etat_stock: item.etat_stock,
+    });
   };
+  
+  
   
   return (
     <div className="containerGetion">
@@ -141,7 +178,9 @@ function GestionStock() {
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
+              {
+                isLoaded?(
+              data.map((item, index) => (
                 <tr key={index}>
                   <td>{item.id}</td>
                   <td>{item.date_commande}</td>
@@ -155,9 +194,9 @@ function GestionStock() {
                   <td>{item.raccord_100}</td>
                   <td>{item.lign}</td>
                   <td>{item.aei}</td>
-                  <td>{item.etat_cout}</td>
+                  <td>{item.etat_stock}</td>
                   <td>
-                  <button style={{padding:"5px"}} type="button" className="button" onClick={() => handleEdit(item.id)}>
+                  <button style={{padding:"5px"}} type="button" className="button" onClick={() => handleEdit(item)}>
                     Modifier
                   </button>
                     </td>
@@ -167,7 +206,9 @@ function GestionStock() {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+              ):<Loading/>
+            }
             </tbody>
           </table>
         </div>

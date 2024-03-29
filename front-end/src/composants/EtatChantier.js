@@ -19,50 +19,7 @@ import {
 import '../styles/EtatChantier.css'
 
 function EtatChantier() {
-  const dataChart = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+  const dataChart = [];
 
   const [data, setData] = useState([]);
 
@@ -71,7 +28,7 @@ function EtatChantier() {
     machine: "",
     avance_foration: "",
     avance_decapage: "",
-    
+
   });
 
   useEffect(() => {
@@ -81,7 +38,10 @@ function EtatChantier() {
   const fetchData = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/etat-chantiers");
-      setData(response.data);
+      const sortedData = response.data.sort((a, b) => new Date(a.date) - new Date(b.date)); // Tri des données par date croissante
+      const firstCommand = sortedData.shift(); // Prendre la première commande
+      const lastFiveCommands = sortedData.slice(-6); // Prendre les cinq dernières commandes
+      setData([firstCommand, ...lastFiveCommands]); // Fusionner les données
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -96,43 +56,82 @@ function EtatChantier() {
     try {
       const response = await axios.post("http://127.0.0.1:8000/api/etat-chantiers", formData);
       const newData = response.data; // Assuming the API returns the newly added data
-      setData([...data, newData]);
+      setData([newData, ...data.slice(0, 6)]); // Ajouter la nouvelle donnée au début du tableau existant
       setFormData({
         date: "",
         machine: "",
         avance_foration: "",
         avance_decapage: "",
-        
       });
     } catch (error) {
       console.error("Error adding data:", error);
     }
   };
-  
 
-  const handleUpdate = (index) => {
-    // Logique pour la mise à jour des données
+
+  const handleUpdate = async () => {
+    try {
+      await axios.put(`http://127.0.0.1:8000/api/etat-chantiers/${formData.id}`, formData);
+      const updatedData = data.map(item => item.id === formData.id ? formData : item);
+      setData(updatedData);
+      resetForm();
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
   };
 
-  const handleDelete = (index) => {
-    // Logique pour la suppression des données
+  const handleEdit = (item) => {
+    setFormData(item);
+  };
+  const resetForm = () => {
+    setFormData({
+      id: null,
+      date: "",
+      machine: "",
+      avance_foration: "",
+      avance_decapage: "",
+    });
+  };
+  
+  
+
+
+  const handleDelete = async (index) => {
+    const selectedItem = data[index]; // Obtenir l'élément sélectionné
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/etat-chantiers/${selectedItem.id}`);
+      const updatedData = [...data];
+      updatedData.splice(index, 1); // Supprimer l'élément de la liste de données
+      setData(updatedData); // Mettre à jour la liste de données
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
+
+
+  const prepareChartData = () => {
+    return data.map(item => ({
+      name: item.machine,
+      avance_foration: item.avance_foration,
+      avance_decapage: item.avance_decapage,
+    }));
   };
 
   return (
     <div className="containerGetion">
-      <h1 
-      style={{
-        textAlign: "left",
-        color: "rgba(255, 255, 255, 0.95)",
-        display: "block",
-        fontSize: "1.17em",
-        marginBlockStart: "1em",
-        marginBlockEnd: "1em",
-        marginInlineStart: "0px",
-        marginInlineEnd: "0px",
-        fontWeight: "bold",
-      }}> 
-      SUIVI ETAT DE CHANTIER
+      <h1
+        style={{
+          textAlign: "left",
+          color: "rgba(255, 255, 255, 0.95)",
+          display: "block",
+          fontSize: "1.17em",
+          marginBlockStart: "1em",
+          marginBlockEnd: "1em",
+          marginInlineStart: "0px",
+          marginInlineEnd: "0px",
+          fontWeight: "bold",
+        }}>
+        SUIVI ETAT DE CHANTIER
       </h1>
 
       <div className="formRow">
@@ -178,17 +177,17 @@ function EtatChantier() {
         Ajouter
       </button>
 
+      <button type="button" onClick={handleUpdate} className="button">Mise à jour</button>
+
       <div className="container">
         <div className="tableContainer">
           <table className="table">
             <thead className="thead">
               <tr>
-                <th>ID</th>
-                <th>Date</th>
+                <th>Date commande:</th>
                 <th>Machine</th>
                 <th>Avance Foration</th>
                 <th>Avance Décapage</th>
-                <th>État Coût</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -196,17 +195,18 @@ function EtatChantier() {
             <tbody>
               {data.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.id}</td>
                   <td>{item.date}</td>
                   <td>{item.machine}</td>
                   <td>{item.avance_foration}</td>
                   <td>{item.avance_decapage}</td>
-                  <td>{item.etat_cout}</td>
                   <td>
-                    <button style={{padding:"5px"}} onClick={() => handleUpdate(index)} className="button">Modifier</button>
-                    </td>
-                    <td>
-                    <button  style={{padding:"5px"}} onClick={() => handleDelete(index)} className="button">Supprimer</button>
+                    <button style={{ padding: "5px" }} onClick={() => handleEdit(item)} className="button">
+                      Modifier
+                    </button>
+
+                  </td>
+                  <td>
+                    <button style={{ padding: "5px" }} onClick={() => handleDelete(index)} className="button">Supprimer</button>
                   </td>
                 </tr>
               ))}
@@ -216,14 +216,12 @@ function EtatChantier() {
         <div className="chart-container">
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
-              width={500}
-              height={500}
-              data={dataChart}
+              data={prepareChartData()} // Use prepared data for the chart
               margin={{
                 top: 5,
                 right: 30,
                 left: 20,
-                bottom: 0,
+                bottom: 0
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
@@ -231,8 +229,8 @@ function EtatChantier() {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="pv" fill="#8884d8" />
-              <Bar dataKey="uv" fill="#82ca9d" />
+              <Bar dataKey="avance_foration" fill="#8884d8" />
+              <Bar dataKey="avance_decapage" fill="#82ca9d" />
             </BarChart>
           </ResponsiveContainer>
         </div>
