@@ -1,0 +1,59 @@
+/* ArchivePage.css */
+
+  .archiveContainer {
+    margin: 20px auto; /* Marge auto pour centrer la table horizontalement */
+    max-width: 800px;
+    margin-left: 80px; /* Ajout de la marge à gauche pour éviter que le tableau ne soit sous la sidebar */
+    position: relative; /* Position relative pour positionner le bouton */
+  }
+  
+  .archive-header {
+    margin-bottom: 20px;
+  }
+  
+  .export-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute; /* Position absolue pour positionner le bouton */
+    top: -5px; /* Déplacer légèrement le bouton vers le haut */
+    right: -185px; /* Déplacer légèrement le bouton vers la droite */
+    transition: background-color 0.3s;
+  }
+  
+  .archive-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .archiveTable {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+    background-color: #1d2634; /* Couleur de fond du tableau */
+  }
+  
+  .archiveTable th, .archiveTable td {
+    border: 1px solid #38424e; /* Couleur de la bordure */
+    padding: 10px;
+    text-align: left;
+    color: #9e9ea4; /* Couleur du texte */
+  }
+  
+  .archiveTable th {
+    background-color: #38424e; /* Couleur de fond de l'en-tête du tableau */
+    font-weight: bold;
+    white-space: nowrap; /* Empêcher le texte de se diviser sur plusieurs lignes */
+  }
+  
+  .archiveTable tbody tr:nth-child(even) {
+    background-color: #29303b; /* Couleur de fond des lignes paires */
+  }
+  
+  .archiveTable tbody tr:hover {
+    background-color: #38424e; /* Couleur de fond au survol */
+  }

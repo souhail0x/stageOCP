@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+  }
+  
+  .tableContainer {
+    flex: 1;
+    top: 0px;
+    margin-top: 0px;
+    align-self: flex-start;
+  }
+  
+  .chart-container {
+    flex: 1;
+    align-self: flex-start;
+  }
+  
+  .table{
+    width: 100%;
+    /* border-collapse: collapse; */
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+    top: 0;
+  }
+
+  .table th ,.table td{
+    border: 1px solid #38424e;
+    /* padding: 5px; */
+    text-align: left;
+    color: #a49e9e;
+  }
+
+  .table tbody tr:nth-child(even) {
+    background-color: #29303b; /* Couleur de fond des lignes paires */
+  }
+  
+  .table tbody tr:hover {
+    background-color: #38424e; /* Couleur de fond au survol */
+  }
+
+  .table th {
+    background-color: #38424e; /* Couleur de fond de l'en-tête du tableau */
+    font-weight: bold;
+    white-space: nowrap; /* Empêcher le texte de se diviser sur plusieurs lignes */
+  }
+
+  

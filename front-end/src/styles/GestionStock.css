@@ -1,0 +1,104 @@
+.form-section {
+    display: flex;
+    /* justify-content: center; */
+    /* width: 100%; */
+    
+  }
+
+
+  .containerGetion{
+    margin-left: 90px;
+  }
+  .form-container {
+    flex: 1;
+    margin-bottom: 20px;
+    margin-top: 40px;
+  }
+
+  .table-container {
+    /* flex: 1; */
+    background-color: rgba(224, 235, 238, 0.852);
+    margin: 40px 10px 20px 0px;
+    /* width: 75%; */
+  }
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="float"]
+ {
+    padding: 10px;
+    margin-left: 5px;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+h4 ,label{
+    color: grey;
+}
+  
+.chart-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+  
+table{
+    width: 100%;
+}
+.table-container  {
+    width: 65%;
+}
+  
+  .table-container th, .table-container td {
+    border: 1px solid black; /* Add border to each cell */
+    /* padding: px; Add padding to each cell */
+    text-align: center; /* Center align text */
+  }
+  
+  .table-container th {
+    background-color: #f2f2f2; /* Add background color to header cells */
+  }
+  
+
+  .button-container-bottom{
+    display: flex;
+    justify-content:center;
+    margin-top: 10px;
+  }
+  
+  .button{
+    padding: 10px 20px;
+    margin: 0px 5px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    background-color: #45a049
+}
+.button:hover{
+    background-color: #ccc;
+    color: #45a049;
+}
+  
+  .formRow {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0px;
+    height: 75px;
+  }
+  
+  .formGroup {
+    flex: 1;
+    margin-right: 15px;
+  }
+  
+  .formGroup label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+  
