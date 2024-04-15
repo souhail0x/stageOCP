@@ -5,6 +5,8 @@
     max-width: 800px;
     margin-left: 80px; /* Ajout de la marge à gauche pour éviter que le tableau ne soit sous la sidebar */
     position: relative; /* Position relative pour positionner le bouton */
+    
+    
   }
   
   .archive-header {
@@ -28,11 +30,13 @@
   .archive-title {
     font-size: 24px;
     font-weight: bold;
+    text-align: center;
   }
   
   .archiveTable {
     width: 100%;
     border-collapse: collapse;
+    margin: 0 auto;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
     background-color: #1d2634; /* Couleur de fond du tableau */
   }

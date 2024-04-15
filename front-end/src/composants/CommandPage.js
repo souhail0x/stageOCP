@@ -3,6 +3,7 @@ import "../styles/CommandPage.css";
 import axios from 'axios';
 import 'jspdf-autotable';
 import generatePDF from "./pdfGenerator";
+import Popup from "./shemaGenerator";
 
 function CommandPage2() {
   const [formData, setFormData] = useState({
@@ -28,6 +29,11 @@ function CommandPage2() {
 
   const [data, setData] = useState(null);
   const [submittedData, setSubmittedData] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
     fetchData(); // Appel de la fonction fetchData au chargement du composant
@@ -116,7 +122,7 @@ function CommandPage2() {
       let r42 = 0;
       let r65 = 0;
       let r100 = 0;
-      
+
       if (formData.foration === "D500" || formData.foration === "D700") {
         r17 = (parseInt(formData.nombre_trous) / parseInt(2) - parseInt(formData.trous_range)) + parseInt(2);
       } else {
@@ -150,7 +156,7 @@ function CommandPage2() {
       } else {
         prix_detonateur = (parseFloat(detonateur500) * parseFloat(49.90)) * 2;
       }
-      
+
       const prix_raccord =
         parseFloat(34.90) * parseFloat(r17) +
         parseFloat(34.90) * parseFloat(r25) +
@@ -574,9 +580,15 @@ function CommandPage2() {
             >
               AJOUTER
             </button>
-            <button className="button" onClick={generatePDFHandler}>
-              Générer PDF
+            <button className="button" onClick={togglePopup}>
+              Générer Shema
             </button>
+            {isOpen && (
+              <Popup onClose={togglePopup} trous={formData.nombre_trous} ranges = {formData.nombre_ranges}>
+                <h2>This is a Popup!</h2>
+                <p>Popup content goes here.</p>
+              </Popup>
+            )}
 
           </div>
         </form>
@@ -929,6 +941,13 @@ function CommandPage2() {
                 </tr>
               </table>
             </form>
+            <br/>
+            <button className="button" onClick={generatePDFHandler}>
+              Générer PDF
+            </button>
+            
+            <br/>
+            <br/>
           </div>
         )}
       </div>

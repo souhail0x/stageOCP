@@ -4,6 +4,7 @@ import '../styles/Sidebare.css';
 
 function SidBar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -34,41 +35,58 @@ function SidBar() {
           </Link>
           <span className="tooltip">Home</span>
         </li>
-        <li>
-          <Link to="/command">
-            <i className="bx bx-edit"></i>
-            <span className="links_name">Saisir commande</span>
-          </Link>
-          <span className="tooltip">Saisir commande</span>
-        </li>
-        <li>
-          <Link to="/sautage">
-            <i className="bx bx-wrench"></i>
-            <span className="links_name">Sairir-a-sautage</span>
-          </Link>
-          <span className="tooltip">Sairir-a-sautage</span>
-        </li>
-        <li>
-          <Link to="/gestion-stock">
-            <i className="bx bx-box"></i>
-            <span className="links_name">Gestion-stock</span>
-          </Link>
-          <span className="tooltip">Gestion-stock</span>
-        </li>
-        <li>
-          <Link to="/gestion-cout">
-            <i className="bx bx-money"></i>
-            <span className="links_name">Gestion-cout</span>
-          </Link>
-          <span className="tooltip">Gestion-cout</span>
-        </li>
-        <li>
-          <Link to="/etat-chantier">
-            <i className="bx bx-cart-alt"></i>
-            <span className="links_name">Etat-chantier</span>
-          </Link>
-          <span className="tooltip">Etat-chantier</span>
-        </li>
+        {
+          isDisabled ? '' : (
+            <>
+              <li>
+                <Link to="/command">
+                  <i className="bx bx-edit"></i>
+                  <span className="links_name">Saisir commande</span>
+                </Link>
+                <span className="tooltip">Saisir commande</span>
+              </li>
+              <li>
+
+
+                {/* // Assuming you have a state variable called `isDisabled` */}
+                <Link to="/sautage" className={isDisabled ? 'disabled-link' : ''}>
+                  <i className="bx bx-wrench"></i>
+                  <span className="links_name">Sairir-a-sautage</span>
+                </Link>
+
+                <span className="tooltip">Sairir-a-sautage</span>
+              </li>
+              <li>
+                <Link to="/gestion-stock">
+                  <i className="bx bx-box"></i>
+                  <span className="links_name">Gestion-stock</span>
+                </Link>
+                <span className="tooltip">Gestion-stock</span>
+              </li>
+              <li>
+                <Link to="/gestion-cout">
+                  <i className="bx bx-money"></i>
+                  <span className="links_name">Gestion-cout</span>
+                </Link>
+                <span className="tooltip">Gestion-cout</span>
+              </li>
+              <li>
+                <Link to="/etat-chantier">
+                  <i className="bx bx-cart-alt"></i>
+                  <span className="links_name">Etat-chantier</span>
+                </Link>
+                <span className="tooltip">Etat-chantier</span>
+              </li>
+              <li>
+                <Link to="/security">
+                  <i className="bx bx-shield"></i>
+                  <span className="links_name">Security</span>
+                </Link>
+                <span className="tooltip">Security</span>
+              </li>
+            </>
+          )
+        }
         <li>
           <Link to="/dashboard">
             <i className="bx bx-pie-chart-alt-2"></i>
@@ -84,11 +102,11 @@ function SidBar() {
           <span className="tooltip">Archive</span>
         </li>
         <li>
-          <Link to="/security">
-            <i className="bx bx-shield"></i>
-            <span className="links_name">Security</span>
+          <Link to="/Gerer-utilisateurs">
+            <i class='bx bxs-user'></i>
+            <span className="links_name">Gerer-utilisateurs</span>
           </Link>
-          <span className="tooltip">Security</span>
+          <span className="tooltip">Gerer-utilisateurs</span>
         </li>
       </ul>
     </div>
