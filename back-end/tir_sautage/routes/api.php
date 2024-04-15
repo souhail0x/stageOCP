@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserManagementController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SautageGestionController;
@@ -8,14 +9,7 @@ use App\Http\Controllers\CoutController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\EtatChantierController;
-
-
-
-
-
-
-
-
+use App\Http\Middleware\CheckTokenAbilities;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +60,15 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Protected routes (require authentication)
+Route::middleware(['auth:sanctum,ability:admin-rules'])->group(function () {
+    Route::get('/users', [UserManagementController::class, 'index']);
+    
+    Route::get('/users/show/{user}', [UserManagementController::class, 'show']);
+    Route::put('/users/update/{user}', [UserManagementController::class, 'update']);
+    Route::delete('/users/delete/{user}', [UserManagementController::class, 'destroy']);
+    
+});
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/users', [AuthController::class, 'show']);
+    
     Route::post('/logout', [AuthController::class, 'logout']);
 });

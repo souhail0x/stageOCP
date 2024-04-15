@@ -48,7 +48,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
-            $token = $user->createToken('auth-token')->plainTextToken;
+            if (Auth::user()->isAdmin) {
+                $token = $user->createToken('auth-token',abilities:['admin-rules'])
+                    ->plainTextToken;
+            } else {
+                $token = $user->createToken('auth-token')->plainTextToken;
+            }
 
             return response()->json(['token' => $token]);
         }
@@ -71,9 +76,11 @@ class AuthController extends Controller
             $users = User::all();
             // Return the list of users
             return response()->json(['Users' => $users]);
+        }else{
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         // If the user is not an admin, return an unauthorized message
-        return response()->json(['message' => 'Unauthorized'], 403);
+        
     }
 }
