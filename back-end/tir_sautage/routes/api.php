@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SautageGestionController;
@@ -61,3 +62,11 @@ Route::post('/etat-chantiers', [EtatChantierController::class, 'store']);
 Route::put('/etat-chantiers/{id}', [EtatChantierController::class, 'update']);
 Route::delete('/etat-chantiers/{id}', [EtatChantierController::class, 'destroy']);
 
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+// Protected routes (require authentication)
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/users', [AuthController::class, 'show']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
