@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Importez Link à partir de 'react-router-dom'
 import '../styles/Sidebare.css';
 
-function SidBar() {
+function SidBar(props) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(props.isAdmin);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -36,7 +36,7 @@ function SidBar() {
           <span className="tooltip">Home</span>
         </li>
         {
-          isDisabled ? '' : (
+          !isAdmin ? '' : (
             <>
               <li>
                 <Link to="/command">
@@ -49,7 +49,7 @@ function SidBar() {
 
 
                 {/* // Assuming you have a state variable called `isDisabled` */}
-                <Link to="/sautage" className={isDisabled ? 'disabled-link' : ''}>
+                <Link to="/sautage">
                   <i className="bx bx-wrench"></i>
                   <span className="links_name">Sairir-a-sautage</span>
                 </Link>
@@ -84,6 +84,13 @@ function SidBar() {
                 </Link>
                 <span className="tooltip">Security</span>
               </li>
+              <li>
+                <Link to="/Gerer-utilisateurs">
+                  <i class='bx bxs-user'></i>
+                  <span className="links_name">Gerer-utilisateurs</span>
+                </Link>
+                <span className="tooltip">Gerer-utilisateurs</span>
+              </li>
             </>
           )
         }
@@ -101,13 +108,7 @@ function SidBar() {
           </Link>
           <span className="tooltip">Archive</span>
         </li>
-        <li>
-          <Link to="/Gerer-utilisateurs">
-            <i class='bx bxs-user'></i>
-            <span className="links_name">Gerer-utilisateurs</span>
-          </Link>
-          <span className="tooltip">Gerer-utilisateurs</span>
-        </li>
+
       </ul>
     </div>
   );

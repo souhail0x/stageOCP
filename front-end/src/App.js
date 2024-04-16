@@ -1,4 +1,3 @@
-// App.js
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./composants/HomePage";
@@ -13,24 +12,36 @@ import ArchivePage from "./composants/ArchivePage";
 import SecurityPage from "./composants/SecurityPage";
 import UserTable from "./composants/crudUsers";
 import Login from "./composants/Login";
+import UserList from "./composants/crudUsers";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false); // Initialize isAdmin as false
   const [isLogged, setIsLogged] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleLogin = (isAdmin) => {
+    setIsLogged(true); // Set isLogged to true upon successful login
+    setIsAdmin(isAdmin); // Set isAdmin based on the login response
+  };
+
+  const handleLogout = () => {
+    setIsLogged(false); // Set isLogged to false upon logout
+    setIsAdmin(false); // Set isAdmin to false upon logout
+  };
+  console.log(isAdmin);
+
   return (
     <>
       {!isLogged ? (
-        <Login />
+        <Login onLogin={handleLogin} />
       ) : (
         <div className={`app-container ${isSidebarOpen ? "sidebar-open" : ""}`}>
           <Router>
-            <SidBar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+            <SidBar isAdmin={isAdmin} isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
             <Routes>
               <Route path="/" element={<HomePage />} />
               {isAdmin ? (
@@ -41,14 +52,16 @@ function App() {
                   <Route path="/gestion-cout" element={<GestionCout />} />
                   <Route path="/etat-chantier" element={<EtatChantier />} />
                   <Route path="/security" element={<SecurityPage />} />
-                  <Route path="/Gerer-utilisateurs" element={<UserTable />} />
+                  <Route path="/gerer-utilisateurs" element={<UserList />} />
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/archive" element={<ArchivePage />} />
                 </>
-              ) : (
-                <></>
-              )}
-
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/archive" element={<ArchivePage />} />
+              ) :
+                (<>
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/archive" element={<ArchivePage />} />
+                </>)
+              }
             </Routes>
           </Router>
         </div>

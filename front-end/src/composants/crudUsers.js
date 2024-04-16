@@ -1,72 +1,136 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import styled from "styled-components";
+import AddUser from "./addUser";
 
-const TableWrapper = styled.div`
-  width: 100%;
+const UserListContainer = styled.div`
+  max-width: 800px;
+  margin: 10px auto;
 `;
 
-const Table = styled.table`
+const UserTable = styled.table`
   width: 100%;
   border-collapse: collapse;
 `;
 
-const Th = styled.th`
+const TableHeader = styled.th`
+  padding: 12px;
+  border: 1px solid #ddd;
   background-color: #f2f2f2;
-  border: 1px solid #ddd;
-  padding: 8px;
+  font-weight: bold;
+  text-align: left;
 `;
 
-const Td = styled.td`
+const TableCell = styled.td`
+  padding: 12px;
   border: 1px solid #ddd;
-  padding: 8px;
+  text-align: left;
 `;
 
-const Button = styled.button`
-  margin-right: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
+const ActionButton = styled.button`
+  padding: 8px 16px;
   border: none;
+  cursor: pointer;
   background-color: #007bff;
   color: #fff;
 `;
 
-const UserTable = ({  handleEdit, handleDelete }) => {
-    const [users, setUsers] = useState([]);
+const AddUserButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px 20px;
+  margin: 0px 5px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  background-color: #45a049
+`;
 
-    useEffect(() => {
-      // Fetch users data from the API
-      fetch('http://127.0.0.1:8000/api/users')
-        .then((response) => response.json())
-        .then((data) => setUsers(data))
-        .catch((error) => console.error('Error fetching users:', error));
-    }, []);
+const UserList = () => {
+  const [users, setUsers] = useState([]);
+  const [showAddUser, setShowAddUser] = useState(false);
+
+  useEffect(() => {
+    // Fetch users from the API
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://127.0.0.1:8000/api/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUsers(response.data.users);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const handleDelete = async (userId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://127.0.0.1:8000/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUsers(users.filter((user) => user.id !== userId));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
+  const handleUpdate = (userId) => {
+    console.log("Update user with ID:", userId);
+  };
+
+  const handleAddUser = () => {
+    console.log("Add user clicked");
+    setShowAddUser(true)
+  };
+  const handleCloseAddUser = () => {
+    setShowAddUser(false);
+  }
+
   return (
-    <TableWrapper>
-      <Table>
+    <UserListContainer>
+      <h1>User List</h1>
+      <AddUserButton onClick={handleAddUser}>Ajouter utilisateur</AddUserButton>
+      {showAddUser && <AddUser onClose={handleCloseAddUser} />}
+      <UserTable>
         <thead>
           <tr>
-            <Th>Name</Th>
-            <Th>Email</Th>
-            <Th>Role</Th>
-            <Th>Actions</Th>
+            <TableHeader>Name</TableHeader>
+            <TableHeader>Email</TableHeader>
+            <TableHeader>Role</TableHeader>
+            <TableHeader>Actions</TableHeader>
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
-            <tr key={index}>
-              <Td>{user.name}</Td>
-              <Td>{user.email}</Td>
-              <Td>{user.role}</Td>
-              <Td>
-                <Button onClick={() => handleEdit(user)}>Edit</Button>
-                <Button onClick={() => handleDelete(user)}>Delete</Button>
-              </Td>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>{user.isAdmin ? "Admin" : "Utilisateur"}</TableCell>
+              <TableCell>
+                <button className="button" onClick={() => handleUpdate(user.id)}>
+                  Update
+                </button>
+                <button className="button" onClick={() => handleDelete(user.id)}>
+                  Delete
+                </button>
+              </TableCell>
             </tr>
           ))}
         </tbody>
-      </Table>
-    </TableWrapper>
+      </UserTable>
+    </UserListContainer>
   );
 };
 
-export default UserTable;
+export default UserList;
