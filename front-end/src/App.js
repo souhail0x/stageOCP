@@ -16,8 +16,13 @@ import UserList from "./composants/crudUsers";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+<<<<<<< HEAD
   const [isAdmin, setIsAdmin] = useState(false); // Initialize isAdmin as false
   const [isLogged, setIsLogged] = useState(false);
+=======
+  const [isAdmin, setIsAdmin] = useState(true);
+  const [isLogged, setIsLogged] = useState(true);
+>>>>>>> schemaBranch
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
