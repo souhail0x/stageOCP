@@ -1,0 +1,108 @@
+.font-family {
+  font-family: Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.button-container {
+  margin: 40px auto 10px;
+}
+
+#matrix {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+form {
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+label {
+  margin-right: 10px;
+}
+
+input[type="number"] {
+  width: 50px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+table {
+  border: none;
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 100%;
+  padding-bottom: 50px;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: center;
+  position: relative;
+}
+
+th {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.yellow,
+.green {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: scale(2) translateX(-30%);
+  font-weight: bold;
+}
+
+h3 {
+  margin: 0px auto 20px;
+  padding: 10px 20px;
+  background-color: #93e9be;
+  font-weight: 500;
+  width: 700px;
+  text-align: center;
+  color: black;
+  border: 1.5px black solid;
+}
+
+.red-down-left {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: scale(2) translateX(-180%);
+  font-weight: bold;
+  color: red;
+}
+
+td {
+  color: black;
+}
+
+.red-down-right {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: scale(2) translateX(90%);
+  font-weight: bold;
+  color: red;
+}
+
+.yellow {
+  color: rgb(252, 215, 2);
+}
+
+.green {
+  color: green;
+}

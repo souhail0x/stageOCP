@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/CommandPage.css";
-import axios from 'axios';
-import 'jspdf-autotable';
+import axios from "axios";
+import "jspdf-autotable";
 import generatePDF from "./pdfGenerator";
 import Popup from "./shemaGenerator";
 
@@ -33,11 +33,12 @@ function CommandPage2() {
 
   const togglePopup = () => {
     setIsOpen(!isOpen);
+    console.log(formData.nombre_ranges);
   };
 
   useEffect(() => {
-    fetchData(); // Appel de la fonction fetchData au chargement du composant
-  }, []); // Le tableau vide en deuxième argument signifie que useEffect s'exécute une seule fois, équivalent à componentDidMount
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -51,10 +52,13 @@ function CommandPage2() {
 
   const handleAdd = async () => {
     try {
-      axios.get('http://localhost:8000/sanctum/csrf-cookie')
-      const response = await axios.post("http://127.0.0.1:8000/api/commandes", formData);
-      console.log(response.data)
-      fetchData(); // Fetch data after adding
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/commandes",
+        formData
+      );
+      console.log(response.data);
+      fetchData();
     } catch (error) {
       console.error("Error adding data:", error);
     }
@@ -71,8 +75,6 @@ function CommandPage2() {
     generatePDF(formData, submittedData); // Appeler la fonction de génération de PDF avec les données nécessaires
   };
 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const emptyFields = [];
@@ -84,8 +86,10 @@ function CommandPage2() {
 
     if (emptyFields.length === 0) {
       // Calculer les résultats
-      const longeur = parseInt(formData.espacement) * parseInt(formData.trous_range);
-      const largeur = parseInt(formData.nombre_ranges) * parseInt(formData.maille_banquette);
+      const longeur =
+        parseInt(formData.espacement) * parseInt(formData.trous_range);
+      const largeur =
+        parseInt(formData.nombre_ranges) * parseInt(formData.maille_banquette);
       const surface = longeur * largeur;
       const volume = surface * parseInt(formData.profondeur);
       const ligneDeTir = 500;
@@ -124,19 +128,33 @@ function CommandPage2() {
       let r100 = 0;
 
       if (formData.foration === "D500" || formData.foration === "D700") {
-        r17 = (parseInt(formData.nombre_trous) / parseInt(2) - parseInt(formData.trous_range)) + parseInt(2);
+        r17 =
+          parseInt(formData.nombre_trous) / parseInt(2) -
+          parseInt(formData.trous_range) +
+          parseInt(2);
       } else {
         if (formData.schema_tir === "17ms - 25 ms - 42 ms") {
-          r17 = parseInt(formData.nombre_trous) - parseInt(formData.nombre_ranges) * parseInt(2) + parseInt(2);
+          r17 =
+            parseInt(formData.nombre_trous) -
+            parseInt(formData.nombre_ranges) * parseInt(2) +
+            parseInt(2);
         } else if (formData.schema_tir === "17ms - 25ms - 42ms - 65ms") {
-          r17 = parseInt(formData.nombre_trous) - parseInt(formData.nombre_ranges) * parseInt(2) + parseInt(2);
+          r17 =
+            parseInt(formData.nombre_trous) -
+            parseInt(formData.nombre_ranges) * parseInt(2) +
+            parseInt(2);
         } else if (formData.schema_tir === "42ms - 17ms") {
-          r17 = parseInt(formData.nombre_trous) - parseInt(formData.trous_range) + parseInt(2);
+          r17 =
+            parseInt(formData.nombre_trous) -
+            parseInt(formData.trous_range) +
+            parseInt(2);
         } else if (formData.schema_tir === "100ms - 17ms") {
-          r17 = parseInt(formData.nombre_trous) - parseInt(formData.trous_range) + parseInt(2);
+          r17 =
+            parseInt(formData.nombre_trous) -
+            parseInt(formData.trous_range) +
+            parseInt(2);
         }
       }
-
 
       if (formData.schema_tir === "17ms - 25 ms - 42 ms") {
         r25 = parseInt(formData.nombre_ranges) + parseInt(2);
@@ -152,31 +170,26 @@ function CommandPage2() {
       }
       let prix_detonateur;
       if (formData.mode_charge === "unique") {
-        prix_detonateur = parseFloat(detonateur500) * parseFloat(49.90);
+        prix_detonateur = parseFloat(detonateur500) * parseFloat(49.9);
       } else {
-        prix_detonateur = (parseFloat(detonateur500) * parseFloat(49.90)) * 2;
+        prix_detonateur = parseFloat(detonateur500) * parseFloat(49.9) * 2;
       }
 
       const prix_raccord =
-        parseFloat(34.90) * parseFloat(r17) +
-        parseFloat(34.90) * parseFloat(r25) +
-        parseFloat(34.90) * parseFloat(r42) +
-        parseFloat(34.90) * parseFloat(r65) +
-        parseFloat(34.90) * parseFloat(r100);
+        parseFloat(34.9) * parseFloat(r17) +
+        parseFloat(34.9) * parseFloat(r25) +
+        parseFloat(34.9) * parseFloat(r42) +
+        parseFloat(34.9) * parseFloat(r65) +
+        parseFloat(34.9) * parseFloat(r100);
       const prix_ammonix = 7.64 * ammonix;
       const prix_ligne_de_tir = 4000;
       const prix_tovex = 18.45 * parseFloat(tovex);
       const metrageFore =
         parseInt(formData.nombre_trous) * parseFloat(formData.profondeur);
 
-
       if (formData.mode_charge === "unique") {
         detonateur450 = 0;
       }
-
-
-
-
 
       const calculatedResults = {
         longeur: longeur,
@@ -244,7 +257,6 @@ function CommandPage2() {
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
-                  // style={{width:"100px"}}
                   />
                 </div>
               </td>
@@ -311,8 +323,6 @@ function CommandPage2() {
               </td>
             </tr>
             <tr>
-
-
               <td colSpan={2}>
                 <div className="form-group">
                   <label>Num Commande:</label>
@@ -333,7 +343,6 @@ function CommandPage2() {
                     name="mode_tir"
                     value={formData.mode_tir}
                     onChange={handleChange}
-
                   >
                     <option value="">select mode de tir </option>
                     <option value="Nonel">Nonel</option>
@@ -349,7 +358,6 @@ function CommandPage2() {
                     name="foration"
                     value={formData.foration}
                     onChange={handleChange}
-
                   >
                     <option value="">select Foration</option>
                     <option value="PV1">PV1</option>
@@ -370,7 +378,6 @@ function CommandPage2() {
                     name="nombre_trous"
                     value={formData.nombre_trous}
                     onChange={handleChange}
-
                   />
                 </div>
               </td>
@@ -381,7 +388,7 @@ function CommandPage2() {
               <td>
                 <div className="form-group">
                   <label htmlFor="trous_range">
-                    Nombre de trous sur rangée :
+                    Nombre de trous par rangé :
                   </label>
                   <input
                     type="number"
@@ -389,13 +396,12 @@ function CommandPage2() {
                     name="trous_range"
                     value={formData.trous_range}
                     onChange={handleChange}
-
                   />
                 </div>
               </td>
               <td>
                 <div className="form-group">
-                  <label htmlFor="espacement">Maill :</label>
+                  <label htmlFor="espacement">Maille :</label>
                   <div
                     style={{
                       display: "flex",
@@ -412,7 +418,6 @@ function CommandPage2() {
                       style={{
                         width: "calc((100% - 22px));",
                         // margin:"1px"
-
                       }}
                     >
                       <option>espacement</option>
@@ -430,7 +435,6 @@ function CommandPage2() {
                       onChange={handleChange}
                       style={{
                         width: "calc((100% - 22px))",
-
                       }}
                     >
                       <option>banquette</option>
@@ -451,7 +455,6 @@ function CommandPage2() {
                     name="decappage"
                     value={formData.decappage}
                     onChange={handleChange}
-
                   >
                     <option value="">select decapage</option>
                     <option value="7500|1">7500|1</option>
@@ -536,9 +539,7 @@ function CommandPage2() {
                     value={formData.schema_tir}
                     onChange={handleChange}
                   >
-                    <option value="">
-                      select schéma
-                    </option>
+                    <option value="">select schéma</option>
                     <option value="17ms - 25 ms - 42 ms">
                       17ms - 25 ms - 42 ms
                     </option>
@@ -546,13 +547,13 @@ function CommandPage2() {
                       17ms - 25ms - 42ms - 65ms
                     </option>
                     <option value="42ms - 17ms">42ms - 17ms</option>
-                    <option value="100ms - 17ms">100ms - 17ms</option>
+                    <option value="100ms - 25ms - 17ms">100ms - 25ms - 17ms</option>
                   </select>
                 </div>
               </td>
               <td>
                 <div className="form-group">
-                  <label htmlFor="nombre_ranges">Nombre de rangées :</label>
+                  <label htmlFor="nombre_ranges">Nombre de rangés :</label>
                   <input
                     type="number"
                     id="nombre_ranges"
@@ -573,23 +574,6 @@ function CommandPage2() {
             <button type="reset" className="button">
               Effacer
             </button>
-            <button
-              className="button"
-              type="submit"
-              onClick={handleAdd} // Conservez ce gestionnaire d'événements onClick
-            >
-              AJOUTER
-            </button>
-            <button className="button" onClick={togglePopup}>
-              Générer Shema
-            </button>
-            {isOpen && (
-              <Popup onClose={togglePopup} trous={formData.nombre_trous} ranges = {formData.nombre_ranges}>
-                <h2>This is a Popup!</h2>
-                <p>Popup content goes here.</p>
-              </Popup>
-            )}
-
           </div>
         </form>
 
@@ -791,7 +775,12 @@ function CommandPage2() {
                         type="TEXT"
                         id=""
                         name=""
-                        value={submittedData.detonateur500.toFixed(2) + " (500ms)  /  " + submittedData.detonateur450.toFixed(2) + " (450ms)"}
+                        value={
+                          submittedData.detonateur500.toFixed(2) +
+                          " (500ms)  /  " +
+                          submittedData.detonateur450.toFixed(2) +
+                          " (450ms)"
+                        }
                         readOnly // Rendre le champ en lecture seule
                       />
                     </div>
@@ -859,11 +848,11 @@ function CommandPage2() {
                     </div>
                   </td>
                 </tr>
-                <h3> prix Résultats :</h3>
+                <h3> Prix Résultats :</h3>
                 <tr>
                   <td>
                     <div className="form-group">
-                      <label htmlFor="prix_a_e_i">prix_a_e_i :</label>
+                      <label htmlFor="prix_a_e_i">AEI (8.00dh/Unité):</label>
                       <input
                         type="TEXT"
                         id=""
@@ -876,7 +865,9 @@ function CommandPage2() {
 
                   <td>
                     <div className="form-group">
-                      <label htmlFor="prix_detonateur">prix_detonateur:</label>
+                      <label htmlFor="prix_detonateur">
+                        Detonateur (49.90dh/Unité):
+                      </label>
                       <input
                         type="TEXT"
                         id=""
@@ -889,7 +880,9 @@ function CommandPage2() {
 
                   <td>
                     <div className="form-group">
-                      <label htmlFor="prix_raccord">prix_raccord :</label>
+                      <label htmlFor="prix_raccord">
+                        Raccord (34.90dh/Unité):
+                      </label>
                       <input
                         type="TEXT"
                         id=""
@@ -902,7 +895,7 @@ function CommandPage2() {
 
                   <td>
                     <div className="form-group">
-                      <label htmlFor="prix_ammonix">prix_ammonix :</label>
+                      <label htmlFor="prix_ammonix">Ammonix (7.00dh/Kg):</label>
                       <input
                         type="TEXT"
                         id=""
@@ -916,19 +909,23 @@ function CommandPage2() {
                 <tr>
                   <td>
                     <div className="form-group">
-                      <label htmlFor="prix_ligne_de_tir">prix_ligne_de_tir :</label>
+                      <label htmlFor="prix_ligne_de_tir">
+                        Ligne de tir (1.25dh/m):
+                      </label>
                       <input
                         type="TEXT"
                         id=""
                         name=""
-                        value={submittedData.prix_ligne_de_tir.toFixed(2) + " Dh"}
+                        value={
+                          submittedData.prix_ligne_de_tir.toFixed(2) + " Dh"
+                        }
                         readOnly // Rendre le champ en lecture seule
                       />
                     </div>
                   </td>
                   <td>
                     <div className="form-group">
-                      <label htmlFor="prix_tovex">prix_tovex :</label>
+                      <label htmlFor="prix_tovex">Tovex (18.45dh/Kg):</label>
                       <input
                         type="TEXT"
                         id=""
@@ -941,13 +938,30 @@ function CommandPage2() {
                 </tr>
               </table>
             </form>
-            <br/>
+            <br />
+            <button className="button" type="submit" onClick={handleAdd}>
+              AJOUTER
+            </button>
             <button className="button" onClick={generatePDFHandler}>
               Générer PDF
             </button>
-            
-            <br/>
-            <br/>
+            <button className="button" onClick={togglePopup}>
+              Générer le Schema de Tir
+            </button>
+            {isOpen && (
+              <Popup
+                onClose={togglePopup}
+                trous={formData.trous_range}
+                ranges={formData.nombre_ranges}
+                selectedSchema={formData.schema_tir}
+              >
+                <h2>This is a Popup!</h2>
+                <p>Popup content goes here.</p>
+              </Popup>
+            )}
+
+            <br />
+            <br />
           </div>
         )}
       </div>
