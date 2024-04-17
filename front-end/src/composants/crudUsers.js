@@ -51,6 +51,8 @@ const AddUserButton = styled.button`
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [showAddUser, setShowAddUser] = useState(false);
+  const [modifiedTable, setmodifiedTable] = useState('');
+
 
   useEffect(() => {
     // Fetch users from the API
@@ -69,17 +71,18 @@ const UserList = () => {
     };
 
     fetchUsers();
-  }, []);
+  }, [modifiedTable]);
 
   const handleDelete = async (userId) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://127.0.0.1:8000/api/users/${userId}`, {
+      await axios.delete(`http://127.0.0.1:8000/api/users/delete/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setUsers(users.filter((user) => user.id !== userId));
+      setmodifiedTable(Math.random())
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -106,7 +109,6 @@ const UserList = () => {
         <thead>
           <tr>
             <TableHeader>Name</TableHeader>
-            <TableHeader>Email</TableHeader>
             <TableHeader>Role</TableHeader>
             <TableHeader>Actions</TableHeader>
           </tr>
@@ -115,7 +117,7 @@ const UserList = () => {
           {users.map((user) => (
             <tr key={user.id}>
               <TableCell>{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
+             
               <TableCell>{user.isAdmin ? "Admin" : "Utilisateur"}</TableCell>
               <TableCell>
                 <button className="button" onClick={() => handleUpdate(user.id)}>

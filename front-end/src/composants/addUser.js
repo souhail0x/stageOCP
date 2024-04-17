@@ -47,54 +47,83 @@ const Input = styled.input`
 const Checkbox = styled.input`
   margin-right: 5px;
 `;
-
+const SuccessMessage = styled.div`
+  background-color: #5cb85c;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+`;
 const AddUser = ({ onClose }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Submit form data
-    console.log("Form submitted");
-    // Close the addUser popup
-    onClose();
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://127.0.0.1:8000/api/register", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    name: username,
+                    password,
+                    isAdmin,
+                })
+            });
+            const data = await response.json();
+            console.log("Response:", data);
+            setSuccessMessage("User added successfully!");
+            // Close the addUser popup after a brief delay
+            setTimeout(() => {
+                setSuccessMessage("");;
+            }, 2000);
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+    };
+    
+    return (
+        <AddUserContainer>
+            <AddUserForm onSubmit={handleSubmit}>
+                <CloseIcon onClick={onClose}>X</CloseIcon>
+                {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+                <Label>
+                    Username:
+                    <Input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                </Label>
+                <Label>
+                    Password:
+                    <Input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </Label>
+                <Checkbox
+                    type="checkbox"
+                    checked={isAdmin}
+                    onChange={(e) => setIsAdmin(e.target.checked)}
+                />
+                <Label>Is Admin</Label>
 
-  return (
-    <AddUserContainer>
-      <AddUserForm onSubmit={handleSubmit}>
-        <CloseIcon onClick={onClose}>X</CloseIcon>
-        <Label>
-          Username:
-          <Input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </Label>
-        <Label>
-          Password:
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Label>
-        <Label>
-          <Checkbox
-            type="checkbox"
-            checked={isAdmin}
-            onChange={(e) => setIsAdmin(e.target.checked)}
-          />
-          Is Admin
-        </Label>
-        <button className="button" type="submit">Add User</button>
-      </AddUserForm>
-    </AddUserContainer>
-  );
+                <button className="button" type="submit">Add User</button>
+            </AddUserForm>
+            
+        </AddUserContainer>
+    );
 };
+
 
 export default AddUser;
