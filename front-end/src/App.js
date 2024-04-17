@@ -16,6 +16,7 @@ import UserList from "./composants/crudUsers";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const [isAdmin, setIsAdmin] = useState(false); // Initialize isAdmin as false
   const [isLogged, setIsLogged] = useState(false);
 
