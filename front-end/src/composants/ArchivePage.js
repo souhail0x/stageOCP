@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import * as XLSX from 'xlsx';
 import '../styles/ArchivePage.css';
+import Loader from './spinnerLoader';
 
 function ArchivePage() {
     const [archiveData, setArchiveData] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(true);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoaded(false); // Set isLoading to false after 3 seconds
+        }, 1000);
+
+        return () => clearTimeout(timer); // Clear the timeout when component unmounts
+    }, []);
 
     useEffect(() => {
         // Fonction asynchrone pour récupérer les données de l'API
@@ -35,46 +44,52 @@ function ArchivePage() {
     };
 
     return (
-        <div className="archiveContainer">
-            <div className="archive-header">
-                <h2 className="archive-title">Archive</h2>
-                <button className="export-btn" onClick={handleExportExcel}>Export to Excel</button>
-            </div>
-            <table className="archiveTable">
-                <thead className='archiveThead'>
-                    <tr>
-                        <th>Date Excel</th>
-                        <th>Panneau Tranche</th>
-                        <th>Niveau</th>
-                        <th>Mode de Tir</th>
-                        <th>Foration</th>
-                        <th>Nbr Trou</th>
-                        <th>Nbr Range</th>
-                        <th>Nb Tr Range</th>
-                        <th>Decappage</th>
-                        <th>Profondeur</th>
-                        <th>Zone de Tir</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {archiveData.map((item, index) => (
-                        <tr key={index}>
-                            <td>{item.date}</td>
-                            <td>{item.panneau}</td>
-                            <td>{item.niveau}</td>
-                            <td>{item.mode_tir}</td>
-                            <td>{item.foration}</td>
-                            <td>{item.nombre_trous}</td>
-                            <td>{item.nombre_ranges}</td>
-                            <td>{item.trous_range}</td>
-                            <td>{item.decappage}</td>
-                            <td>{item.profondeur}</td>
-                            <td>{item.zone_tir}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+        <>
+            {
+                isLoaded ? (<Loader />) : (
+                    <div className="archiveContainer">
+                        <div className="archive-header">
+                            <h2 className="archive-title">Archive</h2>
+                            <button className="export-btn" onClick={handleExportExcel}>Export to Excel</button>
+                        </div>
+                        <table className="archiveTable">
+                            <thead className='archiveThead'>
+                                <tr>
+                                    <th>Date Excel</th>
+                                    <th>Panneau Tranche</th>
+                                    <th>Niveau</th>
+                                    <th>Mode de Tir</th>
+                                    <th>Foration</th>
+                                    <th>Nbr Trou</th>
+                                    <th>Nbr Range</th>
+                                    <th>Nb Tr Range</th>
+                                    <th>Decappage</th>
+                                    <th>Profondeur</th>
+                                    <th>Zone de Tir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {archiveData.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.date}</td>
+                                        <td>{item.panneau}</td>
+                                        <td>{item.niveau}</td>
+                                        <td>{item.mode_tir}</td>
+                                        <td>{item.foration}</td>
+                                        <td>{item.nombre_trous}</td>
+                                        <td>{item.nombre_ranges}</td>
+                                        <td>{item.trous_range}</td>
+                                        <td>{item.decappage}</td>
+                                        <td>{item.profondeur}</td>
+                                        <td>{item.zone_tir}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )
+            }
+        </>
     );
 }
 
