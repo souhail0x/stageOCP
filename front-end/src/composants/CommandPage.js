@@ -548,6 +548,7 @@ function CommandPage2() {
                     </option>
                     <option value="42ms - 17ms">42ms - 17ms</option>
                     <option value="100ms - 25ms - 17ms">100ms - 25ms - 17ms</option>
+                    <option value="100ms - 17ms">100ms - 17ms</option>
                   </select>
                 </div>
               </td>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -14,29 +14,11 @@ import {
   LineChart,
   Line,
 } from "recharts";
-
+import axios from "axios";
 import "../styles/DashboardPage.css";
 
-import logoOcp from "../images/ocp.png";
-
 function DashboardPage() {
-  const pieChartData = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ];
-
-  // const scatterData = [
-  //   { x: 100, y: 200, z: 200 },
-  //   { x: 120, y: 100, z: 260 },
-  //   { x: 170, y: 300, z: 400 },
-  //   { x: 140, y: 250, z: 280 },
-  //   { x: 150, y: 400, z: 500 },
-  //   { x: 110, y: 280, z: 200 },
-  // ];
-
-  const data = [
+  const [data, setData] = useState([
     {
       name: "Page A",
       uv: 4000,
@@ -79,9 +61,15 @@ function DashboardPage() {
       pv: 4300,
       amt: 2100,
     },
-  ];
+  ]);
+  const [pieChartData, setPieChartData] = useState([
+    { name: "Group A", value: 400 },
+    { name: "Group B", value: 300 },
+    { name: "Group C", value: 300 },
+    { name: "Group D", value: 200 },
+  ]);
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const COLORS = ["#6ed18f"," #af98c5" ,"#2e7d32", "#9576eb"];
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
@@ -110,8 +98,23 @@ function DashboardPage() {
     );
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/dashboard-data");
+      console.log(response.data);
+      setData(response.data);
+      setPieChartData(response.data.map((item) => ({ name: item.name, value: item.value })));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
-    <main className="main-container">
+    <main className="main-cont">
       <div
         className="main-title"
         style={{ display: "flex", justifyContent: "space-between" }}

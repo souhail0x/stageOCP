@@ -4,6 +4,7 @@ import Schema1 from './Schemas/schema1';
 import Schema2 from './Schemas/schema2';
 import Schema3 from './Schemas/schema3';
 import Schema4 from './Schemas/schema4';
+import Schema5 from './Schemas/schema5';
 
 import '../styles/shemaGenerator.css';
 
@@ -26,6 +27,9 @@ const Popup = ({ onClose, trous, ranges, selectedSchema  }) => {
       break;
     case "100ms - 25ms - 17ms":
       selectedComponent = <Schema4 trous={trous} ranges={ranges} />;
+      break;
+    case "100ms - 17ms":
+      selectedComponent = <Schema5 trous={trous} ranges={ranges} />;
       break;
     default:
       selectedComponent = <p>No schema selected</p>;

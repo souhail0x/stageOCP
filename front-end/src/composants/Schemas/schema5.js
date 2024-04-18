@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import "../../styles/schema2.css";
+import "../../styles/schema3.css";
 
 function Schema1({ trous, ranges }) {
   const [rows, setRows] = useState(parseInt(ranges));
@@ -10,54 +10,23 @@ function Schema1({ trous, ranges }) {
   const [imageData, setImageData] = useState("");
   const [imageDataLegend, setImageDataLegend] = useState("");
 
-  const midCol = Math.floor(columns / 2) - 2;
-
   function generateSchema(rows, columns) {
     const table = [];
-    const midCol = Math.floor(columns / 2) - 2;
     const increment = 17;
-    const increment2 = 25;
-    const increment3 = 42;
-    const increment4 = 65;
+    const increment2 = 100;
 
     for (let i = 0; i < rows; i++) {
       table.push(new Array(columns).fill(0));
     }
 
-    for (let i = midCol - 1; i > 0; i--) {
-      table[0][i] = table[0][i + 1] + increment;
+    // La première ligne
+    for (let i = 1; i < columns; i++) {
+      table[0][i] = table[0][i - 1] + increment2;
     }
-    table[0][0] = table[0][1] + increment4;
-    table[0][midCol + 1] = table[0][midCol] + increment2;
-    for (let i = midCol + 2; i < columns - 1; i++) {
-      table[0][i] = table[0][i - 1] + increment;
-    }
-    table[0][columns - 1] = table[0][columns - 2] + increment4;
 
     for (let row = 1; row < rows; row++) {
-      if (row % 2 === 0) {
-        table[row][midCol] = table[row - 1][midCol] + increment3;
-        table[row][midCol + 1] = table[row][midCol] + increment2;
-        for (let i = midCol + 2; i < columns - 1; i++) {
-          table[row][i] = table[row][i - 1] + increment;
-        }
-        for (let i = midCol - 1; i > 0; i--) {
-          table[row][i] = table[row][i + 1] + increment;
-        }
-        table[row][0] = table[row][1] + increment4;
-        table[row][columns - 1] = table[row][columns - 2] + increment4;
-      } else {
-        table[row][midCol + 1] = table[row - 1][midCol + 1] + increment3;
-        table[row][midCol] = table[row][midCol + 1] + increment2;
-        for (let i = midCol + 2; i < columns - 1; i++) {
-          table[row][i] = table[row][i - 1] + increment;
-        }
-        for (let i = midCol - 1; i > 0; i--) {
-          table[row][i] = table[row][i + 1] + increment;
-        }
-
-        table[row][0] = table[row][1] + increment4;
-        table[row][columns - 1] = table[row][columns - 2] + increment4;
+      for (let col = 0; col < columns; col++) {
+          table[row][col] = table[row - 1][col] + increment;
       }
     }
 
@@ -159,7 +128,7 @@ function Schema1({ trous, ranges }) {
   return (
     <>
       <div id="matrix">
-        <h3 className="title" >{`Schéma de Tir NONEL : Benguerir(Foration Cadex) - ${getCurrentDatePlusOne()}`}</h3>
+        <h3 className="title" >{`Schéma De Tir NONEL : Benguerir(Foration Cadex) - ${getCurrentDatePlusOne()}`}</h3>
 
         <table>
           <thead>
@@ -177,50 +146,11 @@ function Schema1({ trous, ranges }) {
                 {row.map((cell, cellIndex) => {
                   let arrowSymbol = "";
                   if (rowIndex === 0) {
-                    arrowSymbol =
-                      cellIndex === midCol + 1 ? (
-                        <span className="yellow">→</span>
-                      ) : cellIndex === 0 ? (
-                        <span className="blue">←</span> // La premiere flèche est bleue
-                      ) : cellIndex === row.length - 1 ? (
-                        <span className="blue">→</span> // La dernière flèche est bleue
-                      ) : cellIndex <= midCol ? (
-                        <span className="green">←</span>
-                      ) : (
-                        <span className="green">→</span>
-                      );
-                  } else if (rowIndex % 2 === 0) {
-                    arrowSymbol =
-                      cellIndex === midCol + 1 ? (
-                        <>
-                          <span className="red-down-left">↓</span>
-                          <span className="yellow">→</span>
-                        </>
-                      ) : cellIndex === 0 ? (
-                        <span className="blue">←</span> // La premiere flèche est bleue
-                      ) : cellIndex === row.length - 1 ? (
-                        <span className="blue">→</span> // La dernière flèche est bleue
-                      ) : cellIndex <= midCol ? (
-                        <span className="green">←</span>
-                      ) : (
-                        <span className="green">→</span>
-                      );
+                    arrowSymbol = 
+                        <span className="black">→</span> ;
                   } else {
                     arrowSymbol =
-                      cellIndex === midCol + 1 ? (
-                        <>
-                          <span className="red-down-right">↓</span>
-                          <span className="yellow">←</span>
-                        </>
-                      ) : cellIndex === 0 ? (
-                        <span className="blue">←</span> // La premiere flèche est bleue
-                      ) : cellIndex === row.length - 1 ? (
-                        <span className="blue">→</span> // La dernière flèche est bleue
-                      ) : cellIndex <= midCol ? (
-                        <span className="green">←</span>
-                      ) : (
-                        <span className="green">→</span>
-                      );
+                      <span className="yellow-down-left">↓</span> ;
                   }
 
                   return (
@@ -235,9 +165,7 @@ function Schema1({ trous, ranges }) {
           </tbody>
         </table>
         <div id="legend">
-          65ms : <span style={{ color: "#007bff" }}>→</span> <br />
-          42ms : <span style={{ color: "red" }}>→</span> <br />
-          25ms : <span style={{ color: "green" }}>→</span> <br />
+          42ms : <span style={{ color: "black" }}>→</span> <br />
           17ms : <span style={{ color: "rgb(252, 215, 2)" }}>→</span> <br />
         </div>
       </div>

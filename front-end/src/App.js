@@ -17,6 +17,7 @@ import Logout from "./composants/logout";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+<<<<<<< HEAD
   const [isAdmin, setIsAdmin] = useState(false); // Initialize isAdmin as false
   const [isLogged, setIsLogged] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(true);
@@ -27,6 +28,11 @@ function App() {
     setIsLogoutModalOpen(false); // Close the modal
     // Navigate back to the home page
   };
+=======
+
+  const [isAdmin, setIsAdmin] = useState(true); // Before pushing, initialize isAdmin as false
+  const [isLogged, setIsLogged] = useState(true);
+>>>>>>> 38de857d6ebbf4ff8da85abbe220ca40581d1a3f
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

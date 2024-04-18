@@ -192,18 +192,18 @@ function GestionCout() {
                 
               data.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.id_cout}</td>
+                  <td>{item.Num_Cout}</td>
                   <td>{item.dateCommande}</td>
-                  <td>{item.ammonix}</td>
-                  <td>{item.tovex}</td>
-                  <td>{item.detos500ms}</td>
-                  <td>{item.raccord17}</td>
-                  <td>{item.raccord25}</td>
-                  <td>{item.raccord42}</td>
-                  <td>{item.raccord65}</td>
-                  <td>{item.raccord100}</td>
-                  <td>{item.lign}</td>
-                  <td>{item.aei}</td>
+                  <td>{item.cout_ammonix}</td>
+                  <td>{item.cout_tovex}</td>
+                  <td>{item.cout_detos_500ms}</td>
+                  <td>{item.cout_raccord_17}</td>
+                  <td>{item.cout_raccord_25}</td>
+                  <td>{item.cout_raccord_42}</td>
+                  <td>{item.cout_raccord_65}</td>
+                  <td>{item.cout_raccord_100}</td>
+                  <td>{item.ligne_tir}</td>
+                  <td>{item.cout_aei}</td>
                   <td>{item.etatCout}</td>
                   <td>
                     <button style={{ padding: "5px" }} type="button" className="button" onClick={() => handleEdit(item)}>
