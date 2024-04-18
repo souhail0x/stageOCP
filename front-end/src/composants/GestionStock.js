@@ -16,6 +16,7 @@ import {
   Line,
 } from "recharts";
 import Loading from "./loaderSpinner";
+import Loader from "./spinnerLoader";
 
 function GestionStock() {
   const [data, setData] = useState([]);
@@ -196,18 +197,18 @@ function GestionStock() {
                   <td>{item.aei}</td>
                   <td>{item.etat_stock}</td>
                   <td>
-                  <button style={{padding:"5px"}} type="button" className="button" onClick={() => handleEdit(item)}>
+                  <button style={{padding:"5px 0px",width:'100px'}} type="button" className="button" onClick={() => handleEdit(item)}>
                     Modifier
                   </button>
                     </td>
                     <td>
-                    <button type="button" style={{padding:"5px"}} className="button" onClick={() => handleDelete(item.id)}>
+                    <button type="button" style={{padding:"5px 0px",width:'100px'}} className="button" onClick={() => handleDelete(item.id)}>
                       Supprimer
                     </button>
                   </td>
                 </tr>
               ))
-              ):<Loading/>
+              ):<Loader/>
             }
             </tbody>
           </table>

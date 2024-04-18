@@ -33,14 +33,6 @@ const TableCell = styled.td`
   text-align: left;
 `;
 
-const ActionButton = styled.button`
-  padding: 8px 16px;
-  border: none;
-  cursor: pointer;
-  background-color: #007bff;
-  color: #fff;
-`;
-
 const AddUserButton = styled.button`
   position: absolute;
   top: 10px;
@@ -75,7 +67,7 @@ const UserList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(false); // Set isLoading to false after 3 seconds
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(timer); // Clear the timeout when component unmounts
   }, [modifiedTable]);

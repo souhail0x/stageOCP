@@ -1,10 +1,15 @@
 /* ArchivePage.css */
 
   .archiveContainer {
-    margin: 20px auto; /* Marge auto pour centrer la table horizontalement */
+    margin: 0px auto; /* Marge auto pour centrer la table horizontalement */
     max-width: 800px;
     margin-left: 80px; /* Ajout de la marge à gauche pour éviter que le tableau ne soit sous la sidebar */
     position: relative; /* Position relative pour positionner le bouton */
+    display: flex;
+    
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: flex-start;
     
     
   }
