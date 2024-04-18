@@ -13,12 +13,20 @@ import SecurityPage from "./composants/SecurityPage";
 import UserTable from "./composants/crudUsers";
 import Login from "./composants/Login";
 import UserList from "./composants/crudUsers";
+import Logout from "./composants/logout";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const [isAdmin, setIsAdmin] = useState(false); // Initialize isAdmin as false
   const [isLogged, setIsLogged] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(true);
+
+  // Function to handle closing the logout modal and navigate back
+  const onCloseLogout = () => {
+
+    setIsLogoutModalOpen(false); // Close the modal
+    // Navigate back to the home page
+  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -33,10 +41,12 @@ function App() {
     setIsLogged(false); // Set isLogged to false upon logout
     setIsAdmin(false); // Set isAdmin to false upon logout
   };
+
   console.log(isAdmin);
 
   return (
     <>
+
       {!isLogged ? (
         <Login onLogin={handleLogin} />
       ) : (
@@ -61,6 +71,9 @@ function App() {
                 (<>
                   <Route path="/dashboard" element={<DashboardPage />} />
                   <Route path="/archive" element={<ArchivePage />} />
+                  <Route path="/logout" element={<Logout />} />
+
+
                 </>)
               }
             </Routes>

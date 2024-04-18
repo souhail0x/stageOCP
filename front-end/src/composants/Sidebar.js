@@ -109,7 +109,7 @@ function SidBar(props) {
           <span className="tooltip">Archive</span>
         </li>
         <li>
-          <Link to="/gestion-cout">
+          <Link to="/logout">
             <i class='bx bx-power-off'></i>
             <span className="links_name">Deconnexion</span>
           </Link>
