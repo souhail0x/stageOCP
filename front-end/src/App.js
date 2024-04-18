@@ -13,27 +13,39 @@ import SecurityPage from "./composants/SecurityPage";
 import UserTable from "./composants/crudUsers";
 import Login from "./composants/Login";
 import UserList from "./composants/crudUsers";
+import Logout from "./composants/logout";
+import LogoutPopUp from "./composants/logout";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  const [isAdmin, setIsAdmin] = useState(true); // Initialize isAdmin as false
-  const [isLogged, setIsLogged] = useState(true);
+  // Function to handle closing the logout modal
+  const onCloseLogout = () => {
+    setIsLogoutModalOpen(false);
+  };
+
+  // Function to handle logging out
+  const handleLogout = () => {
+    setIsLogged(false);
+    setIsAdmin(false);
+    setIsLogoutModalOpen(false);
+  };
+
+  const handleLogin = (isAdmin) => {
+    setIsLogged(true);
+    setIsAdmin(isAdmin);
+  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  const handleLogin = (isAdmin) => {
-    setIsLogged(true); // Set isLogged to true upon successful login
-    setIsAdmin(isAdmin); // Set isAdmin based on the login response
+  const openLogoutModal = () => {
+    setIsLogoutModalOpen(true);
   };
 
-  const handleLogout = () => {
-    setIsLogged(false); // Set isLogged to false upon logout
-    setIsAdmin(false); // Set isAdmin to false upon logout
-  };
-  console.log(isAdmin);
 
   return (
     <>
@@ -42,7 +54,12 @@ function App() {
       ) : (
         <div className={`app-container ${isSidebarOpen ? "sidebar-open" : ""}`}>
           <Router>
-            <SidBar isAdmin={isAdmin} isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
+            <SidBar
+              isAdmin={isAdmin}
+              isOpen={isSidebarOpen}
+              toggleSidebar={toggleSidebar}
+              onLogout={() => setIsLogoutModalOpen(true)}
+            />
             <Routes>
               <Route path="/" element={<HomePage />} />
               {isAdmin ? (
@@ -56,19 +73,33 @@ function App() {
                   <Route path="/gerer-utilisateurs" element={<UserList />} />
                   <Route path="/dashboard" element={<DashboardPage />} />
                   <Route path="/archive" element={<ArchivePage />} />
+                  <Route path="/logout" element={<LogoutPopUp />} />
+
                 </>
-              ) :
-                (<>
+              ) : (
+                <>
                   <Route path="/dashboard" element={<DashboardPage />} />
                   <Route path="/archive" element={<ArchivePage />} />
-                </>)
-              }
+                  <Route path="/logout" element={<LogoutPopUp />} />
+
+
+
+                </>
+              )}
             </Routes>
           </Router>
         </div>
       )}
+
+      {isLogoutModalOpen && (<LogoutPopUp
+        onCloseLogout={() => setIsLogoutModalOpen(false)}
+
+      />)}
+
+
     </>
   );
 }
+
 
 export default App;

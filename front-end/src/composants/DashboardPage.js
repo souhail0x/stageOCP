@@ -104,7 +104,7 @@ function DashboardPage() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/dashboard-data");
+      const response = await axios.get("http://127.0.0.1:8000/api/gestion-stocks");
       console.log(response.data);
       setData(response.data);
       setPieChartData(response.data.map((item) => ({ name: item.name, value: item.value })));

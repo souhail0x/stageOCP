@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaTimes } from "react-icons/fa";
+import Loader from "./spinnerLoader";
 
 const AddUserContainer = styled.div`
   position: fixed;
+  z-index:9999;
   top: 0;
   left: 0;
   width: 100%;
@@ -59,9 +61,18 @@ const AddUser = ({ onClose }) => {
     const [password, setPassword] = useState("");
     const [isAdmin, setIsAdmin] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+    const [isLoaded, setIsLoaded] = useState(false)
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoaded(true);
+        setSuccessMessage('')
+        setTimeout(() => {
+            setIsLoaded(false); // Set isLoading to false after 3 seconds
+            
+        }, 2000);
         try {
             const token = localStorage.getItem("token");
             const response = await fetch("http://127.0.0.1:8000/api/register", {
@@ -78,34 +89,41 @@ const AddUser = ({ onClose }) => {
             });
             const data = await response.json();
             console.log("Response:", data);
-            setSuccessMessage("User added successfully!");
+
+            isAdmin ? setSuccessMessage(`Admin ${username} ajouté avec succès !`) : setSuccessMessage(`Utilisateur ${username} ajouté avec succès !`);
+
+
+
             // Close the addUser popup after a brief delay
-            setTimeout(() => {
-                setSuccessMessage("");;
-            }, 2000);
+
+
+
         } catch (error) {
             console.error("Error submitting form:", error);
         }
     };
-    
+
     return (
         <AddUserContainer>
             <AddUserForm onSubmit={handleSubmit}>
+                {isLoaded ? (<Loader />) : ''}
+
                 <CloseIcon onClick={onClose}>X</CloseIcon>
-                {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+                {successMessage && !isLoaded && <SuccessMessage>{successMessage}</SuccessMessage>}
+
                 <Label>
                     Username:
                     <Input
                         type="text"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => { setUsername(e.target.value); setSuccessMessage('') }}
                         required
                     />
                 </Label>
                 <Label>
                     Password:
                     <Input
-                        type="password"
+                        type="text"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -120,7 +138,7 @@ const AddUser = ({ onClose }) => {
 
                 <button className="button" type="submit">Add User</button>
             </AddUserForm>
-            
+
         </AddUserContainer>
     );
 };
