@@ -29,7 +29,7 @@ class UserManagementController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:250',
-            'email' => 'required|email|max:250|unique:users,email,' . $user->id,
+            'email' => 'email|max:250|unique:users,email,' . $user->id,
             'password' => 'sometimes|required|min:8',
             'isAdmin' => 'boolean'
         ]);
