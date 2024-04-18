@@ -5,48 +5,36 @@
     height: 100vh;
 }
 
-.form {
-    width: 100%;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="date"],
-.form-group textarea,
-.form-group input[type="float"] {
+.form-group input[type="float"],
+.form-group textarea {
     width: calc(100% - 22px);
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-    margin-bottom: 3px;
-}
-
-.btn-container {
-    display: flex;
-    justify-content:center;
+    margin-bottom: 1px;
+    font-size: 16px; /* Adjust font size */
 }
 
 .btn {
-    padding: 10px 20px;
-    margin: 0px 5px;
+    padding: 12px 50px; /* Increase padding for better visual appeal */
+    margin: 0 10px; /* Add some space between buttons */
     border: none;
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
-    background-color: #45a049
+    background-color: #45a049;
+    font-size: 16px; /* Adjust font size */
+    transition: background-color 0.3s ease; /* Add smooth transition on hover */
+}
+
+.btn:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    transform: scale(1.1); /* Increase size on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Add transition for smoother effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Add shadow */
 }

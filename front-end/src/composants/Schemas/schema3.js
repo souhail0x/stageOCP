@@ -129,7 +129,7 @@ function Schema1({ trous, ranges }) {
   return (
     <>
       <div id="matrix">
-        <h3>{`Schéma De Tir NONEL : Benguerir(Foration Cadex) - ${getCurrentDatePlusOne()}`}</h3>
+        <h3 className="title" >{`Schéma De Tir NONEL : Benguerir(Foration Cadex) - ${getCurrentDatePlusOne()}`}</h3>
 
         <table>
           <thead>
