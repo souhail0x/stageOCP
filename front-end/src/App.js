@@ -17,7 +17,7 @@ import UserList from "./composants/crudUsers";
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const [isAdmin, setIsAdmin] = useState(true); // Before pushing, initialize isAdmin as false
+  const [isAdmin, setIsAdmin] = useState(true); // Initialize isAdmin as false
   const [isLogged, setIsLogged] = useState(true);
 
   const toggleSidebar = () => {
