@@ -14,51 +14,52 @@ import UserTable from "./composants/crudUsers";
 import Login from "./composants/Login";
 import UserList from "./composants/crudUsers";
 import Logout from "./composants/logout";
+import LogoutPopUp from "./composants/logout";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-<<<<<<< HEAD
-  const [isAdmin, setIsAdmin] = useState(false); // Initialize isAdmin as false
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(true);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  // Function to handle closing the logout modal and navigate back
+  // Function to handle closing the logout modal
   const onCloseLogout = () => {
-
-    setIsLogoutModalOpen(false); // Close the modal
-    // Navigate back to the home page
+    setIsLogoutModalOpen(false);
   };
-=======
 
-  const [isAdmin, setIsAdmin] = useState(true); // Before pushing, initialize isAdmin as false
-  const [isLogged, setIsLogged] = useState(true);
->>>>>>> 38de857d6ebbf4ff8da85abbe220ca40581d1a3f
+  // Function to handle logging out
+  const handleLogout = () => {
+    setIsLogged(false);
+    setIsAdmin(false);
+    setIsLogoutModalOpen(false);
+  };
+
+  const handleLogin = (isAdmin) => {
+    setIsLogged(true);
+    setIsAdmin(isAdmin);
+  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  const handleLogin = (isAdmin) => {
-    setIsLogged(true); // Set isLogged to true upon successful login
-    setIsAdmin(isAdmin); // Set isAdmin based on the login response
+  const openLogoutModal = () => {
+    setIsLogoutModalOpen(true);
   };
 
-  const handleLogout = () => {
-    setIsLogged(false); // Set isLogged to false upon logout
-    setIsAdmin(false); // Set isAdmin to false upon logout
-  };
-
-  console.log(isAdmin);
 
   return (
     <>
-
       {!isLogged ? (
         <Login onLogin={handleLogin} />
       ) : (
         <div className={`app-container ${isSidebarOpen ? "sidebar-open" : ""}`}>
           <Router>
-            <SidBar isAdmin={isAdmin} isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
+            <SidBar
+              isAdmin={isAdmin}
+              isOpen={isSidebarOpen}
+              toggleSidebar={toggleSidebar}
+              onLogout={() => setIsLogoutModalOpen(true)}
+            />
             <Routes>
               <Route path="/" element={<HomePage />} />
               {isAdmin ? (
@@ -72,22 +73,33 @@ function App() {
                   <Route path="/gerer-utilisateurs" element={<UserList />} />
                   <Route path="/dashboard" element={<DashboardPage />} />
                   <Route path="/archive" element={<ArchivePage />} />
+                  <Route path="/logout" element={<LogoutPopUp />} />
+
                 </>
-              ) :
-                (<>
+              ) : (
+                <>
                   <Route path="/dashboard" element={<DashboardPage />} />
                   <Route path="/archive" element={<ArchivePage />} />
-                  <Route path="/logout" element={<Logout />} />
+                  <Route path="/logout" element={<LogoutPopUp />} />
 
 
-                </>)
-              }
+
+                </>
+              )}
             </Routes>
           </Router>
         </div>
       )}
+
+      {isLogoutModalOpen && (<LogoutPopUp
+        onCloseLogout={() => setIsLogoutModalOpen(false)}
+
+      />)}
+
+
     </>
   );
 }
+
 
 export default App;

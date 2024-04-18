@@ -1,96 +1,123 @@
-import React from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
+import { Title } from "chart.js";
+import React, { useState } from "react";
+import styled from "styled-components";
 
-// Styled components
 const LogoutContainer = styled.div`
   position: fixed;
-  z-index: 9999;
   top: 0;
   left: 0;
-  z-index:9999;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
-const LogoutForm = styled.div`
-  background-color: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.5);
+const message = styled.h3`
+ 
+`;
+
+const PopUp = styled.div`
   position: relative;
-  width: 80%;
-  max-width: 500px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
-const CloseButton = styled.button`
+const CloseIcon = styled.span`
   position: absolute;
   top: 10px;
   right: 10px;
-  background: none;
-  border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 24px;
 `;
 
-const ConfirmationMessage = styled.p`
-  margin-bottom: 20px;
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 `;
 
 const Button = styled.button`
+  margin: 0 10px;
   padding: 10px 20px;
-  margin-right: 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+
+  &:first-child {
+    background-color: #ff4d4d; /* Red for "Yes" button */
+    color: white;
+  }
+
+  &:last-child {
+    background-color: #4caf50; /* Green for "No" button */
+    color: white;
+  }
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
+function LogoutPopUp() {
+    const [isOpen, setIsOpen] = useState(true);
 
-// Logout component
-const Logout = ({ onCloseLogout }) => {
-  const handleLogout = async () => {
-    try {
-      // Perform logout logic here
-      // Example: clear local storage, perform API logout, or redirect the user
+    const handleClose = () => {
+        setIsOpen(false);
+    };
+    function redirectToRoot() {
+        window.location.href = '/';
 
-      // If using API for logout:
-      // await axios.post('/api/logout');
-
-      // Once logout is successful, close the logout modal
-      onCloseLogout();
-    } catch (error) {
-      console.error('Error logging out:', error.message);
-      // Optional: Display an error message to the user
     }
-  };
+    const handleLogout = async () => {
+        console.log("Logged out");
+        redirectToRoot();
+        setIsOpen(false); try {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://127.0.0.1:8000/api/logout", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                }
+            });
 
-  return (
-    <LogoutContainer>
-      <LogoutForm>
-        <CloseButton onClick={onCloseLogout}>X</CloseButton>
-        <ConfirmationMessage>
-          Êtes-vous sûr de vouloir vous déconnecter ?
-        </ConfirmationMessage>
-        <ButtonContainer>
-          <Button onClick={handleLogout} tabIndex={0}>
-            Oui
-          </Button>
-          <Button onClick={onCloseLogout} tabIndex={0}>
-            Non
-          </Button>
-        </ButtonContainer>
-      </LogoutForm>
-    </LogoutContainer>
-  );
-};
+            console.log("Logged out");
+            redirectToRoot();
 
-export default Logout;
+
+
+
+
+
+            // Close the addUser popup after a brief delay
+
+
+
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+
+
+
+        // Implement your logout functionality here
+    };
+
+    return (
+        <>
+            {isOpen && (
+                <LogoutContainer>
+                    <PopUp>
+                        <CloseIcon onClick={handleClose}>&times;</CloseIcon>
+                        <message>Êtes-vous sûr de vouloir vous déconnecter?</message>
+                        <ButtonsContainer>
+                            <button className="button" onClick={handleLogout}>Yes</button>
+                            <button className="button" style={{ backgroundColor: 'red' }} onClick={handleClose}>No</button>
+                        </ButtonsContainer>
+                    </PopUp>
+                </LogoutContainer>
+            )}
+        </>
+    );
+}
+
+export default LogoutPopUp;
