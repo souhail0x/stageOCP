@@ -165,7 +165,7 @@ function Schema1({ trous, ranges }) {
           </tbody>
         </table>
         <div id="legend">
-          42ms : <span style={{ color: "black" }}>→</span> <br />
+          100ms : <span style={{ color: "black" }}>→</span> <br />
           17ms : <span style={{ color: "rgb(252, 215, 2)" }}>→</span> <br />
         </div>
       </div>
