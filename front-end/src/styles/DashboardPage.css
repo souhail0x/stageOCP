@@ -46,6 +46,14 @@
   background-color: #9576eb;
 }
 
+.card:nth-child(5){
+  background-color: #8884D8;
+}
+
+.card:nth-child(6){
+  background-color: #618663;
+}
+
 .card-inner {
   display: flex;
   align-items: center;
@@ -54,6 +62,14 @@
 
 .card-inner > .card_icon {
   font-size: 25px;
+}
+
+.chart1 {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #272534a2;
 }
 
 .charts {

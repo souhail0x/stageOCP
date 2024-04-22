@@ -37,8 +37,6 @@ function GestionStock() {
     etat_stock: "",
   });
 
-
-
   useEffect(() => {
     fetchData();
   }, []);

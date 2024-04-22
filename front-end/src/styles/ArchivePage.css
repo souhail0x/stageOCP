@@ -2,7 +2,7 @@
 
   .archiveContainer {
     margin: 0px auto; /* Marge auto pour centrer la table horizontalement */
-    max-width: 800px;
+    max-width: 1200px;
     margin-left: 80px; /* Ajout de la marge à gauche pour éviter que le tableau ne soit sous la sidebar */
     position: relative; /* Position relative pour positionner le bouton */
     display: flex;
@@ -10,8 +10,7 @@
     justify-content: center;
     flex-wrap: wrap;
     align-items: flex-start;
-    
-    
+
   }
   
   .archive-header {
@@ -28,7 +27,7 @@
     font-size: 16px;
     position: absolute; /* Position absolue pour positionner le bouton */
     top: -5px; /* Déplacer légèrement le bouton vers le haut */
-    right: -185px; /* Déplacer légèrement le bouton vers la droite */
+    right: 0px; /* Déplacer légèrement le bouton vers la droite */
     transition: background-color 0.3s;
   }
   
@@ -36,6 +35,11 @@
     font-size: 24px;
     font-weight: bold;
     text-align: center;
+  }
+
+  .archiveDiv {
+    width: 100%;
+    overflow-x: scroll;
   }
   
   .archiveTable {
@@ -48,7 +52,7 @@
   
   .archiveTable th, .archiveTable td {
     border: 1px solid #38424e; /* Couleur de la bordure */
-    padding: 10px;
+    padding: 5px;
     text-align: left;
     color: #9e9ea4; /* Couleur du texte */
   }
