@@ -23,8 +23,8 @@ const Img = styled.div`
   margin-bottom: 20px;
 
   img {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    
   }
 `;
 
@@ -127,7 +127,7 @@ const Login = ({ onLogin }) => {
     <LoginContainer>
       <Content>
         <Img>
-          <img src={require('../images/logo.png')} alt="Login" />
+          <img src={require('../images/BGblast-removebg-preview.png')} alt="Login" />
         </Img>
         <Form onSubmit={handleSubmit}>
           <div className="field">

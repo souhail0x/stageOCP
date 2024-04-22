@@ -92,8 +92,8 @@ function EtatChantier() {
       avance_decapage: "",
     });
   };
-  
-  
+
+
 
 
   const handleDelete = async (index) => {
@@ -110,12 +110,16 @@ function EtatChantier() {
 
 
   const prepareChartData = () => {
-    return data.map(item => ({
-      name: item.machine,
-      avance_foration: item.avance_foration,
-      avance_decapage: item.avance_decapage,
-    }));
+    return data
+      .filter((item) => item && item.machine && item.avance_foration !== undefined && item.avance_decapage !== undefined)
+      .map((item) => ({
+        name: item.machine,
+        avance_foration: item.avance_foration,
+        avance_decapage: item.avance_decapage,
+      }));
   };
+
+
 
   return (
     <div className="containerGetion">
@@ -195,20 +199,20 @@ function EtatChantier() {
             <tbody>
               {data.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.date}</td>
-                  <td>{item.machine}</td>
-                  <td>{item.avance_foration}</td>
-                  <td>{item.avance_decapage}</td>
+                  <td>{item?.date || ''}</td>
+                  <td>{item?.machine || ''}</td>
+                  <td>{item?.avance_foration || ''}</td>
+                  <td>{item?.avance_decapage || ''}</td>
                   <td>
                     <button style={{ padding: "5px" }} onClick={() => handleEdit(item)} className="button">
                       Modifier
                     </button>
-
                   </td>
                   <td>
                     <button style={{ padding: "5px" }} onClick={() => handleDelete(index)} className="button">Supprimer</button>
                   </td>
                 </tr>
+
               ))}
             </tbody>
           </table>
