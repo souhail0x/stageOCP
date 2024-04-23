@@ -14,6 +14,7 @@
   /* You can adjust the styling for disabled link */
 }
 
+
 .sidebar {
   position: fixed;
   left: 0;
@@ -45,6 +46,9 @@
 .sidebar .logo-details .logo_name {
   color: #fff;
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-weight: 600;
   opacity: 0;
   transition: all 0.5s ease;

@@ -25,7 +25,11 @@ function SidBar(props) {
     <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
       <div className="logo-details">
         {/* <i className="bx bxl-c-plus-plus icon"></i> */}
-        <center><div className="logo_name">Tir et Sautage</div></center>
+        <center><div className="logo_name">
+          <img style={{width:'45px'}} src={require('../images/BGblast-removebg-preview.png')} alt="Login" />
+          <span>BGBLAST</span>
+
+        </div></center>
         <i className="bx bx-menu" id="btn" onClick={toggleSidebar}></i>
       </div>
       <ul className="nav-list">
