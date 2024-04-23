@@ -6,7 +6,6 @@
     margin-left: 80px; /* Ajout de la marge à gauche pour éviter que le tableau ne soit sous la sidebar */
     position: relative; /* Position relative pour positionner le bouton */
     display: flex;
-    
     justify-content: center;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -34,6 +33,7 @@
     font-size: 24px;
     font-weight: bold;
     text-align: center;
+    text-transform: capitalize;
   }
 
   .archiveDiv {

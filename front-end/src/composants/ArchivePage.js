@@ -5,10 +5,10 @@ import Loader from "./spinnerLoader";
 
 function ArchivePage() {
   const [archiveData, setArchiveData] = useState([]);
-  const [archiveData2, setArchiveData2] = useState([]);
-  const [archiveData3, setArchiveData3] = useState([]);
-
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoaded, setIsLoaded] = useState(true);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(false);
@@ -19,30 +19,42 @@ function ArchivePage() {
 
   useEffect(() => {
     const fetchData = async () => {
-        try {
-          const responses = await Promise.all([
-            fetch("http://127.0.0.1:8000/api/commandes"),
-            fetch("http://127.0.0.1:8000/api/sautages"),
-            fetch("http://127.0.0.1:8000/api/gestion-stocks")
-          ]);
-      
-          const jsonResponses = await Promise.all(responses.map(response => response.json()));
-          const [data1, data2, data3] = jsonResponses;
-      
-          setArchiveData(data1);
-          setArchiveData2(data2);
-          setArchiveData3(data3);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
+      try {
+        const responses = await Promise.all([
+          fetch("http://127.0.0.1:8000/api/commandes"),
+          fetch("http://127.0.0.1:8000/api/sautage"),
+          fetch("http://127.0.0.1:8000/api/gestion-stocks"),
+        ]);
 
+        const jsonResponses = await Promise.all(
+          responses.map((response) => response.json())
+        );
+        const [data1, data2, data3] = jsonResponses;
+
+        const combinedArchiveData = [...data1, ...data2, ...data3];
+        
+
+        const mergedData = [];
+
+        for (let i = 0; i < 4; i++) {
+          const mergedItem = {
+            ...combinedArchiveData[i], // Take properties from the first set of data
+            ...combinedArchiveData[i + 4], // Take properties from the second set of data
+            ...combinedArchiveData[i + 8] // Take properties from the third set of data
+          };
+          mergedData.push(mergedItem);
+        }
+        
+        setArchiveData(mergedData);
+        setFilteredData(mergedData);
+        console.log(combinedArchiveData);
+        console.log(mergedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
     fetchData();
-
-    const combinedArchiveData = [...archiveData, ...archiveData2, ...archiveData3];
-    setArchiveData(combinedArchiveData);
-    
   }, []);
 
   const handleExportExcel = () => {
@@ -50,13 +62,30 @@ function ArchivePage() {
     const filename = `archive_${currentDate.getFullYear()}-${
       currentDate.getMonth() + 1
     }-${currentDate.getDate()}.xlsx`;
-
-    const ws = XLSX.utils.json_to_sheet(archiveData);
+  
+    // Use filteredData instead of archiveData if search is performed
+    const dataToExport = searchQuery ? filteredData : archiveData;
+  
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Archive");
-
+  
     XLSX.writeFile(wb, filename);
   };
+
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearchQuery(value);
+    
+    const filtered = archiveData.filter((item) =>
+      Object.values(item).some((val) =>
+        typeof val === "string" && val.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  
+    setFilteredData(filtered);
+  };
+  
 
   return (
     <>
@@ -66,7 +95,14 @@ function ArchivePage() {
         <div className="archiveContainer">
           <div className="archive-header">
             <h2 className="archive-title">Archive</h2>
-            <input type="text" placeholder="Rechercher..." className="search-input" style={{width: "500px"}} />
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              className="search-input"
+              style={{ width: "700px", height: "40px" }} 
+              value={searchQuery}
+              onChange={handleSearch}
+            />
             <button className="export-btn" onClick={handleExportExcel}>
               Export to Excel
             </button>
@@ -115,7 +151,7 @@ function ArchivePage() {
                 </tr>
               </thead>
               <tbody>
-                {archiveData.map((item, index) => (
+                {filteredData.map((item, index) => (
                   <tr key={index}>
                     <td>{item.date}</td>
                     <td>{item.panneau}</td>
@@ -136,13 +172,13 @@ function ArchivePage() {
                     <td>{item.machine_Foration}</td>
                     <td>{item.machine_Decappage}</td>
                     <td>{item.schema_tir}</td>
-                    
+
                     <td>{item.BLF_Ammonix}</td>
                     <td>{item.BLF_Tovex}</td>
                     <td>{item.BLF_Artifices_Lignes}</td>
                     <td>{item.heure_arrivée_camions}</td>
                     <td>{item.heure_tir}</td>
-                    
+
                     <td>{item.ammonix}</td>
                     <td>{item.aei}</td>
                     <td>{item.raccord_17}</td>
