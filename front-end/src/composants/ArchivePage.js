@@ -66,6 +66,7 @@ function ArchivePage() {
         <div className="archiveContainer">
           <div className="archive-header">
             <h2 className="archive-title">Archive</h2>
+            <input type="text" placeholder="Rechercher..." className="search-input" style={{width: "500px"}} />
             <button className="export-btn" onClick={handleExportExcel}>
               Export to Excel
             </button>

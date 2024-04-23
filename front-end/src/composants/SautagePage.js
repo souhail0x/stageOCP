@@ -94,7 +94,7 @@ const SautagePage = () => {
   };
 
   return (
-    <div style={{ marginLeft: "90px" }}>
+    <div className="sautage">
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h1
           style={{

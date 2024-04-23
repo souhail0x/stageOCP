@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // install axios --> npm install axios
-import ReactApexChart from "react-apexcharts";
-import '../styles/GestionCout.css';
+import axios from "axios";
 import {
   BarChart,
   Bar,
@@ -18,48 +16,45 @@ import {
   Line,
 } from "recharts";
 import Loading from "./loaderSpinner";
+import Loader from "./spinnerLoader";
+import "../styles/GestionStock.css";
 
-
-function GestionCout() {
+function GestionStock() {
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
     dateCommande: "",
-    id_cout: "",
-    ammonix: "",
-    tovex: "",
-    detos500ms: "",
-    raccord17: "",
-    raccord25: "",
-    raccord42: "",
-    raccord65: "",
-    raccord100: "",
-    lign: "",
-    aei: "",
-    etatCout: ""
+    Num_Cout: "",
+    cout_ammonix: "",
+    cout_tovex: "",
+    cout_detonateur_500: "",
+    cout_detonateur_450: "",
+    cout_raccord_65: "",
+    cout_raccord_17: "",
+    cout_raccord_25: "",
+    cout_raccord_42: "",
+    cout_raccord_100: "",
+    ligne_tir: "",
+    cout_aei: "",
+    etat_stock: "",
   });
-
-
-  const dataChart = [];
-
 
   useEffect(() => {
     fetchData();
   }, []);
+
   const fetchData = async () => {
     try {
       // Set isLoaded to true after 2000 milliseconds
       setTimeout(() => {
         setIsLoaded(true);
       }, 750);
-  
-      const response = await axios.get("http://127.0.0.1:8000/api/couts");
+      const response = await axios.get("http://localhost:8000/api/couts");
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  
 
   const [editItem, setEditItem] = useState(null);
 
@@ -70,23 +65,27 @@ function GestionCout() {
 
   const handleAdd = async () => {
     try {
-      axios.get('http://localhost:8000/sanctum/csrf-cookie')
-      const response = await axios.post("http://127.0.0.1:8000/api/couts", formData);
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.post(
+        "http://localhost:8000/api/gestion-stocks",
+        formData
+      );
       setData([...data, response.data]);
       setFormData({
         dateCommande: "",
-        id_cout: "",
-        ammonix: "",
-        tovex: "",
-        detos500ms: "",
-        raccord17: "",
-        raccord25: "",
-        raccord42: "",
-        raccord65: "",
-        raccord100: "",
-        lign: "",
-        aei: "",
-        etatCout: ""
+        Num_Cout: "",
+        cout_ammonix: "",
+        cout_tovex: "",
+        cout_detonateur_500: "",
+        cout_detonateur_450: "",
+        cout_raccord_65: "",
+        cout_raccord_17: "",
+        cout_raccord_25: "",
+        cout_raccord_42: "",
+        cout_raccord_100: "",
+        ligne_tir: "",
+        cout_aei: "",
+        etat_stock: "",
       });
     } catch (error) {
       console.error("Error adding data:", error);
@@ -95,8 +94,11 @@ function GestionCout() {
 
   const handleUpdate = async () => {
     try {
-      axios.get('http://localhost:8000/sanctum/csrf-cookie');
-      const response = await axios.put(`http://127.0.0.1:8000/api/couts/${editItem.id}`, formData);
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.put(
+        `http://localhost:8000/api/gestion-stocks/${editItem.id}`,
+        formData
+      );
       setEditItem(null); // Clear editItem after updating
       setFormData({}); // Clear formData after updating
       fetchData(); // Fetch data after updating
@@ -105,40 +107,37 @@ function GestionCout() {
     }
   };
 
-
-
-
   const handleDelete = async (id) => {
     try {
-      axios.get('http://localhost:8000/sanctum/csrf-cookie');
-      const response = await axios.delete(`http://127.0.0.1:8000/api/couts/${id}`); // Utilisation des backticks
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.delete(
+        `http://localhost:8000/api/gestion-stocks/${id}`
+      );
       fetchData(); // Fetch data after deleting
     } catch (error) {
       console.error("Error deleting data:", error);
     }
   };
-  
+
   const handleEdit = (item) => {
-    setEditItem(item);
+    setEditItem(item); // Définir l'élément à éditer
     setFormData({
       dateCommande: item.dateCommande,
-      id_cout: item.id_cout,
-      ammonix: item.ammonix,
-      tovex: item.tovex,
-      detos500ms: item.detos500ms,
-      raccord17: item.raccord17,
-      raccord25: item.raccord25,
-      raccord42: item.raccord42,
-      raccord65: item.raccord65,
-      raccord100: item.raccord100,
-      lign: item.lign,
-      aei: item.aei,
-      etatCout: item.etatCout,
+        Num_Cout: item.Num_Cout,
+        cout_ammonix: item.cout_ammonix,
+        cout_tovex: item.cout_tovex,
+        cout_detonateur_500: item.cout_detonateur_500,
+        cout_detonateur_450: item.cout_detonateur_450,
+        cout_raccord_65: item.cout_raccord_65,
+        cout_raccord_17: item.cout_raccord_17,
+        cout_raccord_25: item.cout_raccord_25,
+        cout_raccord_42: item.cout_raccord_42,
+        cout_raccord_100: item.cout_raccord_100,
+        ligne_tir: item.ligne_tir,
+        cout_aei: item.cout_aei,
+        etat_stock: item.etat_stock,
     });
   };
-
-
-
 
   return (
     <div className="containerGetion">
@@ -147,7 +146,7 @@ function GestionCout() {
           textAlign: "left",
           color: "rgba(255, 255, 255, 0.95)",
           display: "block",
-          fontSize: "1.17em",
+          fontSize: "1.3em",
           marginBlockStart: "1em",
           marginBlockEnd: "1em",
           marginInlineStart: "0px",
@@ -155,77 +154,88 @@ function GestionCout() {
           fontWeight: "bold",
         }}
       >
-        GESTION DE COûT
+        GESTION DES COUTS
       </h1>
       <div
         className="search-bar"
         style={{
           width: "100%",
           color: "black",
-        }}>
-      </div>
+        }}
+      ></div>
       <div className="container">
         <div className="tableContainer">
           <table className="table">
             <thead className="thead">
               <tr>
                 <th>ID</th>
-                <th>Date-com</th>
+                <th>Date</th>
                 <th>Ammonix</th>
                 <th>Tovex</th>
-                <th>Detos</th>
+                <th>D450</th>
+                <th>D500</th>
                 <th>R17</th>
                 <th>R25</th>
                 <th>R42</th>
                 <th>R65</th>
                 <th>R100</th>
-                <th>Lign</th>
+                <th>Ligne</th>
                 <th>AEI</th>
-                <th>État Coût</th>
+                <th>État</th>
                 <th></th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-            {
-              isLoaded?(
-                
-              data.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.Num_Cout}</td>
-                  <td>{item.dateCommande}</td>
-                  <td>{item.cout_ammonix}</td>
-                  <td>{item.cout_tovex}</td>
-                  <td>{item.cout_detos_500ms}</td>
-                  <td>{item.cout_raccord_17}</td>
-                  <td>{item.cout_raccord_25}</td>
-                  <td>{item.cout_raccord_42}</td>
-                  <td>{item.cout_raccord_65}</td>
-                  <td>{item.cout_raccord_100}</td>
-                  <td>{item.ligne_tir}</td>
-                  <td>{item.cout_aei}</td>
-                  <td>{item.etatCout}</td>
-                  <td>
-                    <button style={{ padding: "5px" }} type="button" className="button" onClick={() => handleEdit(item)}>
-                      Modifier
-                    </button>
-
-                  </td>
-                  <td>
-                    <button type="button" style={{ padding: "5px" }} className="button" onClick={() => handleDelete(item.id)} >
-                      Supprimer
-                    </button>
-                  </td>
-                </tr>
-              ))
-           
-              ):<Loading/>
-            }
+              {isLoaded ? (
+                data.slice(-3).reverse().map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.Num_Cout}</td>
+                    <td>{item.dateCommande}</td>
+                    <td>{item.cout_ammonix}</td>
+                    <td>{item.cout_tovex}</td>
+                    <td>{item.cout_detonateur_450}</td>
+                    <td>{item.cout_detonateur_500}</td>
+                    <td>{item.cout_raccord_17}</td>
+                    <td>{item.cout_raccord_25}</td>
+                    <td>{item.cout_raccord_42}</td>
+                    <td>{item.cout_raccord_65}</td>
+                    <td>{item.cout_raccord_100}</td>
+                    <td>{item.ligne_tir}</td>
+                    <td>{item.cout_aei}</td>
+                    <td>{item.etat_stock}</td>
+                    <td>
+                      <button
+                        style={{ padding: "0px 0px", width: "60px" }}
+                        type="button"
+                        className="button"
+                        onClick={() => handleEdit(item)}
+                      >
+                        Modifier
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        style={{ padding: "5px 0px", width: "80px" }}
+                        className="button"
+                        onClick={() => handleDelete(item.id)}
+                      >
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <Loader />
+              )}
             </tbody>
           </table>
         </div>
+      </div>
 
-        <div className="form-container">
+      <div className="charts-wrapper">
+        <div className="form-container chart1">
           {/* Partie 2: Formulaire */}
           <form>
             <div className="formRow">
@@ -233,28 +243,28 @@ function GestionCout() {
                 <label>Date:</label>
                 <input
                   type="date"
-                  name="dateCommande"
+                  name="date_commande"
                   value={formData.dateCommande}
                   onChange={handleInputChange}
                 />
               </div>
               <div className="formGroup">
-                <label>id:</label>
+                <label>Num_Stock :</label>
                 <input
                   type="number"
-                  name="id_cout"
-                  value={formData.id_cout}
+                  name="Num_Stock"
+                  value={formData.Num_Cout}
                   onChange={handleInputChange}
                 />
               </div>
             </div>
             <div className="formRow">
               <div className="formGroup">
-                <label>Prix Ammonix:</label>
+                <label>Ammonix:</label>
                 <input
                   type="number"
                   name="ammonix"
-                  value={formData.ammonix}
+                  value={formData.cout_ammonix}
                   onChange={handleInputChange}
                 />
               </div>
@@ -263,70 +273,36 @@ function GestionCout() {
                 <input
                   type="number"
                   name="tovex"
-                  value={formData.tovex}
+                  value={formData.cout_tovex}
                   onChange={handleInputChange}
                 />
               </div>
             </div>
             <div className="formRow">
               <div className="formGroup">
-                <label>Prix Detos500ms:</label>
+                <label>Detos 450ms:</label>
                 <input
                   type="number"
-                  name="detos500ms"
-                  value={formData.detos500ms}
+                  name="detonateur_450"
+                  value={formData.cout_detonateur_450}
                   onChange={handleInputChange}
                 />
               </div>
               <div className="formGroup">
-                <label>Prix R17ms:</label>
+                <label>Detos 500ms:</label>
                 <input
                   type="number"
-                  name="raccord17"
-                  value={formData.raccord17}
+                  name="detonateur_500"
+                  value={formData.cout_detonateur_500}
                   onChange={handleInputChange}
                 />
               </div>
-            </div>
-
-            <div className="formRow">
               <div className="formGroup">
-                <label>Prix R25ms:</label>
+                <label>R. 17ms:</label>
                 <input
                   type="number"
-                  name="raccord25"
-                  value={formData.raccord25}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="formGroup">
-                <label>Prix R42ms:</label>
-                <input
-                  type="number"
-                  name="raccord42"
-                  value={formData.raccord42}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <div className="formRow">
-              <div className="formGroup">
-                <label>Prix R65ms:</label>
-                <input
-                  type="number"
-                  name="raccord65"
-                  value={formData.raccord65}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="formGroup">
-                <label>Prix R100ms:</label>
-                <input
-                  type="number"
-                  name="raccord100"
-                  value={formData.raccord100}
+                  name="raccord_17"
+                  value={formData.cout_raccord_17}
                   onChange={handleInputChange}
                 />
               </div>
@@ -334,30 +310,73 @@ function GestionCout() {
 
             <div className="formRow">
               <div className="formGroup">
-                <label>Prix AEI:</label>
+                <label>R. 25ms:</label>
+                <input
+                  type="number"
+                  name="raccord_25"
+                  value={formData.cout_raccord_25}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="formGroup">
+                <label>R. 42ms:</label>
+                <input
+                  type="number"
+                  name="raccord_42"
+                  value={formData.cout_raccord_42}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <div className="formRow">
+              <div className="formGroup">
+                <label>R. 65ms:</label>
+                <input
+                  type="number"
+                  name="raccord_65"
+                  value={formData.cout_raccord_65}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="formGroup">
+                <label>R. 100ms:</label>
+                <input
+                  type="number"
+                  name="raccord_100"
+                  value={formData.cout_raccord_100}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
+            <div className="formRow">
+              <div className="formGroup">
+                <label> AEI:</label>
                 <input
                   type="number"
                   name="aei"
-                  value={formData.aei}
+                  value={formData.cout_aei}
                   onChange={handleInputChange}
                 />
               </div>
 
               <div className="formGroup">
-                <label>Prix Ligne:</label>
+                <label> Ligne:</label>
                 <input
                   type="number"
-                  name="lign"
-                  value={formData.lign}
+                  name="ligne_tir"
+                  value={formData.ligne_tir}
                   onChange={handleInputChange}
                 />
               </div>
               <div className="formGroup">
-                <label> etat cout:</label>
+                <label> Etat stock:</label>
                 <input
                   type="text"
-                  name="etatCout"
-                  value={formData.etatCout}
+                  name="etat_stock"
+                  value={formData.etat_cout}
                   onChange={handleInputChange}
                 />
               </div>
@@ -376,31 +395,45 @@ function GestionCout() {
             </div>
           </form>
         </div>
-      </div>
-
-      <div className="chart-container">
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={[data[data.length - 1]]}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="ammonix" fill="#8884d8" />
-            <Bar dataKey="tovex" fill="#82ca9d" />
-            <Bar dataKey="detos500ms" fill="#8884d8" />
-            <Bar dataKey="raccord17" fill="#82ca9d" />
-            <Bar dataKey="raccord25" fill="#8884d8" />
-            <Bar dataKey="raccord42" fill="#82ca9d" />
-            <Bar dataKey="raccord65" fill="#8884d8" />
-            <Bar dataKey="raccord100" fill="#82ca9d" />
-            <Bar dataKey="lign" fill="#8884d8" />
-            <Bar dataKey="aei" fill="#82ca9d" />
-          </BarChart>
-        </ResponsiveContainer>
+        
+        <div className="chart-container">
+        <ResponsiveContainer width="100%" height={550} className={"chart1"} >
+              <BarChart
+                data={data}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  type="cout_ammonix"
+                  dataKey="cout_ammonix"
+                  fill="#6ED18F"
+                  activeDot={{ r: 8 }}
+                />
+                <Bar type="tovex" dataKey="cout_tovex" fill="#E91E63" />
+                <Bar type="detos" dataKey="cout_detonateur_450" fill="#AF98C5" />
+                <Bar type="detos" dataKey="cout_detonateur_500" fill="#56ffc6" />
+                <Bar type="raccord" dataKey="cout_raccord_17" fill="#9576EB" />
+                <Bar type="raccord" dataKey="cout_raccord_25" fill="#9C27B0" />
+                <Bar type="raccord" dataKey="cout_raccord_42" fill="#b7b5f4" />
+                <Bar type="raccord" dataKey="cout_raccord_65" fill="#94e05e" />
+                <Bar type="raccord" dataKey="cout_raccord_100" fill="#d975ea" />
+                <Bar type="aei" dataKey="cout_aei" fill="#FF5722" />
+                <Bar type="ligne" dataKey="ligne_tir" fill="#FFC107" />
+              </BarChart>
+            </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
 }
 
-export default GestionCout;
+export default GestionStock;

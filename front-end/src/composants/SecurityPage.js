@@ -33,11 +33,8 @@ function SecurityPage() {
           textAlign: "left",
           color: "rgba(255, 255, 255, 0.95)",
           display: "block",
-          fontSize: "1.17em",
-          marginBlockStart: "1em",
-          marginBlockEnd: "1em",
-          marginInlineStart: "0px",
-          marginInlineEnd: "0px",
+          textTransform: "uppercase",
+          fontSize: "1.3em",
           fontWeight: "bold",
         }}
       >
