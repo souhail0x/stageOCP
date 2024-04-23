@@ -17,6 +17,7 @@ import {
 } from "recharts";
 import Loading from "./loaderSpinner";
 import Loader from "./spinnerLoader";
+import "../styles/GestionStock.css";
 
 function GestionStock() {
   const [data, setData] = useState([]);
@@ -37,8 +38,6 @@ function GestionStock() {
     etat_stock: "",
   });
 
-
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -56,7 +55,7 @@ function GestionStock() {
     }
   };
 
-  const [editItem, setEditItem] = useState(null); 
+  const [editItem, setEditItem] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -70,16 +69,17 @@ function GestionStock() {
       setData([...data, response.data]);
       setFormData({
         date_commande: "",
-        id: "",
+        Num_Stock: "",
         ammonix: "",
         tovex: "",
-        detos_500ms: "",
+        detonateur_500: "",
+        detonateur_450: "",
         raccord_65: "",
         raccord_17: "",
         raccord_25: "",
         raccord_42: "",
         raccord_100: "",
-        lign: "",
+        ligne_tir: "",
         aei: "",
         etat_stock: "",
       });
@@ -110,27 +110,25 @@ function GestionStock() {
     }
   };
 
-
   const handleEdit = (item) => {
     setEditItem(item); // Définir l'élément à éditer
     setFormData({
       date_commande: item.date_commande,
-      id: item.id,
+      Num_Stock: item.Num_Stock,
       ammonix: item.ammonix,
       tovex: item.tovex,
-      detos_500ms: item.detos_500ms,
+      detonateur_500: item.detonateur_500,
+      detonateur_450: item.detonateur_450,
       raccord_17: item.raccord_17,
       raccord_25: item.raccord_25,
       raccord_42: item.raccord_42,
       raccord_65: item.raccord_65,
       raccord_100: item.raccord_100,
-      lign: item.lign,
+      ligne_tir: item.ligne_tir,
       aei: item.aei,
       etat_stock: item.etat_stock,
     });
   };
-  
-  
   
   return (
     <div className="containerGetion">
@@ -139,7 +137,7 @@ function GestionStock() {
           textAlign: "left",
           color: "rgba(255, 255, 255, 0.95)",
           display: "block",
-          fontSize: "1.17em",
+          fontSize: "1.3em",
           marginBlockStart: "1em",
           marginBlockEnd: "1em",
           marginInlineStart: "0px",
@@ -162,16 +160,17 @@ function GestionStock() {
             <thead className="thead">
               <tr>
                 <th>ID</th>
-                <th>Date-com</th>
+                <th>Date</th>
                 <th>Ammonix</th>
                 <th>Tovex</th>
-                <th>Detos</th>
+                <th>D450</th>
+                <th>D500</th>
                 <th>R17</th>
                 <th>R25</th>
                 <th>R42</th>
                 <th>R65</th>
                 <th>R100</th>
-                <th>Lign</th>
+                <th>Ligne</th>
                 <th>AEI</th>
                 <th>État</th>
                 <th></th>
@@ -181,28 +180,29 @@ function GestionStock() {
             <tbody>
               {
                 isLoaded?(
-              data.map((item, index) => (
+              data.slice(-3).reverse().map((item, index) => (
                 <tr key={index}>
-                  <td>{item.id}</td>
+                  <td>{item.Num_Stock}</td>
                   <td>{item.date_commande}</td>
                   <td>{item.ammonix}</td>
                   <td>{item.tovex}</td>
-                  <td>{item.detos_500ms}</td>
+                  <td>{item.detonateur_450}</td>
+                  <td>{item.detonateur_500}</td>
                   <td>{item.raccord_17}</td>
                   <td>{item.raccord_25}</td>
                   <td>{item.raccord_42}</td>
                   <td>{item.raccord_65}</td>
                   <td>{item.raccord_100}</td>
-                  <td>{item.lign}</td>
+                  <td>{item.ligne_tir}</td>
                   <td>{item.aei}</td>
                   <td>{item.etat_stock}</td>
                   <td>
-                  <button style={{padding:"5px 0px",width:'100px'}} type="button" className="button" onClick={() => handleEdit(item)}>
-                    Modifier
-                  </button>
-                    </td>
-                    <td>
-                    <button type="button" style={{padding:"5px 0px",width:'100px'}} className="button" onClick={() => handleDelete(item.id)}>
+                    <button style={{padding:"0px 0px",width:'60px'}} type="button" className="button" onClick={() => handleEdit(item)}>
+                      Modifier
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" style={{padding:"5px 0px",width:'80px'}} className="button" onClick={() => handleDelete(item.id)}>
                       Supprimer
                     </button>
                   </td>
@@ -213,8 +213,10 @@ function GestionStock() {
             </tbody>
           </table>
         </div>
+      </div>
 
-        <div className="form-container">
+      <div className="charts-wrapper">
+      <div className="form-container chart1">
           {/* Partie 2: Formulaire */}
           <form>
             <div className="formRow">
@@ -228,18 +230,18 @@ function GestionStock() {
                 />
               </div>
               <div className="formGroup">
-                <label>id:</label>
+                <label>Num_Stock :</label>
                 <input
                   type="number"
-                  name="id"
-                  value={formData.id}
+                  name="Num_Stock"
+                  value={formData.Num_Stock}
                   onChange={handleInputChange}
                 />
               </div>
             </div>
             <div className="formRow">
               <div className="formGroup">
-                <label>Quantité Ammonix:</label>
+                <label>Ammonix:</label>
                 <input
                   type="number"
                   name="ammonix"
@@ -259,16 +261,25 @@ function GestionStock() {
             </div>
             <div className="formRow">
               <div className="formGroup">
-                <label>Nbr Detos500ms:</label>
+                <label>Detos 450ms:</label>
                 <input
                   type="number"
-                  name="detos_500ms"
-                  value={formData.detos_500ms}
+                  name="detonateur_450"
+                  value={formData.detonateur_450}
                   onChange={handleInputChange}
                 />
               </div>
               <div className="formGroup">
-                <label>Nbr R17ms:</label>
+                <label>Detos 500ms:</label>
+                <input
+                  type="number"
+                  name="detonateur_500"
+                  value={formData.detonateur_500}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="formGroup">
+                <label>R. 17ms:</label>
                 <input
                   type="number"
                   name="raccord_17"
@@ -280,7 +291,7 @@ function GestionStock() {
 
             <div className="formRow">
               <div className="formGroup">
-                <label>Nbr R25ms:</label>
+                <label>R. 25ms:</label>
                 <input
                   type="number"
                   name="raccord_25"
@@ -290,7 +301,7 @@ function GestionStock() {
               </div>
 
               <div className="formGroup">
-                <label>Nbr R42ms:</label>
+                <label>R. 42ms:</label>
                 <input
                   type="number"
                   name="raccord_42"
@@ -301,7 +312,7 @@ function GestionStock() {
             </div>
             <div className="formRow">
               <div className="formGroup">
-                <label>Nbr R65ms:</label>
+                <label>R. 65ms:</label>
                 <input
                   type="number"
                   name="raccord_65"
@@ -311,7 +322,7 @@ function GestionStock() {
               </div>
 
               <div className="formGroup">
-                <label>Nbr R100ms:</label>
+                <label>R. 100ms:</label>
                 <input
                   type="number"
                   name="raccord_100"
@@ -336,13 +347,13 @@ function GestionStock() {
                 <label> Ligne:</label>
                 <input
                   type="number"
-                  name="lign"
-                  value={formData.lign}
+                  name="ligne_tir"
+                  value={formData.ligne_tir}
                   onChange={handleInputChange}
                 />
               </div>
               <div className="formGroup">
-                <label> etat stock:</label>
+                <label> Etat stock:</label>
                 <input
                   type="text"
                   name="etat_stock"
@@ -366,29 +377,40 @@ function GestionStock() {
             </div>
           </form>
         </div>
-      </div>
-
-      <div className="chart-container">
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={[data[data.length - 1]]}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="ammonix" fill="#8884d8" />
-              <Bar dataKey="tovex" fill="#82ca9d" />
-              <Bar dataKey="detos_500ms" fill="#8884d8" />
-              <Bar dataKey="raccord_17" fill="#82ca9d" />
-              <Bar dataKey="raccord_25" fill="#8884d8" />
-              <Bar dataKey="raccord_42" fill="#82ca9d" />
-              <Bar dataKey="raccord_65" fill="#8884d8" />
-              <Bar dataKey="raccord_100" fill="#82ca9d" />
-              <Bar dataKey="lign" fill="#8884d8" />
-              <Bar dataKey="aei" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer> 
+        <div className="chart-container">
+            <ResponsiveContainer width="100%" height={550} className={"chart1"} >
+              <BarChart
+                data={data}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  type="ammonix"
+                  dataKey="ammonix"
+                  fill="#6ED18F"
+                  activeDot={{ r: 8 }}
+                />
+                <Bar type="tovex" dataKey="tovex" fill="#E91E63" />
+                <Bar type="detos" dataKey="detonateur_450" fill="#AF98C5" />
+                <Bar type="detos" dataKey="detonateur_500" fill="#56ffc6" />
+                <Bar type="raccord" dataKey="raccord_17" fill="#9576EB" />
+                <Bar type="raccord" dataKey="raccord_25" fill="#9C27B0" />
+                <Bar type="raccord" dataKey="raccord_42" fill="#b7b5f4" />
+                <Bar type="aei" dataKey="aei" fill="#FF5722" />
+                <Bar type="ligne" dataKey="ligne_tir" fill="#FFC107" />
+              </BarChart>
+            </ResponsiveContainer>
         </div>
+      </div>
     </div>
   );
 }
