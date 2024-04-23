@@ -20,7 +20,6 @@ function SidBar(props) {
     }
   };
 
-
   return (
     <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
       <div className="logo-details">
@@ -36,9 +35,9 @@ function SidBar(props) {
         <li>
           <Link to="/">
             <i className="bx bx-grid-alt"></i>
-            <span className="links_name">Home</span>
+            <span className="links_name">Acceuil</span>
           </Link>
-          <span className="tooltip">Home</span>
+          <span className="tooltip">Acceuil</span>
         </li>
         {
           !isAdmin ? '' : (
@@ -46,9 +45,9 @@ function SidBar(props) {
               <li>
                 <Link to="/command">
                   <i className="bx bx-edit"></i>
-                  <span className="links_name">Saisir commande</span>
+                  <span className="links_name">Saisir une commande</span>
                 </Link>
-                <span className="tooltip">Saisir commande</span>
+                <span className="tooltip">Saisir une commande</span>
               </li>
               <li>
 
@@ -56,45 +55,45 @@ function SidBar(props) {
                 {/* // Assuming you have a state variable called `isDisabled` */}
                 <Link to="/sautage">
                   <i className="bx bx-wrench"></i>
-                  <span className="links_name">Sairir-a-sautage</span>
+                  <span className="links_name">Saisir à sautage</span>
                 </Link>
 
-                <span className="tooltip">Sairir-a-sautage</span>
+                <span className="tooltip">Saisir à sautage</span>
               </li>
               <li>
                 <Link to="/gestion-stock">
                   <i className="bx bx-box"></i>
-                  <span className="links_name">Gestion-stock</span>
+                  <span className="links_name">Gestion du stock</span>
                 </Link>
-                <span className="tooltip">Gestion-stock</span>
+                <span className="tooltip">Gestion du stock</span>
               </li>
               <li>
                 <Link to="/gestion-cout">
                   <i className="bx bx-money"></i>
-                  <span className="links_name">Gestion-cout</span>
+                  <span className="links_name">Gestion des couts</span>
                 </Link>
-                <span className="tooltip">Gestion-cout</span>
+                <span className="tooltip">Gestion des couts</span>
               </li>
               <li>
                 <Link to="/etat-chantier">
                   <i className="bx bx-cart-alt"></i>
-                  <span className="links_name">Etat-chantier</span>
+                  <span className="links_name">Etat du chantier</span>
                 </Link>
-                <span className="tooltip">Etat-chantier</span>
+                <span className="tooltip">Etat du chantier</span>
               </li>
               <li>
                 <Link to="/security">
                   <i className="bx bx-shield"></i>
-                  <span className="links_name">Security</span>
+                  <span className="links_name">Securité</span>
                 </Link>
-                <span className="tooltip">Security</span>
+                <span className="tooltip">Securité</span>
               </li>
               <li>
                 <Link to="/Gerer-utilisateurs">
                   <i class='bx bxs-user'></i>
-                  <span className="links_name">Gerer-utilisateurs</span>
+                  <span className="links_name">Gérer les utilisateurs</span>
                 </Link>
-                <span className="tooltip">Gerer-utilisateurs</span>
+                <span className="tooltip">Gérer les utilisateurs</span>
               </li>
             </>
           )
@@ -102,9 +101,9 @@ function SidBar(props) {
         <li>
           <Link to="/dashboard">
             <i className="bx bx-pie-chart-alt-2"></i>
-            <span className="links_name">Dashboard</span>
+            <span className="links_name">Tableau de bord</span>
           </Link>
-          <span className="tooltip">Dashboard</span>
+          <span className="tooltip">Tableau de bord</span>
         </li>
         <li>
           <Link to="/archive">
@@ -116,7 +115,7 @@ function SidBar(props) {
         <li>
           <Link to="/logout" >
             <i class='bx bx-power-off'></i>
-            <span className="links_name">Deconnexion</span>
+            <span className="links_name">Déconnexion</span>
           </Link>
         </li>
 
