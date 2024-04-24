@@ -1,98 +1,122 @@
-/* HomePage.css */
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #1d2634;
-  color: #9e9ea4;
-  font-family: 'Montserrat', sans-serif;
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content:flex-end;
 }
-
-.page-container {
+.definition {
+  border: 2px solid #333;
   padding: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
 }
 
-.homepage-container {
-  max-width: 800px;
-  margin: 0 auto;
+.definition-container {
+  max-width: 1000px;
+  width: 100%;
+  padding: 20px;
+  background-color: #333; /* Couleur de fond */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
+  display: flex;
+  align-items: center; /* Alignement vertical */
+  justify-content: space-between; /* Espacement équitable entre les éléments */
 }
 
-.homepage-header {
-  text-align: center;
-  margin-bottom: 30px;
+.definition-content {
+  width: 100%;
 }
 
-.homepage-header h1 {
-  font-size: 2.5rem;
-  color: rgba(255, 255, 255, 0.95);
-}
-
-.homepage-header p {
-  font-size: 1.2rem;
-  color: rgb(151, 151, 151);
-}
-
-.section {
-  margin-bottom: 40px;
-}
-
-h2 {
-  font-size: 2rem;
-  color: rgba(255, 255, 255, 0.95) !important;
-  margin-bottom: 20px;
-}
-
-.section p {
-  font-size: 1.1rem;
-  color: #666;
-}
-
-.section ol {
-  margin-left: 20px;
-}
-
-.section ol li {
-  margin-bottom: 10px;
-  font-size: 1rem;
-  color: #888;
+.definition-text {
+  margin: 0;
+  
 }
 
 .image-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
+  width: 30%;
+  display: inline;
+  flex-direction: column;
+  align-items: flex-end; /* Alignement à droite */
 }
 
-.image-container img {
-  width: 45%;
+
+
+.small-images {
+  display: flex;
+  align-items: center; /* Alignement vertical */
+  justify-content: flex-end; /* Alignement à droite */
+  margin-top: 10px;
+  width: 100%;
+}
+
+.small-image {
+  width: 500%; /* Ajustement à 30% */
+  margin-left: 5px; /* Marge à gauche entre les images */
   border-radius: 5px;
 }
-
-.footer {
-  margin-top: 50px;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #888;
+.definition p {
+  margin: 0;
 }
 
-.footer ul {
-  list-style-type: none;
-  padding: 0;
+.hidden {
+  display: none;
 }
 
-.footer ul li {
-  margin-bottom: 5px;
+.nav-buttons {
+  margin-top: 20px;
+  display: flex;
 }
 
-.footer ul li:last-child {
-  margin-bottom: 0;
-}
-/* HomePage.css */
-
-/* HomePage.css */
-
-.logo {
-  width: 200px; /* Ajustez la taille du logo selon vos besoins */
-  vertical-align: middle;
-  margin-right: 10px; /* Ajoutez une marge à droite pour séparer le logo du titre */
+.nav-buttons button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Rend les boutons des cercles */
+  margin: 0 5px;
+  border: none;
+  background-color: #333;
+  color: #ffffff;
+  cursor: pointer;
 }
 
+.nav-buttons button.active {
+  background-color: #555;
+}
+
+
+.definition-title {
+  font-weight: bold; 
+  color: #ffffff;
+}
+
+.definition p {
+  margin: 0;
+  color: rgb(243, 243, 240); /* Couleur du texte blanc */
+}
+
+.banner-image {
+  width: 100%;
+  max-width: 1000px; /* Ajustez la largeur maximale selon vos besoins */
+  border-radius: 10px; /* Facultatif : ajoutez une bordure arrondie */
+  margin-bottom: 20px; /* Ajoute une marge en bas pour séparer de la div suivante */
+  justify-content:left;
+}
+
+.description {
+  max-width: 1000px; /* Ajustez la largeur maximale selon vos besoins */
+  width: 100%;
+  padding: 20px;
+  background-color: #333; /* Couleur de fond */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
+  color: #ffffff; /* Couleur du texte blanc */
+  margin-bottom: 20px; /* Ajoute une marge en bas pour séparer de la div suivante */
+}
+
+.Title {
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-weight: bold;
+  margin: 10px;
+  margin-bottom: 15px;
+}
