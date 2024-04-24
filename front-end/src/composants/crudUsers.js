@@ -136,7 +136,7 @@ const UserList = () => {
 
         ) : (
           <UserListContainer>
-            <h1>User List</h1>
+            <h1>Liste des utilisateurs</h1>
             {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
             <AddUserButton onClick={handleAddUser}>Ajouter utilisateur</AddUserButton>
             {showAddUser && <AddUser onClose={handleCloseAddUser} />}
@@ -151,7 +151,7 @@ const UserList = () => {
             <UserTable>
               <thead>
                 <tr>
-                  <TableHeader>Name</TableHeader>
+                  <TableHeader>Nom</TableHeader>
                   <TableHeader>Role</TableHeader>
                   <TableHeader>Actions</TableHeader>
                 </tr>
@@ -163,10 +163,10 @@ const UserList = () => {
                     <TableCell>{user.isAdmin ? "Admin" : "Utilisateur"}</TableCell>
                     <TableCell>
                       <button className="button" onClick={() => handleUpdate(user.id, user.name, user.password)}>
-                        Update
+                        Mettre à jour
                       </button>
                       <button className="button" onClick={() => handleDelete(user.id, user.isAdmin, user.name)}>
-                        Delete
+                        Supprimer
                       </button>
                     </TableCell>
                   </tr>

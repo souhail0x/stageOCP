@@ -227,17 +227,14 @@ function CommandPage2() {
   };
 
   return (
-    <div className="App">
+    <div className="page-commande">
       <h2
         style={{
           textAlign: "left",
           color: "rgba(255, 255, 255, 0.95)",
           display: "block",
-          fontSize: "1.17em",
-          marginBlockStart: "1em",
-          marginBlockEnd: "1em",
-          marginInlineStart: "0px",
-          marginInlineEnd: "0px",
+          fontSize: "1.3em",
+          marginLeft: "20px",
           fontWeight: "bold",
         }}
       >
@@ -547,7 +544,9 @@ function CommandPage2() {
                       17ms - 25ms - 42ms - 65ms
                     </option>
                     <option value="42ms - 17ms">42ms - 17ms</option>
-                    <option value="100ms - 25ms - 17ms">100ms - 25ms - 17ms</option>
+                    <option value="100ms - 25ms - 17ms">
+                      100ms - 25ms - 17ms
+                    </option>
                     <option value="100ms - 17ms">100ms - 17ms</option>
                   </select>
                 </div>
@@ -578,8 +577,19 @@ function CommandPage2() {
           </div>
         </form>
 
+        <br />
+
         {submittedData && (
           <div>
+            <center>
+              <hr
+                style={{
+                  border: "1px solid rgba(255, 255, 255, 0.95)",
+                  width: "50%",
+                }}
+              />
+            </center>
+            <br />
             <h3>Résultats du dernier calcul :</h3>
             <form>
               <table>
@@ -940,15 +950,17 @@ function CommandPage2() {
               </table>
             </form>
             <br />
-            <button className="button" type="submit" onClick={handleAdd}>
-              AJOUTER
-            </button>
-            <button className="button" onClick={generatePDFHandler}>
-              Générer PDF
-            </button>
-            <button className="button" onClick={togglePopup}>
-              Générer le Schema de Tir
-            </button>
+            <div className="form-row">
+              <button className="button" type="submit" onClick={handleAdd}>
+                AJOUTER
+              </button>
+              <button className="button" onClick={generatePDFHandler}>
+                Générer PDF
+              </button>
+              <button className="button" onClick={togglePopup}>
+                Générer Schéma Tir
+              </button>
+            </div>
             {isOpen && (
               <Popup
                 onClose={togglePopup}

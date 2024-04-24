@@ -112,7 +112,7 @@ const AddUser = ({ onClose }) => {
                 {successMessage && !isLoaded && <SuccessMessage>{successMessage}</SuccessMessage>}
 
                 <Label>
-                    Username:
+                    Nom de l'utilisateur:
                     <Input
                         type="text"
                         value={username}
@@ -121,7 +121,7 @@ const AddUser = ({ onClose }) => {
                     />
                 </Label>
                 <Label>
-                    Password:
+                    Mot de passe:
                     <Input
                         type="text"
                         value={password}
@@ -134,7 +134,7 @@ const AddUser = ({ onClose }) => {
                     checked={isAdmin}
                     onChange={(e) => setIsAdmin(e.target.checked)}
                 />
-                <Label>Is Admin</Label>
+                <Label>Est Admin</Label>
 
                 <button className="button" type="submit">Add User</button>
             </AddUserForm>

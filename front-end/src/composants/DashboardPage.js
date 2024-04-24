@@ -62,20 +62,19 @@ function DashboardPage() {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/gestion-stocks"
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }; 
+
     fetchData();
   }, []);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/gestion-stocks"
-      );
-      console.log(response.data);
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   const calculateSum = () => {
     let sum = {
@@ -89,12 +88,13 @@ function DashboardPage() {
       raccord_100: 0,
       detonateur_450: 0,
       detonateur_500: 0,
+      ligne_tir: 0,
       raccord: 0,
       aei: 0,
-      ligne_tir: 0,
     };
 
     data.forEach((item) => {
+      sum.ligne_tir += parseFloat(item.ligne_tir);
       sum.ammonix += parseInt(item.ammonix);
       sum.tovex += parseInt(item.tovex);
       sum.detos +=
@@ -109,13 +109,13 @@ function DashboardPage() {
       sum.detonateur_450 += parseInt(item.detonateur_450);
       sum.detonateur_500 += parseInt(item.detonateur_500);
       sum.aei += parseInt(item.aei);
-      sum.ligne_tir += parseInt(item.ligne_tir);
       sum.raccord +=
         parseInt(item.raccord_17) +
         parseInt(item.raccord_25) +
         parseInt(item.raccord_42) +
         parseInt(item.raccord_65) +
         parseInt(item.raccord_100);
+
     });
 
     return sum;
@@ -140,13 +140,6 @@ function DashboardPage() {
     { name: "Ligne_tir", value: sum.ligne_tir },
   ];
 
-  const intialStock = {
-    ammonix: 3282900,
-    tovex: 45500,
-    detos: 87056,
-    raccord: 63608,
-  };
-
   return (
     <main className="main-cont">
       <div
@@ -157,58 +150,94 @@ function DashboardPage() {
           fontSize: "19px",
         }}
       >
-        <h3>DASHBOARD</h3>
+        <h2>DASHBOARD</h2>
+        <h4></h4>
       </div>
 
       <div className="main-cards">
+
         <div className="card">
-          <div className="card-inner">
-            <h3>Ammonix</h3>
-          </div>
-          <h1>{sum.ammonix}</h1>
-          <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
+          <h2>Ammonix</h2>
           <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>3282900</h1>
-        </div>
-        <div className="card">
-          <div className="card-inner">
-            <h3>Tovex</h3>
-          </div>
-          <h1>{sum.tovex}</h1>
+          <h1>3282900 kg</h1>
           <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
+          <div className="card-inner">
+            <h3>Consommation</h3>
+          </div>
+          <h1>{sum.ammonix} kg</h1>
+        </div>
+
+        <div className="card">
+          <h2>Tovex</h2>
           <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>45500</h1>
-        </div>
-        <div className="card">
-          <div className="card-inner">
-            <h3>Detos</h3>
-          </div>
-          <h1>{sum.detos}</h1>
+          <h1>45500 kg</h1>
           <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
+          <div className="card-inner">
+            <h3>Consommation</h3>
+          </div>
+          <h1>{sum.tovex} kg</h1>
+        </div>
+
+        <div className="card">
+          <h2>Detos</h2>
+        <div className="card-inner">
+            <h3>Stock Initial</h3>
+          </div>
+          <h1>87056 U</h1>
+          <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
+          <div className="card-inner">
+            <h3>Consommation</h3>
+          </div>
+          <h1>{sum.detos} U</h1>
+        </div>
+        
+        <div className="card">
+          <h2>Raccord</h2>
           <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>87056</h1>
-        </div>
-        <div className="card">
-          <div className="card-inner">
-            <h3>Raccord</h3>
-          </div>
-          <h1>{sum.raccord}</h1>
+          <h1>63608 U</h1>
           <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
+          <div className="card-inner">
+            <h3>Consommation</h3>
+          </div>
+          <h1>{sum.raccord} U</h1>          
+        </div>
+
+        <div className="card">
+          <h2>Ligne de tir</h2>
           <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>63608</h1>
+          <h1>142000 m</h1>
+          <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
+          <div className="card-inner">
+            <h3>Consommation</h3>
+          </div>
+          <h1>{sum.ligne_tir} m</h1>
         </div>
+
+        <div className="card">
+          <h2>Aei</h2>
+          <div className="card-inner">
+            <h3>Stock Initial</h3>
+          </div>
+          <h1>292</h1>
+          <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
+          <div className="card-inner">
+            <h3>Consommation</h3>
+          </div>
+          <h1>{sum.aei} </h1>
+        </div>
+        
       </div>
 
       <div className="charts">
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={300} className={"chart1"} >
           <BarChart
             data={data}
             margin={{
@@ -230,7 +259,7 @@ function DashboardPage() {
           </BarChart>
         </ResponsiveContainer>
 
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" className={"chart1"} >
           <PieChart>
             <Pie dataKey="value" data={pieData1} fill="#8884d8" label>
               {pieData1.map((entry, index) => (
@@ -244,7 +273,7 @@ function DashboardPage() {
           </PieChart>
         </ResponsiveContainer>
 
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={300} className={"chart1"} >
           <LineChart
             data={data}
             margin={{
@@ -275,7 +304,7 @@ function DashboardPage() {
           </LineChart>
         </ResponsiveContainer>
 
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" className={"chart1"} >
           <PieChart width={400} height={161}>
             <Pie
               data={pieData2}
@@ -298,6 +327,7 @@ function DashboardPage() {
           </PieChart>
         </ResponsiveContainer>
       </div>
+
     </main>
   );
 }
