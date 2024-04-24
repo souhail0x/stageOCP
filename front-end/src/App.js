@@ -18,8 +18,8 @@ import LogoutPopUp from "./composants/logout";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true);
-  const [isLogged, setIsLogged] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   // Function to handle closing the logout modal
