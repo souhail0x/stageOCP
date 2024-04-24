@@ -32,6 +32,12 @@ const HomePage = () => {
       </p>
     </div>
       <img src={homeImage} alt="home" className="banner-image" /> 
+      <div className="nav-buttons">
+        <button onClick={() => handleClick(1)} className={currentDefinition === 1 ? 'active' : ''}>1</button>
+        <button onClick={() => handleClick(2)} className={currentDefinition === 2 ? 'active' : ''}>2</button>
+        <button onClick={() => handleClick(3)} className={currentDefinition === 3 ? 'active' : ''}>3</button>
+        <button onClick={() => handleClick(4)} className={currentDefinition === 4 ? 'active' : ''}>4</button>
+      </div>
       <div className="definition-container">
         <div className="definition">
         <div className={currentDefinition === 1 ? '' : 'hidden'}>
@@ -126,12 +132,6 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="nav-buttons">
-        <button onClick={() => handleClick(1)} className={currentDefinition === 1 ? 'active' : ''}>1</button>
-        <button onClick={() => handleClick(2)} className={currentDefinition === 2 ? 'active' : ''}>2</button>
-        <button onClick={() => handleClick(3)} className={currentDefinition === 3 ? 'active' : ''}>3</button>
-        <button onClick={() => handleClick(4)} className={currentDefinition === 4 ? 'active' : ''}>4</button>
       </div>
     </div>
   );

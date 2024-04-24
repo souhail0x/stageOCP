@@ -52,8 +52,8 @@
 }
 
 .small-image {
-  width: 500%; /* Ajustement à 30% */
-  margin-left: 5px; /* Marge à gauche entre les images */
+  width: 33%; /* Ajustement à 30% */
+  margin-left: 10px; /* Marge à gauche entre les images */
   border-radius: 5px;
 }
 .definition p {
@@ -65,15 +65,15 @@
 }
 
 .nav-buttons {
-  margin-top: 20px;
   display: flex;
+  margin-bottom: 15px;
 }
 
 .nav-buttons button {
   width: 40px;
   height: 40px;
   border-radius: 50%; /* Rend les boutons des cercles */
-  margin: 0 5px;
+  margin:  10px;
   border: none;
   background-color: #333;
   color: #ffffff;
