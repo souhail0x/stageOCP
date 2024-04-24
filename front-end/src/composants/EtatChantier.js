@@ -3,32 +3,23 @@ import axios from "axios";
 import {
   BarChart,
   Bar,
-  PieChart,
-  Pie,
-  Cell,
+  CartesianGrid,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
 } from "recharts";
 
-import '../styles/EtatChantier.css'
+import '../styles/EtatChantier.css';
 
 function EtatChantier() {
-  const dataChart = [];
-
   const [data, setData] = useState([]);
-
   const [formData, setFormData] = useState({
     date: "",
     machine: "",
     avance_foration: "",
     avance_decapage: "",
-
   });
 
   useEffect(() => {
@@ -38,10 +29,10 @@ function EtatChantier() {
   const fetchData = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/etat-chantiers");
-      const sortedData = response.data.sort((a, b) => new Date(a.date) - new Date(b.date)); // Tri des données par date croissante
-      const firstCommand = sortedData.shift(); // Prendre la première commande
-      const lastFiveCommands = sortedData.slice(-6); // Prendre les cinq dernières commandes
-      setData([firstCommand, ...lastFiveCommands]); // Fusionner les données
+      const sortedData = response.data.sort((a, b) => new Date(a.date) - new Date(b.date));
+      const firstCommand = sortedData.shift();
+      const lastFiveCommands = sortedData.slice(-6);
+      setData([firstCommand, ...lastFiveCommands]);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -55,19 +46,13 @@ function EtatChantier() {
   const handleAdd = async () => {
     try {
       const response = await axios.post("http://127.0.0.1:8000/api/etat-chantiers", formData);
-      const newData = response.data; // Assuming the API returns the newly added data
-      setData([newData, ...data.slice(0, 6)]); // Ajouter la nouvelle donnée au début du tableau existant
-      setFormData({
-        date: "",
-        machine: "",
-        avance_foration: "",
-        avance_decapage: "",
-      });
+      const newData = response.data;
+      setData([newData, ...data.slice(0, 6)]);
+      resetForm();
     } catch (error) {
       console.error("Error adding data:", error);
     }
   };
-
 
   const handleUpdate = async () => {
     try {
@@ -83,6 +68,7 @@ function EtatChantier() {
   const handleEdit = (item) => {
     setFormData(item);
   };
+
   const resetForm = () => {
     setFormData({
       id: null,
@@ -93,51 +79,32 @@ function EtatChantier() {
     });
   };
 
-
-
-
   const handleDelete = async (index) => {
-    const selectedItem = data[index]; // Obtenir l'élément sélectionné
+    const selectedItem = data[index];
     try {
       await axios.delete(`http://127.0.0.1:8000/api/etat-chantiers/${selectedItem.id}`);
       const updatedData = [...data];
-      updatedData.splice(index, 1); // Supprimer l'élément de la liste de données
-      setData(updatedData); // Mettre à jour la liste de données
+      updatedData.splice(index, 1);
+      setData(updatedData);
     } catch (error) {
       console.error("Error deleting data:", error);
     }
   };
 
-
   const prepareChartData = () => {
     return data
-      .filter((item) => item && item.machine && item.avance_foration !== undefined && item.avance_decapage !== undefined)
-      .map((item) => ({
+      .filter(item => item && item.machine && item.avance_foration !== undefined && item.avance_decapage !== undefined)
+      .map(item => ({
         name: item.machine,
         avance_foration: item.avance_foration,
         avance_decapage: item.avance_decapage,
       }));
   };
 
-
-
   return (
     <div className="containerGetion">
       <h1
-        style={{
-          textAlign: "left",
-          color: "rgba(255, 255, 255, 0.95)",
-          display: "block",
-          fontSize: "1.17em",
-          marginBlockStart: "1em",
-          marginBlockEnd: "1em",
-          marginInlineStart: "0px",
-          marginInlineEnd: "0px",
-          fontWeight: "bold",
-        }}>
-        SUIVI ETAT DE CHANTIER
-      </h1>
-
+        style={{ color: "white", marginBottom: "30px" }}>SUIVI DE L'ETAT DU CHANTIER</h1>
       <div className="formRow">
         <div className="formGroup">
           <label>Date:</label>
@@ -150,12 +117,23 @@ function EtatChantier() {
         </div>
         <div className="formGroup">
           <label>Machine:</label>
-          <input
-            type="text"
+          <select
             name="machine"
+            style={{ height: "35px" }}
             value={formData.machine}
             onChange={handleInputChange}
-          />
+          >
+            <option value="">select machine</option>
+            <option value="7500|1">7500|1</option>
+            <option value="7500|2">7500|2</option>
+            <option value="PH1">PH1</option>
+            <option value="PH2">PH2</option>
+            <option value="ZD11">ZD11</option>
+            <option value="Procaneq">Procaneq</option>
+            <option value="TechnoZaim">TechnoZaim</option>
+            <option value="Transmine">Transmine</option>
+            <option value="EE">EE.</option>
+          </select>
         </div>
         <div className="formGroup">
           <label>Avances Foration:</label>
@@ -176,19 +154,14 @@ function EtatChantier() {
           />
         </div>
       </div>
-
-      <button type="button" onClick={handleAdd} className="button">
-        Ajouter
-      </button>
-
+      <button type="button" onClick={handleAdd} className="button">Ajouter</button>
       <button type="button" onClick={handleUpdate} className="button">Mise à jour</button>
-
       <div className="container">
         <div className="tableContainer">
           <table className="table">
             <thead className="thead">
               <tr>
-                <th>Date commande:</th>
+                <th>Date</th>
                 <th>Machine</th>
                 <th>Avance Foration</th>
                 <th>Avance Décapage</th>
@@ -212,7 +185,6 @@ function EtatChantier() {
                     <button style={{ padding: "5px" }} onClick={() => handleDelete(index)} className="button">Supprimer</button>
                   </td>
                 </tr>
-
               ))}
             </tbody>
           </table>
@@ -220,13 +192,8 @@ function EtatChantier() {
         <div className="chart-container">
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
-              data={prepareChartData()} // Use prepared data for the chart
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 0
-              }}
+              data={prepareChartData()}
+              margin={{ top: 5, right: 30, left: 20, bottom: 0 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
