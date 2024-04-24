@@ -32,7 +32,6 @@ function ArchivePage() {
         const [data1, data2, data3] = jsonResponses;
 
         const combinedArchiveData = [...data1, ...data2, ...data3];
-        
 
         const mergedData = [];
 
@@ -40,11 +39,11 @@ function ArchivePage() {
           const mergedItem = {
             ...combinedArchiveData[i], // Take properties from the first set of data
             ...combinedArchiveData[i + 4], // Take properties from the second set of data
-            ...combinedArchiveData[i + 8] // Take properties from the third set of data
+            ...combinedArchiveData[i + 8], // Take properties from the third set of data
           };
           mergedData.push(mergedItem);
         }
-        
+
         setArchiveData(mergedData);
         setFilteredData(mergedData);
         console.log(combinedArchiveData);
@@ -62,30 +61,31 @@ function ArchivePage() {
     const filename = `archive_${currentDate.getFullYear()}-${
       currentDate.getMonth() + 1
     }-${currentDate.getDate()}.xlsx`;
-  
+
     // Use filteredData instead of archiveData if search is performed
     const dataToExport = searchQuery ? filteredData : archiveData;
-  
+
     const ws = XLSX.utils.json_to_sheet(dataToExport);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Archive");
-  
+
     XLSX.writeFile(wb, filename);
   };
 
   const handleSearch = (e) => {
     const { value } = e.target;
     setSearchQuery(value);
-    
+
     const filtered = archiveData.filter((item) =>
-      Object.values(item).some((val) =>
-        typeof val === "string" && val.toLowerCase().includes(value.toLowerCase())
+      Object.values(item).some(
+        (val) =>
+          typeof val === "string" &&
+          val.toLowerCase().includes(value.toLowerCase())
       )
     );
-  
+
     setFilteredData(filtered);
   };
-  
 
   return (
     <>
@@ -94,12 +94,21 @@ function ArchivePage() {
       ) : (
         <div className="archiveContainer">
           <div className="archive-header">
-            <h2 className="archive-title">Archive</h2>
+            <h2
+              style={{
+                textAlign: "left",
+                color: "white",
+                textTransform: "uppercase",
+              }}
+              className="archive-title"
+            >
+              Archive des sautages
+            </h2>
             <input
               type="text"
-              placeholder="Rechercher..."
+              placeholder="Rechercher par mot-clé ..."
               className="search-input"
-              style={{ width: "700px", height: "40px" }} 
+              style={{ width: "1200px", height: "40px", marginTop: "20px" }}
               value={searchQuery}
               onChange={handleSearch}
             />

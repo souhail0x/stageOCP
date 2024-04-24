@@ -4,8 +4,43 @@ import axios from "axios";
 import "jspdf-autotable";
 import generatePDF from "./pdfGenerator";
 import Popup from "./shemaGenerator";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 function CommandPage2() {
+  const [isResetPopupOpen, setIsResetPopupOpen] = useState(false);
+  const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [isGeneratePDFPopupOpen, setIsGeneratePDFPopupOpen] = useState(false);
+
+  const handleResetConfirmation = () => {
+    setIsResetPopupOpen(true);
+    handleCancel();
+  };
+
+  const handleAddConfirmation = () => {
+    setIsAddPopupOpen(true);
+  };
+
+  const handleGeneratePDFConfirmation = () => {
+    setIsGeneratePDFPopupOpen(true);
+  };
+
+  const handleResetConfirm = () => {
+    // Logique pour réinitialiser le formulaire
+    setIsResetPopupOpen(false);
+  };
+
+  const handleAddConfirm = () => {
+    // Logique pour ajouter les données
+    setIsAddPopupOpen(false);
+    handleAdd();
+  };
+
+  const handleGeneratePDFConfirm = () => {
+    // Logique pour générer le PDF
+    setIsGeneratePDFPopupOpen(false);
+    generatePDFHandler();
+  };
+
   const [formData, setFormData] = useState({
     date: "",
     Num_Commande: "",
@@ -48,6 +83,29 @@ function CommandPage2() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      date: "",
+      Num_Commande: "",
+      panneau: "",
+      tranche: "",
+      niveau: "",
+      mode_tir: "",
+      foration: "",
+      nombre_trous: "",
+      nombre_ranges: "",
+      trous_range: "",
+      maille_banquette: "",
+      espacement: "",
+      decappage: "",
+      profondeur: "",
+      zone_tir: "",
+      mode_charge: "",
+      dosage_prevu: "",
+      schema_tir: "",
+    });
   };
 
   const handleAdd = async () => {
@@ -491,7 +549,7 @@ function CommandPage2() {
                   >
                     <option value="">select zone de tir </option>
                     <option value="LBRAYKIYIN">LBRAYKIYIN</option>
-                    <option value="LBHIRA">LBHIRA</option>
+                    <option value="LBRAHLA">LBRAHLA</option>
                   </select>
                 </div>
               </td>
@@ -571,9 +629,21 @@ function CommandPage2() {
               Calculer
             </button>
             {/* onClick={handleSubmit} */}
-            <button type="reset" className="button">
+
+            <button
+              type="reset"
+              className="button"
+              onClick={handleResetConfirmation}
+            >
               Effacer
             </button>
+            {isResetPopupOpen && (
+              <ConfirmationPopup
+                message="Êtes-vous sûr de vouloir effacer les données du formulaire ?"
+                onConfirm={handleResetConfirm}
+                onClose={() => setIsResetPopupOpen(false)}
+              />
+            )}
           </div>
         </form>
 
@@ -590,7 +660,16 @@ function CommandPage2() {
               />
             </center>
             <br />
-            <h3>Résultats du dernier calcul :</h3>
+            <h3
+              style={{
+                textAlign: "left",
+                textTransform: "uppercase",
+                color: "white",
+                paddingLeft: "20px",
+              }}
+            >
+              Résultats du dernier calcul :
+            </h3>
             <form>
               <table>
                 <tr>
@@ -859,7 +938,18 @@ function CommandPage2() {
                     </div>
                   </td>
                 </tr>
-                <h3> Prix Résultats :</h3>
+                <h3
+                  style={{
+                    textAlign: "left",
+                    textTransform: "uppercase",
+                    color: "white",
+                    paddingLeft: "20px",
+                    padding: "20px",
+                  }}
+                >
+                  {" "}
+                  Prix Résultats :
+                </h3>
                 <tr>
                   <td>
                     <div className="form-group">
@@ -951,12 +1041,33 @@ function CommandPage2() {
             </form>
             <br />
             <div className="form-row">
-              <button className="button" type="submit" onClick={handleAdd}>
-                AJOUTER
+              <button
+                className="button"
+                type="submit"
+                onClick={handleAddConfirmation}
+              >
+                Ajouter
               </button>
-              <button className="button" onClick={generatePDFHandler}>
+              {isAddPopupOpen && (
+                <ConfirmationPopup
+                  message="Êtes-vous sûr de vouloir ajouter les données ?"
+                  onConfirm={handleAddConfirm}
+                  onClose={() => setIsAddPopupOpen(false)}
+                />
+              )}
+              <button
+                className="button"
+                onClick={handleGeneratePDFConfirmation}
+              >
                 Générer PDF
               </button>
+              {isGeneratePDFPopupOpen && (
+                <ConfirmationPopup
+                  message="Êtes-vous sûr de vouloir générer le PDF ?"
+                  onConfirm={handleGeneratePDFConfirm}
+                  onClose={() => setIsGeneratePDFPopupOpen(false)}
+                />
+              )}
               <button className="button" onClick={togglePopup}>
                 Générer Schéma Tir
               </button>

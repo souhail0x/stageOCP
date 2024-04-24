@@ -18,8 +18,11 @@ import {
 import Loading from "./loaderSpinner";
 import Loader from "./spinnerLoader";
 import "../styles/GestionStock.css";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 function GestionStock() {
+  const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
@@ -128,6 +131,15 @@ function GestionStock() {
       aei: item.aei,
       etat_stock: item.etat_stock,
     });
+  };
+
+  const handleAddConfirmation = () => {
+    setIsAddPopupOpen(true);
+  };
+
+  const handleAddConfirm = () => {
+    setIsAddPopupOpen(false);
+    handleAdd();
   };
   
   return (
@@ -365,7 +377,7 @@ function GestionStock() {
 
             <div className="button-container-bottom">
               {/* Boutons */}
-              <button type="button" onClick={handleAdd} className="button">
+              <button type="button" onClick={handleAddConfirmation} className="button">
                 Ajouter
               </button>
               {editItem && (
@@ -373,6 +385,8 @@ function GestionStock() {
                     Mettre à jour
                   </button>
                 )}
+
+
 
             </div>
           </form>
@@ -411,6 +425,13 @@ function GestionStock() {
             </ResponsiveContainer>
         </div>
       </div>
+      {isAddPopupOpen && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir ajouter les données ?"
+          onConfirm={handleAddConfirm}
+          onClose={() => setIsAddPopupOpen(false)}
+        />
+      )}
     </div>
   );
 }

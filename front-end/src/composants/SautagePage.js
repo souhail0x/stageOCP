@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import "../styles/SautagePage.css";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 const SautagePage = () => {
+  const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+
   // Déclaration des états pour les champs du formulaire
   const [date, setDate] = useState("");
   const [numeroExecution, setNumeroExecution] = useState("");
@@ -83,14 +86,13 @@ const SautagePage = () => {
     setObservation(event.target.value);
   };
 
-  // Fonction pour gérer la modification des données
-  const handleModifier = async () => {
-    // Logique pour la modification des données
+  const handleAddConfirmation = () => {
+    setIsAddPopupOpen(true);
   };
 
-  // Fonction pour gérer la suppression des données
-  const handleSupprimer = async () => {
-    // Logique pour la suppression des données
+  const handleAddConfirm = () => {
+    setIsAddPopupOpen(false);
+    handleAjouter();
   };
 
   return (
@@ -337,10 +339,17 @@ const SautagePage = () => {
             style={{ backgroundColor: "#45a049" }}
             className="btn btn-ajouter"
             type="submit"
-            onClick={handleAjouter}
+            onClick={handleAddConfirmation}
           >
             AJOUTER
           </button>
+          {isAddPopupOpen && (
+            <ConfirmationPopup
+              message="Êtes-vous sûr de vouloir ajouter les données ?"
+              onConfirm={handleAddConfirm}
+              onClose={() => setIsAddPopupOpen(false)}
+            />
+          )}
         </div>
         {/* </form> */}
       </div>

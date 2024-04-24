@@ -21,14 +21,13 @@ const TableHeader = styled.th`
   background-color: #f2f2f2;
   font-weight: bold;
   text-align: left;
-  color:black;
-  text-decoration:none;
-
+  color: black;
+  text-decoration: none;
 `;
 
 const TableCell = styled.td`
   padding: 12px;
-  color:white;
+  color: white;
   border: 1px solid #ddd;
   text-align: left;
 `;
@@ -43,7 +42,7 @@ const AddUserButton = styled.button`
   border-radius: 5px;
   color: #fff;
   cursor: pointer;
-  background-color: #45a049
+  background-color: #45a049;
 `;
 const SuccessMessage = styled.div`
   background-color: #5cb85c;
@@ -57,12 +56,12 @@ const UserList = () => {
   const [users, setUsers] = useState([]);
   const [showAddUser, setShowAddUser] = useState(false);
   const [showUpdateUser, setShowUpdateUser] = useState(false); // Initialize showUpdateUser state
-  const [modifiedTable, setModifiedTable] = useState('');
-  const [newName, setNewName] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [modifiedTable, setModifiedTable] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [userId, setUserId] = useState('');
-  const [isLoaded, setIsLoaded] = useState(true)
+  const [userId, setUserId] = useState("");
+  const [isLoaded, setIsLoaded] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -100,9 +99,12 @@ const UserList = () => {
         },
       });
       setUsers(users.filter((user) => user.id !== userId));
-      setModifiedTable(Math.random())
-      isAdmin ? setSuccessMessage(`Admin ${username} supprimé(e) avec succès !`) : setSuccessMessage(`Utilisateur ${username} supprimé(e) avec succès !`);
-
+      setModifiedTable(Math.random());
+      isAdmin
+        ? setSuccessMessage(`Admin ${username} supprimé(e) avec succès !`)
+        : setSuccessMessage(
+            `Utilisateur ${username} supprimé(e) avec succès !`
+          );
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -121,7 +123,7 @@ const UserList = () => {
 
   const handleCloseAddUser = () => {
     setShowAddUser(false);
-    setModifiedTable(Math.random())
+    setModifiedTable(Math.random());
   };
 
   const handleCloseUpdateUser = () => {
@@ -130,54 +132,72 @@ const UserList = () => {
 
   return (
     <>
-      {
-        isLoaded ? (
-          <Loader />
-
-        ) : (
-          <UserListContainer>
-            <h1>Liste des utilisateurs</h1>
-            {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
-            <AddUserButton onClick={handleAddUser}>Ajouter utilisateur</AddUserButton>
-            {showAddUser && <AddUser onClose={handleCloseAddUser} />}
-            {showUpdateUser && ( // Render UpdateUser component conditionally based on showUpdateUser state
-              <UpdateUser
-                userId={userId}
-                newName={newName}
-                newPassword={newPassword}
-                onCloseUpdate={handleCloseUpdateUser}
-              />
-            )}
-            <UserTable>
-              <thead>
-                <tr>
-                  <TableHeader>Nom</TableHeader>
-                  <TableHeader>Role</TableHeader>
-                  <TableHeader>Actions</TableHeader>
+      {isLoaded ? (
+        <Loader />
+      ) : (
+        <UserListContainer>
+          <h1
+            style={{
+              textAlign: "center",
+              color: "white",
+              textTransform: "uppercase",
+            }}
+          >
+            Liste des utilisateurs
+          </h1>
+          {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+          <AddUserButton onClick={handleAddUser}>
+            Ajouter utilisateur
+          </AddUserButton>
+          {showAddUser && <AddUser onClose={handleCloseAddUser} />}
+          {showUpdateUser && ( // Render UpdateUser component conditionally based on showUpdateUser state
+            <UpdateUser
+              userId={userId}
+              newName={newName}
+              newPassword={newPassword}
+              onCloseUpdate={handleCloseUpdateUser}
+            />
+          )}
+          <UserTable>
+            <thead>
+              <tr>
+                <TableHeader>Nom</TableHeader>
+                <TableHeader>Role</TableHeader>
+                <TableHeader>Actions</TableHeader>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>
+                    {user.isAdmin ? "Admin" : "Utilisateur"}
+                  </TableCell>
+                  <TableCell>
+                    <button
+                      className="button"
+                      onClick={() =>
+                        handleUpdate(user.id, user.name, user.password)
+                      }
+                    >
+                      Mettre à jour
+                    </button>
+                    <button
+                      className="button"
+                      onClick={() =>
+                        handleDelete(user.id, user.isAdmin, user.name)
+                      }
+                    >
+                      Supprimer
+                    </button>
+                  </TableCell>
                 </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.id}>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.isAdmin ? "Admin" : "Utilisateur"}</TableCell>
-                    <TableCell>
-                      <button className="button" onClick={() => handleUpdate(user.id, user.name, user.password)}>
-                        Mettre à jour
-                      </button>
-                      <button className="button" onClick={() => handleDelete(user.id, user.isAdmin, user.name)}>
-                        Supprimer
-                      </button>
-                    </TableCell>
-                  </tr>
-                ))}
-              </tbody>
-            </UserTable>
-          </UserListContainer>
-        )
-      }
+              ))}
+            </tbody>
+          </UserTable>
+        </UserListContainer>
+      )}
     </>
-
   );
 };
 
