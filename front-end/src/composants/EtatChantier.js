@@ -9,9 +9,11 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  LineChart,
+  Line,
 } from "recharts";
 
-import '../styles/EtatChantier.css';
+import "../styles/EtatChantier.css";
 
 function EtatChantier() {
   const [data, setData] = useState([]);
@@ -28,8 +30,12 @@ function EtatChantier() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/etat-chantiers");
-      const sortedData = response.data.sort((a, b) => new Date(a.date) - new Date(b.date));
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/etat-chantiers"
+      );
+      const sortedData = response.data.sort(
+        (a, b) => new Date(a.date) - new Date(b.date)
+      );
       const firstCommand = sortedData.shift();
       const lastFiveCommands = sortedData.slice(-6);
       setData([firstCommand, ...lastFiveCommands]);
@@ -45,7 +51,10 @@ function EtatChantier() {
 
   const handleAdd = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/etat-chantiers", formData);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/etat-chantiers",
+        formData
+      );
       const newData = response.data;
       setData([newData, ...data.slice(0, 6)]);
       resetForm();
@@ -56,8 +65,13 @@ function EtatChantier() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://127.0.0.1:8000/api/etat-chantiers/${formData.id}`, formData);
-      const updatedData = data.map(item => item.id === formData.id ? formData : item);
+      await axios.put(
+        `http://127.0.0.1:8000/api/etat-chantiers/${formData.id}`,
+        formData
+      );
+      const updatedData = data.map((item) =>
+        item.id === formData.id ? formData : item
+      );
       setData(updatedData);
       resetForm();
     } catch (error) {
@@ -82,7 +96,9 @@ function EtatChantier() {
   const handleDelete = async (index) => {
     const selectedItem = data[index];
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/etat-chantiers/${selectedItem.id}`);
+      await axios.delete(
+        `http://127.0.0.1:8000/api/etat-chantiers/${selectedItem.id}`
+      );
       const updatedData = [...data];
       updatedData.splice(index, 1);
       setData(updatedData);
@@ -93,8 +109,14 @@ function EtatChantier() {
 
   const prepareChartData = () => {
     return data
-      .filter(item => item && item.machine && item.avance_foration !== undefined && item.avance_decapage !== undefined)
-      .map(item => ({
+      .filter(
+        (item) =>
+          item &&
+          item.machine &&
+          item.avance_foration !== undefined &&
+          item.avance_decapage !== undefined
+      )
+      .map((item) => ({
         name: item.machine,
         avance_foration: item.avance_foration,
         avance_decapage: item.avance_decapage,
@@ -103,9 +125,10 @@ function EtatChantier() {
 
   return (
     <div className="containerGetion">
-      <h1
-        style={{ color: "white", marginBottom: "30px" }}>SUIVI DE L'ETAT DU CHANTIER</h1>
-      <div className="formRow">
+      <h1 style={{ color: "white", marginBottom: "30px" }}>
+        SUIVI DE L'ETAT DU CHANTIER
+      </h1>
+      <div className="formRow ">
         <div className="formGroup">
           <label>Date:</label>
           <input
@@ -131,7 +154,8 @@ function EtatChantier() {
             <option value="ZD11">ZD11</option>
             <option value="Procaneq">Procaneq</option>
             <option value="TechnoZaim">TechnoZaim</option>
-            <option value="Transmine">Transmine</option>
+            <option value="Transmine">Transwine</option>
+            <option value="GNE">GNE</option>
             <option value="EE">EE.</option>
           </select>
         </div>
@@ -154,11 +178,15 @@ function EtatChantier() {
           />
         </div>
       </div>
-      <button type="button" onClick={handleAdd} className="button">Ajouter</button>
-      <button type="button" onClick={handleUpdate} className="button">Mise à jour</button>
+      <button type="button" onClick={handleAdd} className="button">
+        Ajouter
+      </button>
+      <button type="button" onClick={handleUpdate} className="button">
+        Mise à jour
+      </button>
       <div className="container">
         <div className="tableContainer">
-          <table className="table">
+          <table className="table table-etat">
             <thead className="thead">
               <tr>
                 <th>Date</th>
@@ -172,25 +200,40 @@ function EtatChantier() {
             <tbody>
               {data.map((item, index) => (
                 <tr key={index}>
-                  <td>{item?.date || ''}</td>
-                  <td>{item?.machine || ''}</td>
-                  <td>{item?.avance_foration || ''}</td>
-                  <td>{item?.avance_decapage || ''}</td>
+                  <td>{item?.date || ""}</td>
+                  <td>{item?.machine || ""}</td>
+                  <td>{item?.avance_foration || ""}</td>
+                  <td>{item?.avance_decapage || ""}</td>
                   <td>
-                    <button style={{ padding: "5px" }} onClick={() => handleEdit(item)} className="button">
+                    <button
+                      style={{ padding: "5px" }}
+                      onClick={() => handleEdit(item)}
+                      className="button"
+                    >
                       Modifier
                     </button>
                   </td>
                   <td>
-                    <button style={{ padding: "5px" }} onClick={() => handleDelete(index)} className="button">Supprimer</button>
+                    <button
+                      style={{ padding: "5px" }}
+                      onClick={() => handleDelete(index)}
+                      className="button"
+                    >
+                      Supprimer
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className="chart-container">
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="chart-container chart-wrapper ">
+          <ResponsiveContainer
+            width="50%"
+            height={300}
+            className="chart1"
+            style={{ marginRight: "10px" }}
+          >
             <BarChart
               data={prepareChartData()}
               margin={{ top: 5, right: 30, left: 20, bottom: 0 }}
@@ -203,6 +246,33 @@ function EtatChantier() {
               <Bar dataKey="avance_foration" fill="#8884d8" />
               <Bar dataKey="avance_decapage" fill="#82ca9d" />
             </BarChart>
+          </ResponsiveContainer>
+          <ResponsiveContainer
+            width="50%"
+            height={300}
+            className="chart1"
+            style={{ marginLeft: "10px" }}
+          >
+            <LineChart
+              data={prepareChartData()} // Assuming the same data for line chart
+              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="avance_foration"
+                stroke="#8884d8"
+              />
+              <Line
+                type="monotone"
+                dataKey="avance_decapage"
+                stroke="#82ca9d"
+              />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </div>

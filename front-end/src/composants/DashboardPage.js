@@ -248,7 +248,7 @@ function DashboardPage() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="Num_Stock" />
             <YAxis />
             <Tooltip />
             <Legend />
@@ -284,7 +284,7 @@ function DashboardPage() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="Num_Stock" />
             <YAxis />
             <Tooltip />
             <Legend />

@@ -200,6 +200,24 @@ function GestionStock() {
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
               {isLoaded ? (
                 data.slice(-3).reverse().map((item, index) => (
                   <tr key={index}>
@@ -421,7 +439,7 @@ function GestionStock() {
                 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+                <XAxis dataKey="Num_Cout" />
                 <YAxis />
                 <Tooltip />
                 <Legend />

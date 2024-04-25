@@ -1,19 +1,18 @@
 .container {
-    display: flex;
+  display: block;
     justify-content: space-between;
     margin-top: 50px;
   }
-  
+
   .tableContainer {
-    flex: 1;
     top: 0px;
     margin-top: 0px;
     align-self: flex-start;
   }
-  
-  .chart-container {
-    flex: 1;
-    align-self: flex-start;
+
+  .chart-wrapper {
+    display: flex;
+    margin: 0px;
   }
   
   .table{
@@ -28,6 +27,7 @@
     /* padding: 5px; */
     text-align: left;
     color: #a49e9e;
+    white-space: nowrap;
   }
 
   .table tbody tr:nth-child(even) {
