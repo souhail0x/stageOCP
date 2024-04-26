@@ -22,17 +22,17 @@ function GestionStock() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
     date_commande: "",
-    Num_Stock: "",
+    id: "",
     ammonix: "",
     tovex: "",
-    detonateur_500: "",
-    detonateur_450: "",
-    raccord_65: "",
+    detos_500ms: "",
+    detos_450ms: "",
     raccord_17: "",
     raccord_25: "",
     raccord_42: "",
+    raccord_65: "",
     raccord_100: "",
-    ligne_tir: "",
+    lign: "",
     aei: "",
     etat_stock: "",
   });
@@ -63,7 +63,7 @@ function GestionStock() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleAdd = async (e) => {
+  const handleAdd = async () => {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
       const response = await axios.post(
@@ -73,17 +73,17 @@ function GestionStock() {
       setData([...data, response.data]);
       setFormData({
         date_commande: "",
-        Num_Stock: "",
+        id: "",
         ammonix: "",
         tovex: "",
-        detonateur_500: "",
-        detonateur_450: "",
-        raccord_65: "",
+        detos_500ms: "",
+        detos_450ms: "",
         raccord_17: "",
         raccord_25: "",
         raccord_42: "",
+        raccord_65: "",
         raccord_100: "",
-        ligne_tir: "",
+        lign: "",
         aei: "",
         etat_stock: "",
       });
@@ -98,7 +98,7 @@ function GestionStock() {
         // Check if editItem is set
         await axios.get("http://localhost:8000/sanctum/csrf-cookie"); // Add await here
         const response = await axios.put(
-          `http://localhost:8000/api/gestion-stocks/${editItem.Num_Stock}`,
+          `http://localhost:8000/api/gestion-stocks/${editItem.id}`,
           formData
         );
         setEditItem(null); // Clear editItem after updating
@@ -112,11 +112,11 @@ function GestionStock() {
     }
   };
 
-  const handleDelete = async (Num_Stock) => {
+  const handleDelete = async (id) => {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
       const response = await axios.delete(
-        `http://localhost:8000/api/gestion-stocks/${Num_Stock}`
+        `http://localhost:8000/api/gestion-stocks/${id}`
       );
       fetchData(); // Fetch data after deleting
     } catch (error) {
@@ -128,17 +128,17 @@ function GestionStock() {
     setEditItem(item); // Définir l'élément à éditer
     setFormData({
       date_commande: item.date_commande,
-      Num_Stock: item.Num_Stock,
+      id: item.id,
       ammonix: item.ammonix,
       tovex: item.tovex,
-      detonateur_500: item.detonateur_500,
-      detonateur_450: item.detonateur_450,
+      detos_500ms: item.detos_500ms,
+      detos_450ms: item.detos_450ms,
       raccord_17: item.raccord_17,
       raccord_25: item.raccord_25,
       raccord_42: item.raccord_42,
       raccord_65: item.raccord_65,
       raccord_100: item.raccord_100,
-      ligne_tir: item.ligne_tir,
+      lign: item.lign,
       aei: item.aei,
       etat_stock: item.etat_stock,
     });
@@ -226,17 +226,17 @@ function GestionStock() {
                   .map((item, index) => (
                     <tr key={index}>
                       <td>{item.date_commande}</td>
-                      <td>{item.Num_Stock}</td>
+                      <td>{item.id}</td>
                       <td>{item.ammonix}</td>
                       <td>{item.tovex}</td>
-                      <td>{item.detonateur_450}</td>
-                      <td>{item.detonateur_500}</td>
+                      <td>{item.detos_450ms}</td>
+                      <td>{item.detos_500ms}</td>
                       <td>{item.raccord_17}</td>
                       <td>{item.raccord_25}</td>
                       <td>{item.raccord_42}</td>
                       <td>{item.raccord_65}</td>
                       <td>{item.raccord_100}</td>
-                      <td>{item.ligne_tir}</td>
+                      <td>{item.lign}</td>
                       <td>{item.aei}</td>
                       <td>{item.etat_stock}</td>
                       <td>
@@ -254,7 +254,7 @@ function GestionStock() {
                           type="button"
                           style={{ padding: "5px 0px", width: "80px" }}
                           className="button"
-                          onClick={() => handleDelete(item.Num_Stock)}
+                          onClick={() => handleDelete(item.id)}
                         >
                           Supprimer
                         </button>
@@ -287,8 +287,8 @@ function GestionStock() {
                 <label>Num_Stock :</label>
                 <input
                   type="number"
-                  name="Num_Stock"
-                  value={formData.Num_Stock}
+                  name="id"
+                  value={formData.id}
                   onChange={handleInputChange}
                 />
               </div>
@@ -318,8 +318,8 @@ function GestionStock() {
                 <label>Detos 450ms:</label>
                 <input
                   type="number"
-                  name="detonateur_450"
-                  value={formData.detonateur_450}
+                  name="detos_450ms"
+                  value={formData.detos_450ms}
                   onChange={handleInputChange}
                 />
               </div>
@@ -327,8 +327,8 @@ function GestionStock() {
                 <label>Detos 500ms:</label>
                 <input
                   type="number"
-                  name="detonateur_500"
-                  value={formData.detonateur_500}
+                  name="detos_500ms"
+                  value={formData.detos_500ms}
                   onChange={handleInputChange}
                 />
               </div>
@@ -401,8 +401,8 @@ function GestionStock() {
                 <label> Ligne:</label>
                 <input
                   type="number"
-                  name="ligne_tir"
-                  value={formData.ligne_tir}
+                  name="lign"
+                  value={formData.lign}
                   onChange={handleInputChange}
                 />
               </div>
@@ -411,7 +411,7 @@ function GestionStock() {
                 <input
                   type="text"
                   name="etat_stock"
-                  value={formData.etat_cout}
+                  value={formData.etat_stock}
                   onChange={handleInputChange}
                 />
               </div>

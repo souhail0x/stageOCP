@@ -15,6 +15,7 @@ class CreateCoutsTable extends Migration
             $table->integer('ammonix');
             $table->integer('tovex');
             $table->integer('detos500ms');
+            $table->integer('detos450ms');
             $table->integer('raccord17');
             $table->integer('raccord25');
             $table->integer('raccord42');

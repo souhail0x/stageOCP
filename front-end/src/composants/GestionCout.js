@@ -70,7 +70,7 @@ function GestionStock() {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
       const response = await axios.post(
-        "http://localhost:8000/api/gestion-stocks",
+        "http://localhost:8000/api/couts",
         formData
       );
       setData([...data, response.data]);
@@ -99,7 +99,7 @@ function GestionStock() {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
       const response = await axios.put(
-        `http://localhost:8000/api/gestion-stocks/${editItem.id}`,
+        `http://localhost:8000/api/couts/${editItem.id}`,
         formData
       );
       setEditItem(null); // Clear editItem after updating
@@ -114,7 +114,7 @@ function GestionStock() {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
       const response = await axios.delete(
-        `http://localhost:8000/api/gestion-stocks/${id}`
+        `http://localhost:8000/api/couts/${id}`
       );
       fetchData(); // Fetch data after deleting
     } catch (error) {
