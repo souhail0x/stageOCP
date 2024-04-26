@@ -11,18 +11,19 @@ class Cout extends Model
 
     protected $fillable = [
         'dateCommande',
-        'id_cout',
-        'ammonix',
-        'tovex',
-        'detos500ms',
-        'raccord17',
-        'raccord25',
-        'raccord42',
-        'raccord65',
-        'raccord100',
-        'lign',
-        'aei',
-        'etatCout',
+        'Num_Cout',
+        'cout_ammonix',
+        'cout_tovex',
+        'cout_detonateur_500',
+        'cout_detonateur_450',
+        'cout_raccord_17',
+        'cout_raccord_25',
+        'cout_raccord_42',
+        'cout_raccord_65',
+        'cout_raccord_100',
+        'ligne_tir',
+        'cout_aei',
+        'etat_cout',
     ];
 }
 

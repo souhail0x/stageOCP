@@ -14,6 +14,5 @@ class EtatChantier extends Model
         'machine',
         'avance_foration',
         'avance_decapage',
-        'etat_cout',
     ];
 }

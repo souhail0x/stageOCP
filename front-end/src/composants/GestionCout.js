@@ -40,7 +40,7 @@ function GestionStock() {
     cout_raccord_100: "",
     ligne_tir: "",
     cout_aei: "",
-    etat_stock: "",
+    etat_cout: "",
   });
 
   useEffect(() => {
@@ -89,7 +89,7 @@ function GestionStock() {
         cout_raccord_100: "",
         ligne_tir: "",
         cout_aei: "",
-        etat_stock: "",
+        etat_cout: "",
       });
     } catch (error) {
       console.error("Error adding data:", error);
@@ -139,7 +139,7 @@ function GestionStock() {
         cout_raccord_100: item.cout_raccord_100,
         ligne_tir: item.ligne_tir,
         cout_aei: item.cout_aei,
-        etat_stock: item.etat_stock,
+        etat_cout: item.etat_cout,
     });
   };
 
@@ -234,7 +234,7 @@ function GestionStock() {
                     <td>{item.cout_raccord_100}</td>
                     <td>{item.ligne_tir}</td>
                     <td>{item.cout_aei}</td>
-                    <td>{item.etat_stock}</td>
+                    <td>{item.etat_cout}</td>
                     <td>
                       <button
                         style={{ padding: "0px 0px", width: "60px" }}
@@ -406,7 +406,7 @@ function GestionStock() {
                 <label> Etat stock:</label>
                 <input
                   type="text"
-                  name="etat_stock"
+                  name="etat_cout"
                   value={formData.etat_cout}
                   onChange={handleInputChange}
                 />

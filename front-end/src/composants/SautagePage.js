@@ -30,13 +30,13 @@ const SautagePage = () => {
       date,
       numero_execution: numeroExecution,
       numero_commande: numeroCommande,
-      h_arrivee_camions: hArriveeCamions,
-      blf_artifices: blfArtifices,
+      heure_arrivée_camions: hArriveeCamions,
+      BLF_Artifices_Ligne: blfArtifices,
       effictif,
-      blf_ammonix: blfAmmonix,
+      BLF_Ammonix: blfAmmonix,
       bs_tovex_artifices: bsTovexArtifices,
       son,
-      blf_tovex: blfTovex,
+      BLF_Tovex: blfTovex,
       type,
       frequence,
       heure_tir: heureTir,
@@ -90,9 +90,10 @@ const SautagePage = () => {
     setIsAddPopupOpen(true);
   };
 
-  const handleAddConfirm = () => {
+  const handleAddConfirm = (e) => {
+    e.preventDefault();
     setIsAddPopupOpen(false);
-    handleAjouter();
+    handleAjouter(e);
   };
 
   return (

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('Num_Stock');
             $table->integer('ammonix');
             $table->integer('aei');
-            $table->integer('detos_500ms');
             $table->integer('raccord_17');
             $table->integer('raccord_25');
             $table->integer('raccord_42');

@@ -13,13 +13,13 @@ class Sautage extends Model
         'date',
         'numero_execution',
         'numero_commande',
-        'h_arrivee_camions',
-        'blf_artifices',
+        'heure_arrivée_camions',
+        'BLF_Artifices_Ligne',
         'effictif',
-        'blf_ammonix',
+        'BLF_Ammonix',
         'bs_tovex_artifices',
         'son',
-        'blf_tovex',
+        'BLF_Tovex',
         'type',
         'frequence',
         'heure_tir',
@@ -28,3 +28,4 @@ class Sautage extends Model
         'observation',
     ];
 }
+

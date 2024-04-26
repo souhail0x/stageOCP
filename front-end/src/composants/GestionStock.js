@@ -3,17 +3,12 @@ import axios from "axios";
 import {
   BarChart,
   Bar,
-  PieChart,
-  Pie,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
 } from "recharts";
 import Loading from "./loaderSpinner";
 import Loader from "./spinnerLoader";
@@ -27,7 +22,7 @@ function GestionStock() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
     date_commande: "",
-    Num_Stock: "111",
+    Num_Stock: "",
     ammonix: "",
     tovex: "",
     detonateur_500: "",
@@ -69,7 +64,6 @@ function GestionStock() {
   };
 
   const handleAdd = async (e) => {
-    
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
       const response = await axios.post(
@@ -100,24 +94,29 @@ function GestionStock() {
 
   const handleUpdate = async () => {
     try {
-      axios.get("http://localhost:8000/sanctum/csrf-cookie");
-      const response = await axios.put(
-        `http://localhost:8000/api/gestion-stocks/${editItem.id}`,
-        formData
-      );
-      setEditItem(null); // Clear editItem after updating
-      setFormData({}); // Clear formData after updating
-      fetchData(); // Fetch data after updating
+      if (editItem) {
+        // Check if editItem is set
+        await axios.get("http://localhost:8000/sanctum/csrf-cookie"); // Add await here
+        const response = await axios.put(
+          `http://localhost:8000/api/gestion-stocks/${editItem.Num_Stock}`,
+          formData
+        );
+        setEditItem(null); // Clear editItem after updating
+        setFormData({}); // Clear formData after updating
+        fetchData(); // Fetch data after updating
+      } else {
+        console.error("No item selected for update");
+      }
     } catch (error) {
       console.error("Error updating data:", error);
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (Num_Stock) => {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
       const response = await axios.delete(
-        `http://localhost:8000/api/gestion-stocks/${id}`
+        `http://localhost:8000/api/gestion-stocks/${Num_Stock}`
       );
       fetchData(); // Fetch data after deleting
     } catch (error) {
@@ -226,8 +225,8 @@ function GestionStock() {
                   .reverse()
                   .map((item, index) => (
                     <tr key={index}>
-                      <td>{item.Num_Stock}</td>
                       <td>{item.date_commande}</td>
+                      <td>{item.Num_Stock}</td>
                       <td>{item.ammonix}</td>
                       <td>{item.tovex}</td>
                       <td>{item.detonateur_450}</td>
@@ -255,7 +254,7 @@ function GestionStock() {
                           type="button"
                           style={{ padding: "5px 0px", width: "80px" }}
                           className="button"
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => handleDelete(item.Num_Stock)}
                         >
                           Supprimer
                         </button>

@@ -66,11 +66,11 @@ function EtatChantier() {
   const handleUpdate = async () => {
     try {
       await axios.put(
-        `http://127.0.0.1:8000/api/etat-chantiers/${formData.id}`,
+        `http://127.0.0.1:8000/api/etat-chantiers/${formData.machine}`,
         formData
       );
       const updatedData = data.map((item) =>
-        item.id === formData.id ? formData : item
+        item.machine === formData.machine ? formData : item
       );
       setData(updatedData);
       resetForm();
@@ -85,7 +85,6 @@ function EtatChantier() {
 
   const resetForm = () => {
     setFormData({
-      id: null,
       date: "",
       machine: "",
       avance_foration: "",
@@ -97,7 +96,7 @@ function EtatChantier() {
     const selectedItem = data[index];
     try {
       await axios.delete(
-        `http://127.0.0.1:8000/api/etat-chantiers/${selectedItem.id}`
+        `http://127.0.0.1:8000/api/etat-chantiers/${selectedItem.machine}`
       );
       const updatedData = [...data];
       updatedData.splice(index, 1);

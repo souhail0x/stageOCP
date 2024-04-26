@@ -13,7 +13,6 @@ class CreateCoutsTable extends Migration
             $table->string('Num_Cout');
             $table->integer('cout_ammonix');
             $table->integer('cout_aei');
-            $table->integer('cout_detos_500ms');
             $table->integer('cout_raccord_17');
             $table->integer('cout_raccord_25');
             $table->integer('cout_raccord_42');
@@ -23,7 +22,7 @@ class CreateCoutsTable extends Migration
             $table->integer('cout_detonateur_500');
             $table->integer('cout_tovex');
             $table->integer('ligne_tir');
-            $table->text('etat_stock');
+            $table->text('etat_cout');
             $table->timestamps();
         });
     }
@@ -32,6 +31,4 @@ class CreateCoutsTable extends Migration
     {
         Schema::dropIfExists('couts');
     }
-
-
 };
