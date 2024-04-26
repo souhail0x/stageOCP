@@ -14,19 +14,20 @@ class CreateSautagesTable extends Migration
     public function up()
     {
         Schema::create('sautages', function (Blueprint $table) {
+            $table->id();
             $table->date('date');
             $table->integer('numero_execution');
             $table->integer('numero_commande');
-            $table->string('BLF_Ammonix');
-            $table->string('BLF_Tovex');
-            $table->string('BLF_Artifices_Ligne');
-            $table->string('heure_arrivée_camions');
-            $table->string('heure_tir');
+            $table->string('h_arrivee_camions');
+            $table->string('blf_artifices');
             $table->string('effictif');
+            $table->string('blf_ammonix');
             $table->string('bs_tovex_artifices');
             $table->string('son');
+            $table->string('blf_tovex');
             $table->string('type');
             $table->integer('frequence');
+            $table->string('heure_tir');
             $table->string('bs_ammonix');
             $table->integer('vitesse');
             $table->text('observation')->nullable();

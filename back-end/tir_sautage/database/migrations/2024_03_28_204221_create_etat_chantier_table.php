@@ -9,6 +9,7 @@ class CreateEtatChantierTable extends Migration
     public function up()
     {
         Schema::create('etat_chantiers', function (Blueprint $table) {
+            $table->id();
             $table->date('date');
             $table->string('machine');
             $table->integer('avance_foration');

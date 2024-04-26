@@ -7,12 +7,6 @@ use App\Models\Sautage; // Importer le modèle Sautage
 
 class SautageGestionController extends Controller
 {
-    public function index()
-    {
-        $sautages = Sautage::all();
-        return response()->json($sautages);
-    }
-
     /**
      * Store a newly created resource in storage.
      *

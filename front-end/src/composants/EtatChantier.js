@@ -66,11 +66,11 @@ function EtatChantier() {
   const handleUpdate = async () => {
     try {
       await axios.put(
-        `http://127.0.0.1:8000/api/etat-chantiers/${formData.machine}`,
+        `http://127.0.0.1:8000/api/etat-chantiers/${formData.id}`,
         formData
       );
       const updatedData = data.map((item) =>
-        item.machine === formData.machine ? formData : item
+        item.id === formData.id ? formData : item
       );
       setData(updatedData);
       resetForm();

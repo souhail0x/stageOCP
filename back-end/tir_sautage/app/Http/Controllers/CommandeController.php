@@ -33,7 +33,12 @@ class CommandeController extends Controller
             'mode_charge' => 'required|string',
             'dosage_prevu' => 'required|string',
             'schema_tir' => 'required|string',
-            // Ajoutez ici les validations pour les autres champs
+            'maille_E' => 'required|integer',
+            'Métrage foré' => 'integer',
+            'longueur' => 'integer',
+            'surface' => 'integer',
+            'volume' => 'integer',
+            'dosage_realise' => 'integer',
         ]);
 
         $commande = Commande::create($validatedData);
@@ -67,7 +72,12 @@ class CommandeController extends Controller
             'mode_charge' => 'required|string',
             'dosage_prevu' => 'required|string',
             'schema_tir' => 'required|string',
-            // Ajoutez ici les validations pour les autres champs
+            'maille_E' => 'required|integer',
+            'Métrage foré' => 'integer',
+            'longueur' => 'integer',
+            'surface' => 'integer',
+            'volume' => 'integer',
+            'dosage_realise' => 'integer',
         ]);
 
         $commande = Commande::findOrFail($id);

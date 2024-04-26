@@ -20,9 +20,20 @@ class EtatChantierController extends Controller
     public function update(Request $request, $id)
     {
         $etatChantier = EtatChantier::findOrFail($id);
-        $etatChantier->update($request->all());
+        
+        $etatChantier->fill($request->only([
+            'date',
+            'machine',
+            'avance_foration',
+            'avance_decapage',
+            'etat_machine',
+        ]));
+        
+        $etatChantier->save();
+        
         return $etatChantier;
     }
+
 
     public function destroy($id)
     {

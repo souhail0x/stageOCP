@@ -12,20 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stock', function (Blueprint $table) {
+            $table->id();
             $table->date('date_commande');
-            $table->string('Num_Stock');
             $table->integer('ammonix');
-            $table->integer('aei');
+            $table->integer('tovex');
+            $table->integer('detos_500ms');
+            $table->integer('detos_450ms');
             $table->integer('raccord_17');
             $table->integer('raccord_25');
             $table->integer('raccord_42');
             $table->integer('raccord_65');
             $table->integer('raccord_100');
-            $table->integer('detonateur_450');
-            $table->integer('detonateur_500');
-            $table->integer('tovex');
-            $table->integer('ligne_tir');
-            $table->text('etat_stock');
+            $table->integer('lign');
+            $table->integer('aei');
+            $table->string('etat_stock');
             $table->timestamps();
         });
     }

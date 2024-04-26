@@ -12,17 +12,16 @@ class Stock extends Model
     protected $table='stock';
     protected $fillable = [
         'date_commande',
-        'Num_Stock',
         'ammonix',
         'tovex',
-        'detonateur_500',
-        'detonateur_450',
+        'detos_500ms',
+        'detos_450ms',
         'raccord_17',
         'raccord_25',
         'raccord_42',
         'raccord_65',
         'raccord_100',
-        'ligne_tir',
+        'lign',
         'aei',
         'etat_stock',
     ];

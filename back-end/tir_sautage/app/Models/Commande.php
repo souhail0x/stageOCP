@@ -27,6 +27,11 @@ class Commande extends Model
         'mode_charge',
         'dosage_prevu',
         'schema_tir',
-        // Ajoutez ici les autres colonnes du modèle
+        'maille_E',
+        'Metrage_fore',
+        'longueur',
+        'surface',
+        'volume',
+        'dosage_realise',
     ];
 }
