@@ -168,24 +168,24 @@ function ArchivePage() {
                     <td>{item.niveau}</td>
                     <td>{item.mode_tir}</td>
                     <td>{item.maille_E}</td>
-                    <td>{item.maille_B}</td>
-                    <td>{item.métrage_foré}</td>
+                    <td>{item.maille_banquette}</td>
+                    <td>{item.metrage_fore}</td>
                     <td>{item.nombre_trous}</td>
-                    <td>{item.nombre_rangés}</td>
+                    <td>{item.nombre_ranges}</td>
                     <td>{item.longueur}</td>
                     <td>{item.surface}</td>
                     <td>{item.volume}</td>
-                    <td>{item.dosage_prévu}</td>
-                    <td>{item.dosage_réalisé}</td>
+                    <td>{item.dosage_prevu}</td>
+                    <td>{item.dosage_realise}</td>
                     <td>{item.zone_tir}</td>
-                    <td>{item.machine_Foration}</td>
-                    <td>{item.machine_Decappage}</td>
+                    <td>{item.foration}</td>
+                    <td>{item.decappage}</td>
                     <td>{item.schema_tir}</td>
 
-                    <td>{item.BLF_Ammonix}</td>
-                    <td>{item.BLF_Tovex}</td>
-                    <td>{item.BLF_Artifices_Lignes}</td>
-                    <td>{item.heure_arrivée_camions}</td>
+                    <td>{item.blf_ammonix}</td>
+                    <td>{item.blf_tovex}</td>
+                    <td>{item.blf_artifices}</td>
+                    <td>{item.h_arrivee_camions}</td>
                     <td>{item.heure_tir}</td>
 
                     <td>{item.ammonix}</td>
@@ -195,10 +195,10 @@ function ArchivePage() {
                     <td>{item.raccord_42}</td>
                     <td>{item.raccord_65}</td>
                     <td>{item.raccord_100}</td>
-                    <td>{item.detonateur_450}</td>
-                    <td>{item.detonateur_500}</td>
+                    <td>{item.detos_450ms}</td>
+                    <td>{item.detosms_500}</td>
                     <td>{item.tovex}</td>
-                    <td>{item.ligne_tir}</td>
+                    <td>{item.lign}</td>
                   </tr>
                 ))}
               </tbody>
