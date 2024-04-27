@@ -27,12 +27,7 @@ class CreateCommandesTable extends Migration
             $table->string('mode_charge');
             $table->string('dosage_prevu');
             $table->string('schema_tir');
-            $table->integer('maille_E');
-            $table->float('Metrage_fore');
-            $table->integer('longueur');
-            $table->integer('surface');
-            $table->integer('volume');
-            $table->string('dosage_realise');
+            $table->integer('espacement');
             $table->timestamps();
         });
     }
