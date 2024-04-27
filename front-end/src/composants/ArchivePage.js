@@ -167,7 +167,7 @@ function ArchivePage() {
                     <td>{item.tranche}</td>
                     <td>{item.niveau}</td>
                     <td>{item.mode_tir}</td>
-                    <td>{item.maille_E}</td>
+                    <td>{item.espacement}</td>
                     <td>{item.maille_banquette}</td>
                     <td>{item.metrage_fore}</td>
                     <td>{item.nombre_trous}</td>

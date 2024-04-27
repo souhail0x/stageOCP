@@ -1,23 +1,62 @@
 
-INSERT INTO `commandes` (`date`, `Num_Commande`, `panneau`, `tranche`, `niveau`, `mode_tir`, `maille_E`, `maille_B`, `Métrage foré`, `nombre_trous`, `nombre_ranges`, `trous_range`, `profondeur`, `longueur`, `surface`, `volume`, `dosage_prévu`, `dosage_réalisé`, `zone_tir`, `mode_charge`, `machine_Foration`, `machine_Decappage`, `schema_tir`, `created_at`, `updated_at`) VALUES
-('2024-04-01', '1', 'P5', 'TE7', 'int1/2', 'nonel', 4, 4, 836.00, 220, 13, 16, 3.00, 100, 5789, 22000, '290', '250', 'lebrikiyine', 'unique', 'cadex', 'PH2', '17ms,42ms', NULL, NULL),
-('2024-04-02', '2', 'P5', 'TE7 nord', 'sortie', 'nonel', 7, 5, 1710.00, 180, 6, 30, 9.00, 120, 8552, 81250, '290', '240', 'lebrikiyine', 'unique', 'PV1', 'ZD11', '17ms,42ms,25ms', NULL, NULL),
-('2024-04-03', '3', 'P8', 'TF', 'int3/5', 'nonel', 5, 5, 2052.00, 228, 13, 17, 9.00, 100, 8714, 78431, '290', '255', 'lebrikiyine', 'unique', 'cadex', 'société', '17ms,42ms', NULL, NULL),
-('2024-04-04', '4', 'P6', 'TJ5', 'RC2', 'nonel', 6, 5, 1755.00, 450, 11, 40, 3.00, 300, 17230, 67200, '280', '250', 'lebrahla', 'unique', 'DKS', 'procane', '17ms,42ms,25ms', NULL, NULL);
+--
+-- Dumping data for table `commandes`
+--
 
-INSERT INTO `couts` (`dateCommande`, `Num_Cout`, `cout_ammonix`, `cout_aei`, `cout_detos_500ms`, `cout_raccord_17`, `cout_raccord_25`, `cout_raccord_42`, `cout_raccord_65`, `cout_raccord_100`, `cout_detonateur_450`, `cout_detonateur_500`, `cout_tovex`, `ligne_tir`, `etat_stock`, `created_at`, `updated_at`) VALUES
-('2024-01-01', '1', 1349600, 176, 0, 131991, 5130, 14309, 0, 0, 81536, 181236, 52121, 13125, '', NULL, NULL),
-('2024-02-01', '2', 2180325, 208, 0, 156631, 5584, 21044, 0, 0, 0, 357882, 69187, 15625, '', NULL, NULL),
-('2024-03-01', '3', 2215150, 200, 0, 186191, 4013, 30083, 0, 0, 0, 465367, 88560, 15625, '', NULL, NULL);
+INSERT INTO `commandes` (`id`, `date`, `Num_Commande`, `panneau`, `tranche`, `niveau`, `mode_tir`, `foration`, `nombre_trous`, `nombre_ranges`, `trous_range`, `maille_banquette`, `decappage`, `profondeur`, `zone_tir`, `mode_charge`, `dosage_prevu`, `schema_tir`, `espacement`, `created_at`, `updated_at`) VALUES
+(1, '2024-04-01', '1', 'P5', 'TE7', 'int1/2', 'nonel', 'cadex', 220, 13, 16, 4, 'PH2', 3.00, 'lebrikiyine', 'unique', '290', '17ms,42ms', 4, NULL, NULL),
+(2, '2024-04-02', '2', 'P5', 'TE7 nord', 'sortie', 'nonel', 'PV1', 180, 6, 30, 5, 'ZD11', 9.00, 'lebrikiyine', 'unique', '290', '17ms,42ms,25ms', 7, NULL, NULL),
+(3, '2024-04-03', '3', 'P8', 'TF', 'int3/5', 'nonel', 'cadex', 228, 13, 17, 5, 'société', 9.00, 'lebrikiyine', 'unique', '290', '17ms,42ms', 5, NULL, NULL),
+(4, '2024-04-04', '4', 'P6', 'TJ5', 'RC2', 'nonel', 'DKS', 450, 11, 40, 5, 'procane', 3.00, 'lebrahla', 'unique', '280', '17ms,42ms,25ms', 6, NULL, NULL);
 
-INSERT INTO `sautages` (`date`, `numero_execution`, `numero_commande`, `BLF_Ammonix`, `BLF_Tovex`, `BLF_Artifices_Ligne`, `heure_arrivée_camions`, `heure_tir`, `effictif`, `bs_tovex_artifices`, `son`, `type`, `frequence`, `bs_ammonix`, `vitesse`, `observation`, `created_at`, `updated_at`) VALUES
-('2024-04-01', 1, 1, '240302094', '240302095', '7h45', '10h00', '', '', '', '', '', 240302095, '', 0, NULL, NULL, NULL),
-('2024-04-02', 2, 2, '240302112', '240302113', '7h30', '11h00', '', '', '', '', '', 240302113, '', 0, NULL, NULL, NULL),
-('2024-04-03', 3, 3, '240302113', '240302116', '8h30', '10h00', '', '', '', '', '', 240302116, '', 0, NULL, NULL, NULL),
-('2024-04-04', 4, 4, '240302188', '240302115', '7h30', '11h00', '', '', '', '', '', 240302115, '', 0, NULL, NULL, NULL);
+-- --------------------------------------------------------
+--
+-- Dumping data for table `couts`
+--
 
-INSERT INTO `stock` (`date_commande`, `Num_Stock`, `ammonix`, `aei`, `detos_500ms`, `raccord_17`, `raccord_25`, `raccord_42`, `raccord_65`, `raccord_100`, `detonateur_450`, `detonateur_500`, `tovex`, `ligne_tir`, `etat_stock`, `created_at`, `updated_at`) VALUES
-('2024-01-01', '1', 192800, 22, 0, 3782, 147, 410, 0, 0, 1634, 3632, 2825, 10500, '', NULL, NULL),
-('2024-02-01', '2', 311475, 26, 0, 4488, 160, 603, 0, 0, 0, 7172, 3750, 12500, '', NULL, NULL),
-('2024-03-01', '3', 316450, 25, 0, 5335, 115, 862, 0, 0, 0, 9326, 4800, 12500, '', NULL, NULL);
+INSERT INTO `couts` (`id`, `dateCommande`, `id_cout`, `ammonix`, `tovex`, `detos500ms`, `detos450ms`, `raccord17`, `raccord25`, `raccord42`, `raccord65`, `raccord100`, `lign`, `aei`, `etatCout`, `created_at`, `updated_at`) VALUES
+(1, '2024-01-01', 1, 1349600, 52121, 181236, 81536, 131991, 5130, 14309, 0, 0, 13125, 176, '', NULL, NULL),
+(2, '2024-02-01', 2, 2180325, 69187, 357882, 0, 156631, 5584, 21044, 0, 0, 15625, 208, '', NULL, NULL),
+(3, '2024-03-01', 3, 2215150, 88560, 465367, 0, 186191, 4013, 30083, 0, 0, 15625, 200, '', NULL, NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Dumping data for table `etat_chantiers`
+--
+
+INSERT INTO `etat_chantiers` (`id`, `date`, `machine`, `avance_foration`, `avance_decapage`, `created_at`, `updated_at`) VALUES
+(1, '2024-04-28', '7500|1', 120, 100, '2024-04-27 13:34:44', '2024-04-27 13:34:44'),
+(2, '2024-04-13', 'Procaneq', 90, 45, '2024-04-27 13:35:01', '2024-04-27 13:35:01'),
+(3, '2024-04-03', 'PH1', 300, 220, '2024-04-27 13:35:24', '2024-04-27 13:35:24'),
+(4, '2024-04-23', 'GNE', 360, 140, '2024-04-27 13:36:02', '2024-04-27 13:36:02');
+
+-- --------------------------------------------------------
+--
+-- Dumping data for table `sautages`
+--
+
+INSERT INTO `sautages` (`id`, `date`, `numero_execution`, `numero_commande`, `h_arrivee_camions`, `blf_artifices`, `effictif`, `blf_ammonix`, `bs_tovex_artifices`, `son`, `blf_tovex`, `type`, `frequence`, `heure_tir`, `bs_ammonix`, `vitesse`, `observation`, `created_at`, `updated_at`) VALUES
+(1, '2024-04-01', 1, 1, '10h00', '7h45', '', '240302094', '', '', '240302095', '', 240302095, '', '', 0, NULL, NULL, NULL),
+(2, '2024-04-02', 2, 2, '11h00', '7h30', '', '240302112', '', '', '240302113', '', 240302113, '', '', 0, NULL, NULL, NULL),
+(3, '2024-04-03', 3, 3, '10h00', '8h30', '', '240302113', '', '', '240302116', '', 240302116, '', '', 0, NULL, NULL, NULL),
+(4, '2024-04-04', 4, 4, '11h00', '7h30', '', '240302188', '', '', '240302115', '', 240302115, '', '', 0, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+--
+-- Dumping data for table `stock`
+--
+
+INSERT INTO `stock` (`id`, `date_commande`, `ammonix`, `tovex`, `detos_500ms`, `detos_450ms`, `raccord_17`, `raccord_25`, `raccord_42`, `raccord_65`, `raccord_100`, `lign`, `aei`, `etat_stock`, `created_at`, `updated_at`) VALUES
+(1, '2024-01-01', 192800, 2825, 3632, 1634, 3782, 147, 410, 0, 0, 10500, 22, '', NULL, NULL),
+(2, '2024-02-01', 311475, 3750, 7172, 0, 4488, 160, 603, 0, 0, 12500, 26, '', NULL, NULL),
+(3, '2024-03-01', 316450, 4800, 9326, 0, 5335, 115, 862, 0, 0, 12500, 25, '', NULL, NULL);
+
+-- --------------------------------------------------------
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `isAdmin`) VALUES
+(1, 'admin', NULL, NULL, '$2y$12$Hioq.66QLDvL2nP9hA/CSeMK2mgtqQpkJf9M1S/WUWAUPxQZyTJhW', NULL, '2024-04-27 13:45:14', '2024-04-27 13:45:14', 1),
+(2, 'user', NULL, NULL, '$2y$12$/LJIqca9h39QUpqQcwSU6eQHqQDkp/6azQfaioWoBnb.mFicRSCxm', NULL, '2024-04-27 13:45:42', '2024-04-27 13:45:42', 0);

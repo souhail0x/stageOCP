@@ -5,10 +5,13 @@ import "jspdf-autotable";
 import generatePDF from "./pdfGenerator";
 import Popup from "./shemaGenerator";
 import ConfirmationPopup from "./ConfirmationPopup";
+import SuccessMessage from "./SuccessMessage";
 
 function CommandPage2() {
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isResetPopupOpen, setIsResetPopupOpen] = useState(false);
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [isGeneratePDFPopupOpen, setIsGeneratePDFPopupOpen] = useState(false);
 
   const handleResetConfirmation = () => {
@@ -86,6 +89,7 @@ function CommandPage2() {
   };
 
   const handleCancel = () => {
+    setIsSubmitted(false);
     setFormData({
       date: "",
       Num_Commande: "",
@@ -116,6 +120,7 @@ function CommandPage2() {
         formData
       );
       console.log(response.data);
+      setSuccessMessage("Données ajoutées avec succès !");
       fetchData();
     } catch (error) {
       console.error("Error adding data:", error);
@@ -130,11 +135,13 @@ function CommandPage2() {
     });
   };
   const generatePDFHandler = () => {
-    generatePDF(formData, submittedData); // Appeler la fonction de génération de PDF avec les données nécessaires
+    generatePDF(formData, submittedData); 
+    setSuccessMessage("PDF genéré avec succès !");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSubmitted(true);
     const emptyFields = [];
     for (const key in formData) {
       if (formData[key] === "") {
@@ -286,6 +293,7 @@ function CommandPage2() {
 
   return (
     <div className="page-commande">
+      
       <h2
         style={{
           textAlign: "left",
@@ -299,7 +307,6 @@ function CommandPage2() {
         PARAMETRE DE SAUTAGE
       </h2>
       <div style={{ marginTop: "10px" }}>
-        {/* Ajouter une marge pour éviter de masquer les champs de formulaire */}
         <form onSubmit={handleSubmit}>
           <table>
             <tr>
@@ -625,15 +632,15 @@ function CommandPage2() {
           </table>
 
           <div className="form-row">
-            <button type="submit" onClick={handleSubmit} className="button">
+            <button type="submit" onClick={handleAddConfirmation} className="button">
               Calculer
             </button>
-            {/* onClick={handleSubmit} */}
 
             <button
               type="reset"
               className="button"
               onClick={handleResetConfirmation}
+              disabled={isSubmitted}
             >
               Effacer
             </button>
@@ -1039,8 +1046,11 @@ function CommandPage2() {
                 </tr>
               </table>
             </form>
+            { successMessage && <SuccessMessage>{successMessage}</SuccessMessage> }
+
             <br />
             <div className="form-row">
+
               <button
                 className="button"
                 type="submit"
@@ -1089,6 +1099,13 @@ function CommandPage2() {
           </div>
         )}
       </div>
+      {isAddPopupOpen && (
+                <ConfirmationPopup
+                  message="Êtes-vous sûr de vouloir calculer la commande ?"
+                  onConfirm={handleSubmit}
+                  onClose={() => setIsAddPopupOpen(false)}
+                />
+              )}
     </div>
   );
 }

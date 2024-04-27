@@ -238,7 +238,7 @@ function EtatChantier() {
         <div className="chart-container chart-wrapper ">
           <ResponsiveContainer
             width="50%"
-            height={300}
+            height={500}
             className="chart1"
             style={{ marginRight: "10px" }}
           >
@@ -257,7 +257,7 @@ function EtatChantier() {
           </ResponsiveContainer>
           <ResponsiveContainer
             width="50%"
-            height={300}
+            height={500}
             className="chart1"
             style={{ marginLeft: "10px" }}
           >
