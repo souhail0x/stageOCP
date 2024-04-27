@@ -3,7 +3,7 @@
 .security-container {
     width: 70vw;
     margin: 0 auto;
-    padding: 20px;
+    padding: 40px;
   }
   
   .security-title {
@@ -41,3 +41,67 @@
   .pdf-upload input[type="file"]:hover {
     background-color: #5ced71;
   }
+
+
+
+  .image-slider-container {
+    position:relative;
+    bottom: 0;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1400px; /* Ajustez la largeur maximale selon vos besoins */
+    border-radius: 15px; /* Facultatif : ajoutez une bordure arrondie */
+    margin-bottom: 3px; /* Ajoute une marge en bas pour séparer de la div suivante */
+    justify-content: centre;
+  }
+  .image-slider {
+    display: flex;
+    width: 700%; /* Pour 7 images */
+    max-width: 4000px; 
+    animation: slide 35s linear infinite; /* Animation pour faire défiler les images */
+  }
+  
+  .card_s {
+    flex:  calc(100% / 7); /* Pour 7 images */
+    margin: 0 5px;
+    width: 100%;
+    max-width: 1000px; 
+
+  }
+  
+  .card img {
+    width: 100%;
+    max-width: 1000px; 
+    height:auto;
+  }
+  
+.img{
+  width: 100%;
+  max-width: 1000px; 
+  margin-top:5%;
+}
+.imge{
+width: 9%;
+position: relative;
+left:-490px;
+top:46px;
+}
+.h2{
+  color:red ;
+  font-family: 'Poppins', Sans-Serif;
+  margin-top: -30px;
+  right: -70px;
+  position: relative;
+}
+
+  @keyframes slide {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%); /* Fait défiler les images vers la gauche */
+    }
+  }
+  
+ 
+

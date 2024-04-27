@@ -3,10 +3,15 @@ import styled from 'styled-components';
 import '../styles/Login.css';
 
 const LoginContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+background-color: #fff;
+border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+    0 10px 10px rgba(0,0,0,0.22);
+position: relative;
+overflow: hidden;
+width: 768px;
+max-width: 100%;
+min-height: 480px;
 `;
 
 const Content = styled.div`
@@ -157,6 +162,26 @@ const Login = ({ onLogin }) => {
           {errorMessage && <span className="error-message">{errorMessage}</span>}
           <button type="submit">Se connecter</button>
         </Form>
+        <div class="objectifs">
+		     <div class="obj">
+          <div >
+            <h1 class="OB"> BGBLAST </h1>
+               <h2 class="ob"> Vous Permet : </h2>
+          </div>
+           <div class="objectif">
+         	<h5 class="obj1">- Gestion des données pour Tir et Sautage.</h5>
+          <h5 class="obj2">- Création base de données fiable.</h5>
+          <h5 class="obj3">- Accès rapide à l'info (Foration, Sautage, Décapage).</h5>
+          <h5 class="obj4">- Calculs rapides et fiables.</h5>
+	        <h5 class="obj5">- Gestion avances machines décapage.</h5>
+	        <h5 class="obj6">- Mise à jour du Tir et Sautage avec Contrôle de Gestion.</h5>
+	        <h5 class="obj7">- Gestion utilisateurs selon tâches.</h5>
+	        <h5 class="obj8">- Archivage structuré des données de sautages.</h5>
+	        <h5 class="obj9">- Organisation standards sécurité tir et sautage.</h5>
+           </div>
+
+		     </div>
+	      </div>
       </Content>
     </LoginContainer>
   );
