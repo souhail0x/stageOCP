@@ -127,14 +127,10 @@ function ArchivePage() {
                   <th>Mode de tir</th>
                   <th>Maille E.</th>
                   <th>Maille B.</th>
-                  <th>Métrage foré</th>
                   <th>Nbr Trou</th>
                   <th>Nbr Rangés</th>
                   <th>Longueur</th>
-                  <th>Surface</th>
-                  <th>Volume</th>
                   <th>Dosage Prévu</th>
-                  <th>Dosage Réalisé</th>
                   <th>Zone de tir</th>
                   <th>Machine foration</th>
                   <th>Machine decappage</th>
@@ -169,14 +165,10 @@ function ArchivePage() {
                     <td>{item.mode_tir}</td>
                     <td>{item.espacement}</td>
                     <td>{item.maille_banquette}</td>
-                    <td>{item.metrage_fore}</td>
                     <td>{item.nombre_trous}</td>
                     <td>{item.nombre_ranges}</td>
                     <td>{item.longueur}</td>
-                    <td>{item.surface}</td>
-                    <td>{item.volume}</td>
                     <td>{item.dosage_prevu}</td>
-                    <td>{item.dosage_realise}</td>
                     <td>{item.zone_tir}</td>
                     <td>{item.foration}</td>
                     <td>{item.decappage}</td>
@@ -196,7 +188,7 @@ function ArchivePage() {
                     <td>{item.raccord_65}</td>
                     <td>{item.raccord_100}</td>
                     <td>{item.detos_450ms}</td>
-                    <td>{item.detosms_500}</td>
+                    <td>{item.detos_500ms}</td>
                     <td>{item.tovex}</td>
                     <td>{item.lign}</td>
                   </tr>

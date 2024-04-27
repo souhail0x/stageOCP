@@ -16,10 +16,11 @@ import "../styles/GestionStock.css";
 import ConfirmationPopup from "./ConfirmationPopup";
 import SuccessMessage from "./SuccessMessage";
 
-
 function GestionStock() {
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -130,6 +131,11 @@ function GestionStock() {
     }
   };
 
+  const handleDeleteConfirmation = (id) => {
+    setSelectedIndex(id);
+    setIsDeletePopupOpen(true);
+  };
+
   const handleEdit = (item) => {
     setEditItem(item); // Définir l'élément à éditer
     setFormData({
@@ -160,7 +166,7 @@ function GestionStock() {
   };
 
   return (
-    <div className="containerGetion" >
+    <div className="containerGetion">
       <h1
         style={{
           textAlign: "left",
@@ -190,8 +196,8 @@ function GestionStock() {
           <table className="table">
             <thead className="thead">
               <tr>
-                <th>ID</th>
                 <th>Date</th>
+                <th>ID</th>
                 <th>Ammonix</th>
                 <th>Tovex</th>
                 <th>D450</th>
@@ -262,7 +268,7 @@ function GestionStock() {
                           type="button"
                           style={{ padding: "5px 0px", width: "80px" }}
                           className="button"
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => handleDeleteConfirmation(item.id)}
                         >
                           Supprimer
                         </button>
@@ -482,6 +488,16 @@ function GestionStock() {
           message="Êtes-vous sûr de vouloir ajouter les données ?"
           onConfirm={handleAddConfirm}
           onClose={() => setIsAddPopupOpen(false)}
+        />
+      )}
+      {isDeletePopupOpen && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir supprimer les données ?"
+          onConfirm={() => {
+            handleDelete(selectedIndex);
+            setIsDeletePopupOpen(false);
+          }}
+          onClose={() => setIsDeletePopupOpen(false)}
         />
       )}
     </div>

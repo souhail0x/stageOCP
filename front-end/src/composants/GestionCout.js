@@ -21,11 +21,11 @@ import "../styles/GestionStock.css";
 import ConfirmationPopup from "./ConfirmationPopup";
 import SuccessMessage from "./SuccessMessage";
 
-
 function GestionStock() {
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -116,16 +116,24 @@ function GestionStock() {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      axios.get("http://localhost:8000/sanctum/csrf-cookie");
-      const response = await axios.delete(
-        `http://localhost:8000/api/couts/${id}`
-      );
-      setSuccessMessage("Données supprimées avec succès !");
-      fetchData(); // Fetch data after deleting
-    } catch (error) {
-      console.error("Error deleting data:", error);
+  const handleDeleteConfirmationOpen = (id) => {
+    setSelectedIndex(id);
+    setIsDeletePopupOpen(true);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    setIsDeletePopupOpen(false);
+    if (selectedIndex !== null) {
+      try {
+        axios.get("http://localhost:8000/sanctum/csrf-cookie");
+        const response = await axios.delete(
+          `http://localhost:8000/api/couts/${selectedIndex}`
+        );
+        setSuccessMessage("Données supprimées avec succès !");
+        fetchData(); // Fetch data after deleting
+      } catch (error) {
+        console.error("Error deleting data:", error);
+      }
     }
   };
 
@@ -262,7 +270,7 @@ function GestionStock() {
                           type="button"
                           style={{ padding: "5px 0px", width: "80px" }}
                           className="button"
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => handleDeleteConfirmationOpen(item.id)}
                         >
                           Supprimer
                         </button>
@@ -484,6 +492,13 @@ function GestionStock() {
           message="Êtes-vous sûr de vouloir ajouter les données ?"
           onConfirm={handleAddConfirm}
           onClose={() => setIsAddPopupOpen(false)}
+        />
+      )}
+      {isDeletePopupOpen && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir supprimer ces données ?"
+          onConfirm={handleDeleteConfirmation}
+          onClose={() => setIsDeletePopupOpen(false)}
         />
       )}
     </div>

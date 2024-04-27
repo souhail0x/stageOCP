@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import SuccessMessage from "./SuccessMessage";
 import "../styles/EtatChantier.css";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 function EtatChantier() {
   const [data, setData] = useState([]);
@@ -24,7 +25,9 @@ function EtatChantier() {
     avance_decapage: "",
   });
   const [successMessage, setSuccessMessage] = useState("");
-
+  const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -51,7 +54,8 @@ function EtatChantier() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleAdd = async () => {
+  const handleAddConfirm = async () => {
+    setIsAddPopupOpen(false);
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/etat-chantiers",
@@ -64,6 +68,10 @@ function EtatChantier() {
     } catch (error) {
       console.error("Error adding data:", error);
     }
+  };
+
+  const handleAddConfirmation = () => {
+    setIsAddPopupOpen(true);
   };
 
   const handleUpdate = async () => {
@@ -96,19 +104,28 @@ function EtatChantier() {
     });
   };
 
-  const handleDelete = async (index) => {
-    const selectedItem = data[index];
-    try {
-      await axios.delete(
-        `http://127.0.0.1:8000/api/etat-chantiers/${selectedItem.machine}`
-      );
-      const updatedData = [...data];
-      updatedData.splice(index, 1);
-      setSuccessMessage("Données supprimées avec succès !");
-      setData(updatedData);
-    } catch (error) {
-      console.error("Error deleting data:", error);
+  const handleDeleteConfirmation = async () => {
+    setIsDeletePopupOpen(false);
+    if (selectedIndex !== null) {
+      const selectedItem = data[selectedIndex];
+      try {
+        await axios.delete(
+          `http://127.0.0.1:8000/api/etat-chantiers/${selectedItem.machine}`
+        );
+        const updatedData = [...data];
+        updatedData.splice(selectedIndex, 1);
+        setSuccessMessage("Données supprimées avec succès !");
+        setData(updatedData);
+        setSelectedIndex(null);
+      } catch (error) {
+        console.error("Error deleting data:", error);
+      }
     }
+  };
+
+  const handleDeleteConfirmationOpen = (index) => {
+    setSelectedIndex(index);
+    setIsDeletePopupOpen(true);
   };
 
   const prepareChartData = () => {
@@ -133,10 +150,9 @@ function EtatChantier() {
         SUIVI DE L'ETAT DU CHANTIER
       </h1>
       {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
-      <br/>
+      <br />
       <div className="formRow ">
         <div className="formGroup">
-          
           <label>Date:</label>
           <input
             type="date"
@@ -185,7 +201,7 @@ function EtatChantier() {
           />
         </div>
       </div>
-      <button type="button" onClick={handleAdd} className="button">
+      <button type="button" onClick={handleAddConfirmation} className="button">
         Ajouter
       </button>
       <button type="button" onClick={handleUpdate} className="button">
@@ -193,7 +209,6 @@ function EtatChantier() {
       </button>
       <div className="">
         <div className="tableContainer">
-
           <table className="table table-etat">
             <thead className="thead">
               <tr>
@@ -224,7 +239,7 @@ function EtatChantier() {
                   <td>
                     <button
                       style={{ padding: "5px" }}
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDeleteConfirmationOpen(index)}
                       className="button"
                     >
                       Supprimer
@@ -284,6 +299,20 @@ function EtatChantier() {
           </ResponsiveContainer>
         </div>
       </div>
+      {isAddPopupOpen && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir ajouter les données ?"
+          onConfirm={handleAddConfirm}
+          onClose={() => setIsAddPopupOpen(false)}
+        />
+      )}
+      {isDeletePopupOpen && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir supprimer ces données ?"
+          onConfirm={handleDeleteConfirmation}
+          onClose={() => setIsDeletePopupOpen(false)}
+        />
+      )}
     </div>
   );
 }
