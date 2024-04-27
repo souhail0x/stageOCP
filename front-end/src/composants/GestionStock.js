@@ -14,9 +14,12 @@ import Loading from "./loaderSpinner";
 import Loader from "./spinnerLoader";
 import "../styles/GestionStock.css";
 import ConfirmationPopup from "./ConfirmationPopup";
+import SuccessMessage from "./SuccessMessage";
+
 
 function GestionStock() {
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -71,6 +74,7 @@ function GestionStock() {
         formData
       );
       setData([...data, response.data]);
+      setSuccessMessage("Données ajoutées avec succès !");
       setFormData({
         date_commande: "",
         id: "",
@@ -103,6 +107,7 @@ function GestionStock() {
         );
         setEditItem(null); // Clear editItem after updating
         setFormData({}); // Clear formData after updating
+        setSuccessMessage("Données mis à jour avec succès !");
         fetchData(); // Fetch data after updating
       } else {
         console.error("No item selected for update");
@@ -118,6 +123,7 @@ function GestionStock() {
       const response = await axios.delete(
         `http://localhost:8000/api/gestion-stocks/${id}`
       );
+      setSuccessMessage("Données supprimées avec succès !");
       fetchData(); // Fetch data after deleting
     } catch (error) {
       console.error("Error deleting data:", error);
@@ -154,7 +160,7 @@ function GestionStock() {
   };
 
   return (
-    <div className="containerGetion">
+    <div className="containerGetion" >
       <h1
         style={{
           textAlign: "left",
@@ -177,8 +183,10 @@ function GestionStock() {
           color: "black",
         }}
       ></div>
-      <div className="container">
+      <div className="">
         <div className="tableContainer">
+          {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+
           <table className="table">
             <thead className="thead">
               <tr>
@@ -272,6 +280,7 @@ function GestionStock() {
       <div className="charts-wrapper">
         <div className="form-container chart1">
           {/* Partie 2: Formulaire */}
+
           <form>
             <div className="formRow">
               <div className="formGroup">

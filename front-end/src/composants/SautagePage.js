@@ -1,39 +1,63 @@
 import React, { useState } from "react";
 import "../styles/SautagePage.css";
 import ConfirmationPopup from "./ConfirmationPopup";
+import SuccessMessage from "./SuccessMessage";
 
 const SautagePage = () => {
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
 
   // Déclaration des états pour les champs du formulaire
-  const [date, setDate] = useState("");
-  const [numeroExecution, setNumeroExecution] = useState("");
-  const [numeroCommande, setNumeroCommande] = useState("");
-  const [hArriveeCamions, setHArriveeCamions] = useState("");
-  const [blfArtifices, setBlfArtifices] = useState("");
-  const [effictif, setEffictif] = useState("");
-  const [blfAmmonix, setBlfAmmonix] = useState("");
-  const [bsTovexArtifices, setBsTovexArtifices] = useState("");
-  const [son, setSon] = useState("");
-  const [blfTovex, setBlfTovex] = useState("");
-  const [type, setType] = useState("");
-  const [frequence, setFrequence] = useState("");
-  const [heureTir, setHeureTir] = useState("");
-  const [bsAmmonix, setBsAmmonix] = useState("");
-  const [vitesse, setVitesse] = useState("");
-  const [observation, setObservation] = useState("");
+  const [formData, setFormData] = useState({
+    date: "",
+    numero_execution: "",
+    numero_commande: "",
+    h_arrivee_camions: "",
+    blf_artifices: "",
+    effictif: "",
+    blf_ammonix: "",
+    bs_tovex_artifices: "",
+    son: "",
+    blf_tovex: "",
+    type: "",
+    frequence: "",
+    heure_tir: "",
+    bs_ammonix: "",
+    vitesse: "",
+    observation: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleClearForm = () => {
+    setFormData({
+      date: "",
+      numero_execution: "",
+      numero_commande: "",
+      h_arrivee_camions: "",
+      blf_artifices: "",
+      effictif: "",
+      blf_ammonix: "",
+      bs_tovex_artifices: "",
+      son: "",
+      blf_tovex: "",
+      type: "",
+      frequence: "",
+      heure_tir: "",
+      bs_ammonix: "",
+      vitesse: "",
+      observation: "",
+    });
+  };
 
   // Fonction pour gérer l'envoi des données au backend
-  const handleAjouter = async (e) => {};
-
-  const handleChangeObservation = (event) => {
-    setObservation(event.target.value);
-  };
-
-  const handleAddConfirmation = () => {
-    setIsAddPopupOpen(true);
-  };
-
   const handleAddConfirm = async () => {
     setIsAddPopupOpen(false);
     try {
@@ -42,52 +66,25 @@ const SautagePage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          date,
-          numero_execution: numeroExecution,
-          numero_commande: numeroCommande,
-          heure_arrivée_camions: hArriveeCamions,
-          BLF_Artifices_Ligne: blfArtifices,
-          effictif,
-          BLF_Ammonix: blfAmmonix,
-          bs_tovex_artifices: bsTovexArtifices,
-          son,
-          BLF_Tovex: blfTovex,
-          type,
-          frequence,
-          heure_tir: heureTir,
-          bs_ammonix: bsAmmonix,
-          vitesse,
-          observation,
-        }),
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData); // Afficher la réponse JSON du serveur
-        // Réinitialiser les états après l'ajout réussi
-        setDate("");
-        setNumeroExecution("");
-        setNumeroCommande("");
-        setHArriveeCamions("");
-        setBlfArtifices("");
-        setEffictif("");
-        setBlfAmmonix("");
-        setBsTovexArtifices("");
-        setSon("");
-        setBlfTovex("");
-        setType("");
-        setFrequence("");
-        setHeureTir("");
-        setBsAmmonix("");
-        setVitesse("");
-        setObservation("");
+        // Réinitialiser les données du formulaire après l'ajout réussi
+        setSuccessMessage("Données ajoutées avec succès !");
+        handleClearForm();
       } else {
         console.error("Erreur lors de l'ajout de données");
       }
     } catch (error) {
       console.error("Erreur réseau:", error);
     }
+  };
+
+  const handleAddConfirmation = () => {
+    setIsAddPopupOpen(true);
   };
 
   return (
@@ -112,242 +109,251 @@ const SautagePage = () => {
       </div>
 
       <div style={{ marginTop: "10px" }}>
+        {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+
         {/* Ajouter une marge pour éviter de masquer les champs de formulaire */}
-       <form className="form" onSubmit={handleAddConfirm} >
-        <table>
-          <tr>
-            <td colSpan={2}>
-              <div className="form-group">
-                <label htmlFor="date">Date:</label>
-                <input
-                  type="date"
-                  id="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">H.Arrivé Camions:</label>
-                <input
-                  type="text"
-                  id="numero-execution"
-                  value={hArriveeCamions}
-                  onChange={(e) => setHArriveeCamions(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Blf Artifices:</label>
-                <input
-                  type="text"
-                  id="numero-execution"
-                  value={blfArtifices}
-                  onChange={(e) => setBlfArtifices(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Fréquence (HZ):</label>
-                <input
-                  type="number"
-                  id="numero-execution"
-                  value={frequence}
-                  onChange={(e) => setFrequence(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Num d'exécution:</label>
-                <input
-                  type="number"
-                  id="numero-execution"
-                  value={numeroExecution}
-                  onChange={(e) => setNumeroExecution(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Num Commande:</label>
-                <input
-                  type="number"
-                  id="numero-execution"
-                  value={numeroCommande}
-                  onChange={(e) => setNumeroCommande(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Effictif:</label>
-                <input
-                  type="text"
-                  id="numero-execution"
-                  value={effictif}
-                  onChange={(e) => setEffictif(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Blf Ammonix:</label>
-                <input
-                  type="text"
-                  id="numero-execution"
-                  value={blfAmmonix}
-                  onChange={(e) => setBlfAmmonix(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Vitesse (mm/s):</label>
-                <input
-                  type="number"
-                  id="numero-execution"
-                  value={vitesse}
-                  onChange={(e) => setVitesse(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-          </tr>
+          <table>
+            <tr>
+              <td colSpan={2}>
+                <div className="form-group">
+                  <label htmlFor="date">Date:</label>
+                  <input
+                    type="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="h_arrivee_camions">H.Arrivé Camions:</label>
+                  <input
+                    type="text"
+                    name="h_arrivee_camions"
+                    value={formData.h_arrivee_camions}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="blf_artifices">Blf Artifices:</label>
+                  <input
+                    type="text"
+                    name="blf_artifices"
+                    value={formData.blf_artifices}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="frequence">Fréquence (HZ):</label>
+                  <input
+                    type="number"
+                    name="frequence"
+                    value={formData.frequence}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="numero_execution">Num d'exécution:</label>
+                  <input
+                    type="number"
+                    name="numero_execution"
+                    value={formData.numero_execution}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="numero_commande">Num Commande:</label>
+                  <input
+                    type="number"
+                    name="numero_commande"
+                    value={formData.numero_commande}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="effictif">Effictif:</label>
+                  <input
+                    type="text"
+                    name="effictif"
+                    value={formData.effictif}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="blf_ammonix">Blf Ammonix:</label>
+                  <input
+                    type="text"
+                    name="blf_ammonix"
+                    value={formData.blf_ammonix}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="vitesse">Vitesse (mm/s):</label>
+                  <input
+                    type="number"
+                    name="vitesse"
+                    value={formData.vitesse}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+            </tr>
 
-          <tr>
-            <td></td>
-            <td></td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Bs Tovex Artifices:</label>
-                <input
-                  type="text"
-                  id="numero-execution"
-                  value={bsTovexArtifices}
-                  onChange={(e) => setBsTovexArtifices(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Son (db):</label>
-                <input
-                  type="number"
-                  id="numero-execution"
-                  value={son}
-                  onChange={(e) => setSon(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Blf Tovex:</label>
-                <input
-                  type="text"
-                  id="numero-execution"
-                  value={blfTovex}
-                  onChange={(e) => setBlfTovex(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-          </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="bs_tovex_artifices">
+                    Bs Tovex Artifices:
+                  </label>
+                  <input
+                    type="text"
+                    name="bs_tovex_artifices"
+                    value={formData.bs_tovex_artifices}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="son">Son (db):</label>
+                  <input
+                    type="number"
+                    name="son"
+                    value={formData.son}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="blf_tovex">Blf Tovex:</label>
+                  <input
+                    type="text"
+                    name="blf_tovex"
+                    value={formData.blf_tovex}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+            </tr>
 
-          <tr>
-            <td></td>
-            <td></td>
+            <tr>
+              <td></td>
+              <td></td>
 
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Type:</label>
-                <input
-                  type="text"
-                  id="numero-execution"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Heure de Tir:</label>
-                <input
-                  type="text"
-                  id="numero-execution"
-                  value={heureTir}
-                  onChange={(e) => setHeureTir(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div className="form-group">
-                <label htmlFor="numero-execution">Bs Ammonix:</label>
-                <input
-                  type="text"
-                  id="numero-execution"
-                  value={bsAmmonix}
-                  onChange={(e) => setBsAmmonix(e.target.value)}
-                  required
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td colSpan={3}>
-              <div className="form-group">
-                <label htmlFor="observation">Observation:</label>
-                <textarea
-                  id="observation"
-                  value={observation}
-                  onChange={handleChangeObservation}
-                  rows={5} // Spécifiez le nombre de lignes visible
-                  cols={150} // Spécifiez la largeur en nombre de caractères
-                />
-              </div>
-            </td>
-          </tr>
-        </table>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="type">Type:</label>
+                  <input
+                    type="text"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="heure_tir">Heure de Tir:</label>
+                  <input
+                    type="text"
+                    name="heure_tir"
+                    value={formData.heure_tir}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="form-group">
+                  <label htmlFor="bs_ammonix">Bs Ammonix:</label>
+                  <input
+                    type="text"
+                    name="bs_ammonix"
+                    value={formData.bs_ammonix}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td colSpan={3}>
+                <div className="form-group">
+                  <label htmlFor="observation">Observation:</label>
+                  <textarea
+                    name="observation"
+                    value={formData.observation}
+                    onChange={handleChange}
+                    rows={5}
+                    cols={150}
+                  />
+                </div>
+              </td>
+            </tr>
+          </table>
 
-        {/* Boutons --> utiliser des function*/}
-        <div className="btn-container">
-          <button
-            style={{ backgroundColor: "#45a049" }}
-            className="btn btn-ajouter"
-            type="button"
-            onClick={handleAddConfirmation}
-          >
-            AJOUTER
-          </button>
+          <div className="btn-container">
+            <button
+              style={{ backgroundColor: "#45a049", width: "420px" }}
+              className="btn btn-ajouter"
+              type="submit"
+              onClick={handleAddConfirmation}
+            >
+              AJOUTER
+            </button>
+            <button
+              className="btn btn-clear"
+              style={{ backgroundColor: "grey", width: "420px" }}
+              type="button"
+              onClick={handleClearForm}
+            >
+              EFFACER
+            </button>
 
-          {isAddPopupOpen && (
-            <ConfirmationPopup
-              message="Êtes-vous sûr de vouloir ajouter les données ?"
-              onConfirm={handleAddConfirm}
-              onClose={() => setIsAddPopupOpen(false)}
-            />
-          )}
-        </div>
-       </form>
+            {isAddPopupOpen && (
+              <ConfirmationPopup
+                message="Êtes-vous sûr de vouloir ajouter les données ?"
+                onConfirm={handleAddConfirm}
+                onClose={() => setIsAddPopupOpen(false)}
+              />
+            )}
+          </div>
       </div>
     </div>
   );

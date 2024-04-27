@@ -19,9 +19,13 @@ import Loading from "./loaderSpinner";
 import Loader from "./spinnerLoader";
 import "../styles/GestionStock.css";
 import ConfirmationPopup from "./ConfirmationPopup";
+import SuccessMessage from "./SuccessMessage";
+
 
 function GestionStock() {
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
 
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -74,6 +78,7 @@ function GestionStock() {
         formData
       );
       setData([...data, response.data]);
+      setSuccessMessage("Données ajoutées avec succès !");
       setFormData({
         dateCommande: "",
         id_cout: "",
@@ -104,6 +109,7 @@ function GestionStock() {
       );
       setEditItem(null); // Clear editItem after updating
       setFormData({}); // Clear formData after updating
+      setSuccessMessage("Données mis à jour avec succès !");
       fetchData(); // Fetch data after updating
     } catch (error) {
       console.error("Error updating data:", error);
@@ -116,6 +122,7 @@ function GestionStock() {
       const response = await axios.delete(
         `http://localhost:8000/api/couts/${id}`
       );
+      setSuccessMessage("Données supprimées avec succès !");
       fetchData(); // Fetch data after deleting
     } catch (error) {
       console.error("Error deleting data:", error);
@@ -124,6 +131,7 @@ function GestionStock() {
 
   const handleEdit = (item) => {
     setEditItem(item);
+
     setFormData({
       dateCommande: item.dateCommande,
       id_cout: item.id_cout,
@@ -175,8 +183,10 @@ function GestionStock() {
           color: "black",
         }}
       ></div>
-      <div className="container">
+      <div className="">
         <div className="tableContainer">
+          {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+
           <table className="table">
             <thead className="thead">
               <tr>

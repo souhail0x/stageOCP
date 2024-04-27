@@ -12,7 +12,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
-
+import SuccessMessage from "./SuccessMessage";
 import "../styles/EtatChantier.css";
 
 function EtatChantier() {
@@ -23,6 +23,8 @@ function EtatChantier() {
     avance_foration: "",
     avance_decapage: "",
   });
+  const [successMessage, setSuccessMessage] = useState("");
+
 
   useEffect(() => {
     fetchData();
@@ -57,6 +59,7 @@ function EtatChantier() {
       );
       const newData = response.data;
       setData([newData, ...data.slice(0, 6)]);
+      setSuccessMessage("Données ajoutées avec succès !");
       resetForm();
     } catch (error) {
       console.error("Error adding data:", error);
@@ -73,6 +76,7 @@ function EtatChantier() {
         item.id === formData.id ? formData : item
       );
       setData(updatedData);
+      setSuccessMessage("Données modifiées avec succès !");
       resetForm();
     } catch (error) {
       console.error("Error updating data:", error);
@@ -100,6 +104,7 @@ function EtatChantier() {
       );
       const updatedData = [...data];
       updatedData.splice(index, 1);
+      setSuccessMessage("Données supprimées avec succès !");
       setData(updatedData);
     } catch (error) {
       console.error("Error deleting data:", error);
@@ -127,8 +132,11 @@ function EtatChantier() {
       <h1 style={{ color: "white", marginBottom: "30px" }}>
         SUIVI DE L'ETAT DU CHANTIER
       </h1>
+      {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+      <br/>
       <div className="formRow ">
         <div className="formGroup">
+          
           <label>Date:</label>
           <input
             type="date"
@@ -183,8 +191,9 @@ function EtatChantier() {
       <button type="button" onClick={handleUpdate} className="button">
         Mise à jour
       </button>
-      <div className="container">
+      <div className="">
         <div className="tableContainer">
+
           <table className="table table-etat">
             <thead className="thead">
               <tr>
