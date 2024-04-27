@@ -24,34 +24,42 @@ const SautagePage = () => {
   const [observation, setObservation] = useState("");
 
   // Fonction pour gérer l'envoi des données au backend
-  const handleAjouter = async (e) => {
-    e.preventDefault();
-    const data = {
-      date,
-      numero_execution: numeroExecution,
-      numero_commande: numeroCommande,
-      heure_arrivée_camions: hArriveeCamions,
-      BLF_Artifices_Ligne: blfArtifices,
-      effictif,
-      BLF_Ammonix: blfAmmonix,
-      bs_tovex_artifices: bsTovexArtifices,
-      son,
-      BLF_Tovex: blfTovex,
-      type,
-      frequence,
-      heure_tir: heureTir,
-      bs_ammonix: bsAmmonix,
-      vitesse,
-      observation,
-    };
+  const handleAjouter = async (e) => {};
 
+  const handleChangeObservation = (event) => {
+    setObservation(event.target.value);
+  };
+
+  const handleAddConfirmation = () => {
+    setIsAddPopupOpen(true);
+  };
+
+  const handleAddConfirm = async () => {
+    setIsAddPopupOpen(false);
     try {
       const response = await fetch("http://127.0.0.1:8000/api/sautage", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          date,
+          numero_execution: numeroExecution,
+          numero_commande: numeroCommande,
+          heure_arrivée_camions: hArriveeCamions,
+          BLF_Artifices_Ligne: blfArtifices,
+          effictif,
+          BLF_Ammonix: blfAmmonix,
+          bs_tovex_artifices: bsTovexArtifices,
+          son,
+          BLF_Tovex: blfTovex,
+          type,
+          frequence,
+          heure_tir: heureTir,
+          bs_ammonix: bsAmmonix,
+          vitesse,
+          observation,
+        }),
       });
 
       if (response.ok) {
@@ -82,20 +90,6 @@ const SautagePage = () => {
     }
   };
 
-  const handleChangeObservation = (event) => {
-    setObservation(event.target.value);
-  };
-
-  const handleAddConfirmation = () => {
-    setIsAddPopupOpen(true);
-  };
-
-  const handleAddConfirm = (e) => {
-    e.preventDefault();
-    setIsAddPopupOpen(false);
-    handleAjouter(e);
-  };
-
   return (
     <div className="sautage">
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -119,7 +113,7 @@ const SautagePage = () => {
 
       <div style={{ marginTop: "10px" }}>
         {/* Ajouter une marge pour éviter de masquer les champs de formulaire */}
-        {/* <form className="form" > onSubmit={handleSubmit} */}
+       <form className="form" onSubmit={handleAddConfirm} >
         <table>
           <tr>
             <td colSpan={2}>
@@ -339,11 +333,12 @@ const SautagePage = () => {
           <button
             style={{ backgroundColor: "#45a049" }}
             className="btn btn-ajouter"
-            type="submit"
+            type="button"
             onClick={handleAddConfirmation}
           >
             AJOUTER
           </button>
+
           {isAddPopupOpen && (
             <ConfirmationPopup
               message="Êtes-vous sûr de vouloir ajouter les données ?"
@@ -352,7 +347,7 @@ const SautagePage = () => {
             />
           )}
         </div>
-        {/* </form> */}
+       </form>
       </div>
     </div>
   );

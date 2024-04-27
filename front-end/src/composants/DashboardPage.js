@@ -86,28 +86,27 @@ function DashboardPage() {
       raccord_42: 0,
       raccord_65: 0,
       raccord_100: 0,
-      detonateur_450: 0,
-      detonateur_500: 0,
-      ligne_tir: 0,
+      detos_450ms: 0,
+      detos_500ms: 0,
+      lign: 0,
       raccord: 0,
       aei: 0,
     };
 
     data.forEach((item) => {
-      sum.ligne_tir += parseFloat(item.ligne_tir);
+      sum.lign += parseFloat(item.lign);
       sum.ammonix += parseInt(item.ammonix);
       sum.tovex += parseInt(item.tovex);
       sum.detos +=
-        parseInt(item.detonateur_450) +
-        parseInt(item.detonateur_500) +
+        parseInt(item.detos_450ms) +
         parseInt(item.detos_500ms);
       sum.raccord_17 += parseInt(item.raccord_17);
       sum.raccord_25 += parseInt(item.raccord_25);
       sum.raccord_42 += parseInt(item.raccord_42);
       sum.raccord_65 += parseInt(item.raccord_65);
       sum.raccord_100 += parseInt(item.raccord_100);
-      sum.detonateur_450 += parseInt(item.detonateur_450);
-      sum.detonateur_500 += parseInt(item.detonateur_500);
+      sum.detos_450ms += parseInt(item.detos_450ms);
+      sum.detos_500ms += parseInt(item.detos_500ms);
       sum.aei += parseInt(item.aei);
       sum.raccord +=
         parseInt(item.raccord_17) +
@@ -134,10 +133,10 @@ function DashboardPage() {
     { name: "Raccord_42", value: sum.raccord_42 },
     { name: "Raccord_65", value: sum.raccord_65 },
     { name: "Raccord_100", value: sum.raccord_100 },
-    { name: "Detonateur_450", value: sum.detonateur_450 },
-    { name: "Detonateur_500", value: sum.detonateur_500 },
+    { name: "Detonateur_450", value: sum.detos_450ms },
+    { name: "Detonateur_500", value: sum.detos_500ms },
     { name: "Aei", value: sum.aei },
-    { name: "Ligne_tir", value: sum.ligne_tir },
+    { name: "Ligne_tir", value: sum.lign },
   ];
 
   return (
@@ -218,7 +217,7 @@ function DashboardPage() {
           <div className="card-inner">
             <h3>Consommation</h3>
           </div>
-          <h1>{sum.ligne_tir} m</h1>
+          <h1>{sum.lign} m</h1>
         </div>
 
         <div className="card">
@@ -248,13 +247,13 @@ function DashboardPage() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="Num_Stock" />
+            <XAxis dataKey="id" />
             <YAxis />
             <Tooltip />
             <Legend />
             <Bar dataKey="ammonix" name="Ammonix" fill="#8884d8" />
             <Bar dataKey="tovex" name="Tovex" fill="#82ca9d" />
-            <Bar dataKey="detonateur_500" name="Detos" fill="#9c27b0" />
+            <Bar dataKey="detos_500ms" name="Detos" fill="#9c27b0" />
             <Bar dataKey="raccord_17" name="Raccord" fill="#43a047" />
           </BarChart>
         </ResponsiveContainer>
@@ -284,7 +283,7 @@ function DashboardPage() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="Num_Stock" />
+            <XAxis dataKey="id" />
             <YAxis />
             <Tooltip />
             <Legend />
@@ -294,8 +293,8 @@ function DashboardPage() {
               stroke="#6ED18F"
               activeDot={{ r: 8 }}
             />
-            <Line type="detos" dataKey="detonateur_450" stroke="#AF98C5" />
-            <Line type="detos" dataKey="detonateur_500" stroke="#56ffc6" />
+            <Line type="detos" dataKey="detos_450ms" stroke="#AF98C5" />
+            <Line type="detos" dataKey="detos_500ms" stroke="#56ffc6" />
             <Line type="raccord" dataKey="raccord_17" stroke="#9576EB" />
             <Line type="raccord" dataKey="raccord_25" stroke="#9C27B0" />
             <Line type="raccord" dataKey="raccord_42" stroke="#b7b5f4" />
