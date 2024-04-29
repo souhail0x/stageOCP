@@ -3,17 +3,12 @@ import axios from "axios";
 import {
   BarChart,
   Bar,
-  PieChart,
-  Pie,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
 } from "recharts";
 import Loading from "./loaderSpinner";
 import Loader from "./spinnerLoader";
@@ -45,6 +40,15 @@ function GestionStock() {
     aei: "",
     etatCout: "",
   });
+  const [initialStock, setInitialStock] = useState({
+      ammonix: 22980300, // Initial cout for ammonix
+      tovex: 839475, // Initial stock for tovex
+      detos_450ms: 326146.4, // Initial cout for detos 450ms
+      detos_500ms: 4017948, // Initial cout for detos 500ms
+      raccord: 8879676.8, // Initial cout for raccord
+      aei: 9344, // Initial cout for aei
+      lign: 4544000, // Initial cout for lign
+  });
 
   useEffect(() => {
     fetchData();
@@ -56,7 +60,9 @@ function GestionStock() {
       setTimeout(() => {
         setIsLoaded(true);
       }, 750);
-      const response = await axios.get("http://localhost:8000/api/couts");
+      const response = await axios.get(
+        "http://localhost:8000/api/couts"
+      );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -79,67 +85,45 @@ function GestionStock() {
       );
       setData([...data, response.data]);
       setSuccessMessage("Données ajoutées avec succès !");
-      setFormData({
-        dateCommande: "",
-        id_cout: "",
-        ammonix: "",
-        tovex: "",
-        detos500ms: "",
-        detos450ms: "",
-        raccord17: "",
-        raccord25: "",
-        raccord42: "",
-        raccord65: "",
-        raccord100: "",
-        lign: "",
-        aei: "",
-        etatCout: "",
-      });
+
     } catch (error) {
       console.error("Error adding data:", error);
     }
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (id) => {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
       const response = await axios.put(
-        `http://localhost:8000/api/couts/${editItem.id}`,
-        formData
+        `http://localhost:8000/api/couts/${id}`
       );
-      setEditItem(null); // Clear editItem after updating
-      setFormData({}); // Clear formData after updating
-      setSuccessMessage("Données mis à jour avec succès !");
-      fetchData(); // Fetch data after updating
+      setSuccessMessage("Données modifiées avec succès !");
+      fetchData(); // Fetch data after deleting
     } catch (error) {
-      console.error("Error updating data:", error);
+      console.error("Error deleting data:", error);
     }
   };
 
-  const handleDeleteConfirmationOpen = (id) => {
+  const handleDelete = async (id) => {
+    try {
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.delete(
+        `http://localhost:8000/api/couts/${id}`
+      );
+      setSuccessMessage("Données supprimées avec succès !");
+      fetchData(); // Fetch data after deleting
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
+
+  const handleDeleteConfirmation = (id) => {
     setSelectedIndex(id);
     setIsDeletePopupOpen(true);
   };
 
-  const handleDeleteConfirmation = async () => {
-    setIsDeletePopupOpen(false);
-    if (selectedIndex !== null) {
-      try {
-        axios.get("http://localhost:8000/sanctum/csrf-cookie");
-        const response = await axios.delete(
-          `http://localhost:8000/api/couts/${selectedIndex}`
-        );
-        setSuccessMessage("Données supprimées avec succès !");
-        fetchData(); // Fetch data after deleting
-      } catch (error) {
-        console.error("Error deleting data:", error);
-      }
-    }
-  };
-
   const handleEdit = (item) => {
-    setEditItem(item);
-
+    setEditItem(item); // Définir l'élément à éditer
     setFormData({
       dateCommande: item.dateCommande,
       id_cout: item.id_cout,
@@ -167,6 +151,29 @@ function GestionStock() {
     handleAdd();
   };
 
+  const cumulativeSum = data.reduce((acc, curr) => {
+    Object.keys(curr).forEach((key) => {
+      if (key !== "dateCommande" && key !== "id" && key !== "etatCout") {
+        acc[key] = (acc[key] || 0) + parseInt(curr[key]);
+      }
+    });
+    return acc;
+  }, {});
+
+  const remainingStock = Object.keys(initialStock).reduce((acc, key) => {
+    acc[key] = initialStock[key] - (cumulativeSum[key] || 0);
+    return acc;
+  }, {});
+
+  const chartData = Object.keys(cumulativeSum)
+  .filter(key => key !== "updated_at" && key !== "created_at" && key !== "raccord100" && key !== "raccord65" && key !== "raccord42" && key !== "raccord25" && key !== "raccord17" ) 
+  .map((key) => ({
+    category: key,
+    cumulativeSum: cumulativeSum[key],
+    remainingStock: remainingStock[key],
+  }));
+
+  console.log(chartData);
   return (
     <div className="containerGetion">
       <h1
@@ -182,7 +189,7 @@ function GestionStock() {
           fontWeight: "bold",
         }}
       >
-        GESTION DES COUTS
+        GESTION DE COUT
       </h1>
       <div
         className="search-bar"
@@ -198,83 +205,53 @@ function GestionStock() {
           <table className="table">
             <thead className="thead">
               <tr>
-                <th>ID</th>
                 <th>Date</th>
+                <th>ID</th>
                 <th>Ammonix</th>
                 <th>Tovex</th>
-                <th>D450</th>
-                <th>D500</th>
-                <th>R17</th>
-                <th>R25</th>
-                <th>R42</th>
-                <th>R65</th>
-                <th>R100</th>
+                <th>Detonateur 450</th>
+                <th>Detonateur 500</th>
+                <th>Raccord</th>
                 <th>Ligne</th>
                 <th>AEI</th>
                 <th>État</th>
-                <th></th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
               <tr>
+                <td>{new Date().toLocaleDateString()}</td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{remainingStock.ammonix}</td>
+                <td>{remainingStock.tovex}</td>
+                <td>{remainingStock.detos_450ms}</td>
+                <td>{remainingStock.detos_500ms}</td>
+                <td>{remainingStock.raccord}</td>
+                <td>{remainingStock.lign}</td>
+                <td>{remainingStock.aei}</td>
+                <td>Cout Actuel</td>
               </tr>
               {isLoaded ? (
                 data
-                  .slice(-3)
+                  .slice(-1)
                   .reverse()
                   .map((item, index) => (
                     <tr key={index}>
-                      <td>{item.id_cout}</td>
                       <td>{item.dateCommande}</td>
+                      <td>{item.id}</td>
                       <td>{item.ammonix}</td>
                       <td>{item.tovex}</td>
                       <td>{item.detos450ms}</td>
                       <td>{item.detos500ms}</td>
-                      <td>{item.raccord17}</td>
-                      <td>{item.raccord25}</td>
-                      <td>{item.raccord42}</td>
-                      <td>{item.raccord65}</td>
-                      <td>{item.raccord100}</td>
+                      <td>
+                        {item.raccord17 +
+                          item.raccord25 +
+                          item.raccord42 +
+                          item.raccord65 +
+                          item.raccord100}
+                      </td>
                       <td>{item.lign}</td>
                       <td>{item.aei}</td>
                       <td>{item.etatCout}</td>
-                      <td>
-                        <button
-                          style={{ padding: "0px 0px", width: "60px" }}
-                          type="button"
-                          className="button"
-                          onClick={() => handleEdit(item)}
-                        >
-                          Modifier
-                        </button>
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          style={{ padding: "5px 0px", width: "80px" }}
-                          className="button"
-                          onClick={() => handleDeleteConfirmationOpen(item.id)}
-                        >
-                          Supprimer
-                        </button>
-                      </td>
                     </tr>
                   ))
               ) : (
@@ -288,7 +265,9 @@ function GestionStock() {
       <div className="charts-wrapper">
         <div className="form-container chart1">
           {/* Partie 2: Formulaire */}
+
           <form>
+            <h5 style={{ color: "rgba(255, 255, 255, 0.95)" }}>Formulaire de Gestion Couts</h5>
             <div className="formRow">
               <div className="formGroup">
                 <label>Date:</label>
@@ -423,7 +402,7 @@ function GestionStock() {
                 />
               </div>
               <div className="formGroup">
-                <label> Etat cout:</label>
+                <label> Etat stock:</label>
                 <input
                   type="text"
                   name="etatCout"
@@ -442,19 +421,27 @@ function GestionStock() {
               >
                 Ajouter
               </button>
-              {editItem && (
-                <button type="button" onClick={handleUpdate} className="button">
-                  Mettre à jour
-                </button>
-              )}
+              <button
+                type="button"
+                className="button"
+                onClick={() => handleUpdate(formData.id_cout)}
+              >
+                Modifier
+              </button>
+              <button
+                type="button"
+                className="button"
+                onClick={() => handleDeleteConfirmation(formData.id_cout)}
+              >
+                Supprimer
+              </button>
             </div>
           </form>
         </div>
-
-        <div className="chart-container">
-          <ResponsiveContainer width="100%" height={550} className={"chart1"}>
+        <div className="chart-container chart1">
+          <ResponsiveContainer width="100%" height={550}>
             <BarChart
-              data={data}
+              data={chartData}
               margin={{
                 top: 5,
                 right: 30,
@@ -463,26 +450,21 @@ function GestionStock() {
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="id_cout" />
+              <XAxis dataKey="category" />
               <YAxis />
               <Tooltip />
               <Legend />
               <Bar
-                type="ammonix"
-                dataKey="ammonix"
-                fill="#6ED18F"
-                activeDot={{ r: 8 }}
+                dataKey="remainingStock"
+                fill="#FF6B6B"
+                name="Cout Actuel"
               />
-              <Bar type="tovex" dataKey="tovex" fill="#E91E63" />
-              <Bar type="detos" dataKey="detos450" fill="#AF98C5" />
-              <Bar type="detos" dataKey="detos500" fill="#56ffc6" />
-              <Bar type="raccord" dataKey="raccord17" fill="#9576EB" />
-              <Bar type="raccord" dataKey="raccord25" fill="#9C27B0" />
-              <Bar type="raccord" dataKey="raccord42" fill="#b7b5f4" />
-              <Bar type="raccord" dataKey="raccord65" fill="#94e05e" />
-              <Bar type="raccord" dataKey="raccord100" fill="#d975ea" />
-              <Bar type="aei" dataKey="aei" fill="#FF5722" />
-              <Bar type="lign" dataKey="lign" fill="#FFC107" />
+              <Bar
+                dataKey="cumulativeSum"
+                fill="#6ED18F"
+                name="Consommation"
+              />
+              
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -496,8 +478,11 @@ function GestionStock() {
       )}
       {isDeletePopupOpen && (
         <ConfirmationPopup
-          message="Êtes-vous sûr de vouloir supprimer ces données ?"
-          onConfirm={handleDeleteConfirmation}
+          message="Êtes-vous sûr de vouloir supprimer les données ?"
+          onConfirm={() => {
+            handleDelete(selectedIndex);
+            setIsDeletePopupOpen(false);
+          }}
           onClose={() => setIsDeletePopupOpen(false)}
         />
       )}
