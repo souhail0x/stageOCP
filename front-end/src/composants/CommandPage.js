@@ -13,6 +13,7 @@ function CommandPage2() {
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isGeneratePDFPopupOpen, setIsGeneratePDFPopupOpen] = useState(false);
+  const [machine, setMachine] = useState('');
 
   const handleResetConfirmation = () => {
     setIsResetPopupOpen(true);
@@ -68,7 +69,31 @@ function CommandPage2() {
   const [data, setData] = useState(null);
   const [submittedData, setSubmittedData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-
+  useEffect(() => {
+  if (machine) {
+    // Update the form data with the machine state response
+    setFormData({
+      ...formData,
+      date: machine.date || "",
+      Num_Commande: machine.Num_Commande || "",
+      panneau: machine.panneau || "",
+      tranche: machine.tranche || "",
+      niveau: machine.niveau || "",
+      mode_tir: machine.mode_tir || "",
+      foration: machine.foration || "",
+      nombre_trous: machine.nombre_trous || "",
+      nombre_ranges: machine.nombre_ranges || "",
+      trous_range: machine.trous_range || "",
+      maille_banquette: machine.maille_banquette || "",
+      decappage: machine.decappage || "",
+      profondeur: machine.profondeur || "",
+      zone_tir: machine.zone_tir || "",
+      mode_charge: machine.mode_charge || "",
+      dosage_prevu: machine.dosage_prevu || "",
+      schema_tir: machine.schema_tir || "",
+    });
+  }
+}, [machine]);
   const togglePopup = () => {
     setIsOpen(!isOpen);
     console.log(formData.nombre_ranges);
@@ -129,13 +154,14 @@ function CommandPage2() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
     setFormData({
       ...formData,
       [name]: name === "profondeur" ? parseFloat(value) : value, // Convertir la profondeur en nombre décimal
     });
   };
   const generatePDFHandler = () => {
-    generatePDF(formData, submittedData); 
+    generatePDF(formData, submittedData);
     setSuccessMessage("PDF genéré avec succès !");
   };
 
@@ -290,10 +316,30 @@ function CommandPage2() {
       alert(`Veuillez remplir les champs suivants : ${fieldNames}`);
     }
   };
+  const chooseMachine = async (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value, // Update the form data with the selected value
+    });
+
+    try {
+      // Use the updated value of machine directly from the state
+      const response = await axios.get(`http://127.0.0.1:8000/api/commandes/machine/${value}`);
+      setMachine(response.data)
+      console.log(machine)
+      console.log(response.data);
+      // setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
 
   return (
     <div className="page-commande">
-      
+
       <h2
         style={{
           textAlign: "left",
@@ -329,16 +375,16 @@ function CommandPage2() {
                   <select
                     id="niveau"
                     name="niveau"
-                    value={formData.niveau}
+                    value={machine.niveau ? machine.niveau : ''}
                     onChange={handleChange}
                   >
                     <option value="">select niveau</option>
-                    <option value="R+C1">R+C1</option>
-                    <option value="R+C2">R+C2</option>
-                    <option value="R+C3">R+C3</option>
-                    <option value="R+C4">R+C4</option>
-                    <option value="R+C5">R+C5</option>
-                    <option value="R+C6">R+C6</option>
+                    <option value="R/C1">R/C1</option>
+                    <option value="R/C2">R/C2</option>
+                    <option value="R/C3">R/C3</option>
+                    <option value="R/C4">R/C4</option>
+                    <option value="R/C5">R/C5</option>
+                    <option value="R/C6">R/C6</option>
                     <option value="Int1/2">Int1/2</option>
                     <option value="Int2/3">Int2/3</option>
                     <option value="Int3/4">Int3/4</option>
@@ -418,12 +464,13 @@ function CommandPage2() {
                   <select
                     id="foration"
                     name="foration"
-                    value={formData.foration}
-                    onChange={handleChange}
+
+                    onChange={(e) => chooseMachine(e)}
+
                   >
                     <option value="">select Foration</option>
                     <option value="PV1">PV1</option>
-                    <option value="DK6">DKS</option>
+                    <option value="DK6">DK6</option>
                     <option value="SKF1">SKF1</option>
                     <option value="SNF2">SNF2</option>
                     <option value="D500">D500</option>
@@ -1046,7 +1093,7 @@ function CommandPage2() {
                 </tr>
               </table>
             </form>
-            { successMessage && <SuccessMessage>{successMessage}</SuccessMessage> }
+            {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
 
             <br />
             <div className="form-row">
@@ -1100,12 +1147,12 @@ function CommandPage2() {
         )}
       </div>
       {isAddPopupOpen && (
-                <ConfirmationPopup
-                  message="Êtes-vous sûr de vouloir calculer la commande ?"
-                  onConfirm={handleSubmit}
-                  onClose={() => setIsAddPopupOpen(false)}
-                />
-              )}
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir calculer la commande ?"
+          onConfirm={handleSubmit}
+          onClose={() => setIsAddPopupOpen(false)}
+        />
+      )}
     </div>
   );
 }
