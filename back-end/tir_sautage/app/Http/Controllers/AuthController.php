@@ -46,16 +46,18 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
+
+
         if (Auth::attempt($request->only('name', 'password'))) {
             $user = Auth::user();
             if (Auth::user()->isAdmin) {
-                $token = $user->createToken('auth-token',abilities:['admin-rules'])
+                $token = $user->createToken('auth-token', abilities: ['admin-rules'])
                     ->plainTextToken;
             } else {
                 $token = $user->createToken('auth-token')->plainTextToken;
             }
 
-            return response()->json(['token' => $token,'isAdmin'=>$user->isAdmin?true:false]);
+            return response()->json(['token' => $token, 'isAdmin' => $user->isAdmin ? true : false]);
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);
@@ -67,6 +69,4 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Logged out successfully']);
     }
-
-    
 }

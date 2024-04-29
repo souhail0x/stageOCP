@@ -77,6 +77,10 @@ class CommandeController extends Controller
 
         return response()->json($commande, 200);
     }
+    public function showByMachine($mach){
+        $commande = Commande::where('foration', '=', $mach)->get();
+        return response()->json($commande);
+    }
 
     public function destroy($id)
     {
