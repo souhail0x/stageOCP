@@ -34,6 +34,7 @@ Route::post('/sautage', [SautageGestionController::class, 'store']);
 Route::get('/commandes', [CommandeController::class, 'index']);
 Route::post('/commandes', [CommandeController::class, 'store']);
 Route::get('/commandes/{id}', [CommandeController::class, 'show']);
+Route::get('/commandes/machine/{mach}', [CommandeController::class, 'showByMachine']);
 Route::put('/commandes/{id}', [CommandeController::class, 'update']);
 Route::delete('/commandes/{id}', [CommandeController::class, 'destroy']);
 

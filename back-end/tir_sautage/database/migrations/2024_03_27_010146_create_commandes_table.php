@@ -15,7 +15,7 @@ class CreateCommandesTable extends Migration
             $table->string('panneau');
             $table->string('tranche');
             $table->string('niveau');
-            $table->string('mode_tir');
+            $table->string('mode_tir')->nullable();
             $table->string('foration');
             $table->integer('nombre_trous');
             $table->integer('nombre_ranges');
