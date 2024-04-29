@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "../styles/SautagePage.css";
 import ConfirmationPopup from "./ConfirmationPopup";
 import SuccessMessage from "./SuccessMessage";
 
 const SautagePage = () => {
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [isEmptyPopupOpen, setIsEmptyPopupOpen] = useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [ItemId, setItemId] = useState(null);
+  const [data, setData] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
-
-
   // Déclaration des états pour les champs du formulaire
   const [formData, setFormData] = useState({
     date: "",
@@ -36,6 +40,20 @@ const SautagePage = () => {
     });
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/sautage");
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    fetchLastEnteredId(); 
+  }, []);
+  
   const handleClearForm = () => {
     setFormData({
       date: "",
@@ -74,7 +92,6 @@ const SautagePage = () => {
         console.log(responseData); // Afficher la réponse JSON du serveur
         // Réinitialiser les données du formulaire après l'ajout réussi
         setSuccessMessage("Données ajoutées avec succès !");
-        handleClearForm();
       } else {
         console.error("Erreur lors de l'ajout de données");
       }
@@ -84,9 +101,83 @@ const SautagePage = () => {
   };
 
   const handleAddConfirmation = () => {
-    setIsAddPopupOpen(true);
+    const isFormFilled = Object.values(formData).every(value => value !== "");
+    if (isFormFilled) {
+      setIsAddPopupOpen(true);
+    } else {
+      setIsEmptyPopupOpen(true);
+    }
   };
 
+  const handleUpdateConfirmation = (id) => {
+    setItemId(id);
+    setIsEditPopupOpen(true);
+  };
+
+  const handleUpdateConfirm = () => {
+    setIsEditPopupOpen(false);
+    handleUpdate(ItemId);
+  };
+
+  const handleUpdate = async (id) => {
+    try {
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/sautage/${id}`,
+        formData
+      );
+      console.log(response.data);
+      setSuccessMessage("Données mises à jour avec succès !");
+      fetchData();
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
+  
+  const handleDeleteConfirmation = (id) => {
+    setItemId(id);
+    setIsDeletePopupOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setIsDeletePopupOpen(false);
+    handleDelete(ItemId);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.delete(
+        `http://127.0.0.1:8000/api/sautage/${id}`
+      );
+      console.log(response.data);
+      setSuccessMessage("Données supprimées avec succès !");
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
+
+  const fetchLastEnteredId = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/commandes");
+      const data = response.data;
+      
+      if (data.length > 0) {
+        const lastEntry = data[data.length - 1];
+
+        setFormData({
+          ...formData,
+          numero_commande: lastEntry.Num_Commande.toString(), 
+        });
+        console.log(formData)
+      } 
+    } catch (error) {
+      console.error("Error fetching last entered ID:", error);
+    }
+  };
+
+  
   return (
     <div className="sautage">
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -184,7 +275,8 @@ const SautagePage = () => {
                     name="numero_commande"
                     value={formData.numero_commande}
                     onChange={handleChange}
-                    required
+                    style={{ backgroundColor: "white" }}
+                    disabled
                   />
                 </div>
               </td>
@@ -330,7 +422,7 @@ const SautagePage = () => {
 
           <div className="btn-container">
             <button
-              style={{ backgroundColor: "#45a049", width: "420px" }}
+              style={{ backgroundColor: "#45a049", width: "220px" }}
               className="btn btn-ajouter"
               type="submit"
               onClick={handleAddConfirmation}
@@ -338,8 +430,24 @@ const SautagePage = () => {
               AJOUTER
             </button>
             <button
+            style={{ backgroundColor: "#45a049", width: "220px" }}
+            className="btn btn-edit"
+            type="button"
+            onClick={() => handleUpdateConfirmation(formData.numero_execution)}
+          >
+            MODIFIER
+          </button>
+          <button
+            style={{ backgroundColor: "#45a049", width: "220px" }}
+            className="btn btn-delete"
+            type="button"
+            onClick={() => handleDeleteConfirmation(formData.numero_execution)}
+          >
+            SUPPRIMER
+          </button>
+            <button
               className="btn btn-clear"
-              style={{ backgroundColor: "grey", width: "420px" }}
+              style={{ backgroundColor: "grey", width: "220px" }}
               type="button"
               onClick={handleClearForm}
             >
@@ -348,10 +456,30 @@ const SautagePage = () => {
 
             {isAddPopupOpen && (
               <ConfirmationPopup
-                message="Êtes-vous sûr de vouloir ajouter les données ?"
+                message="Êtes-vous sûr de vouloir ajouter les données sautage ?"
                 onConfirm={handleAddConfirm}
                 onClose={() => setIsAddPopupOpen(false)}
               />
+            )}
+            {isEmptyPopupOpen && (
+              <ConfirmationPopup
+                message="Veuillez remplir tous les champs du formulaire"
+                onConfirm={() => setIsEmptyPopupOpen(false)}
+                onClose={() => setIsEmptyPopupOpen(false)}
+              />
+            )}
+            {isEditPopupOpen && (
+              <ConfirmationPopup
+                message="Êtes-vous sûr de vouloir modifier les données sautage ?"
+                onConfirm={handleUpdateConfirm}
+                onClose={() => setIsEditPopupOpen(false)}
+              />
+            )}
+            {isDeletePopupOpen && (
+              <ConfirmationPopup
+                message="Êtes-vous déjà en train de supprimer les données sautage ?"
+                onConfirm={handleDeleteConfirm}
+                onClose={() => setIsDeletePopupOpen(false)} />
             )}
           </div>
       </div>

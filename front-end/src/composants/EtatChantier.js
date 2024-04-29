@@ -25,7 +25,7 @@ function EtatChantier() {
     avance_decapage: "",
   });
   const [successMessage, setSuccessMessage] = useState("");
-  const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -35,15 +35,9 @@ function EtatChantier() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/etat-chantiers"
-      );
-      const sortedData = response.data.sort(
-        (a, b) => new Date(a.date) - new Date(b.date)
-      );
-      const firstCommand = sortedData.shift();
-      const lastFiveCommands = sortedData.slice(-6);
-      setData([firstCommand, ...lastFiveCommands]);
+      const response = await axios.get("http://127.0.0.1:8000/api/etat-chantiers");
+      const sortedData = response.data.sort((a, b) => a.id - b.id);
+      setData(sortedData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -54,25 +48,24 @@ function EtatChantier() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleAddConfirm = async () => {
-    setIsAddPopupOpen(false);
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/etat-chantiers",
-        formData
-      );
-      const newData = response.data;
-      setData([newData, ...data.slice(0, 6)]);
-      setSuccessMessage("Données ajoutées avec succès !");
-      resetForm();
-    } catch (error) {
-      console.error("Error adding data:", error);
-    }
+  const handleUpdateConfirm = async () => {
+    setIsUpdatePopupOpen(false);
+    handleUpdate();
   };
 
-  const handleAddConfirmation = () => {
-    setIsAddPopupOpen(true);
+  const handleUpdateConfirmation = () => {
+    setIsUpdatePopupOpen(true);
+    
   };
+
+  const resetForm = () => {
+    setFormData({
+      date: "",
+      machine: "",
+      avance_foration: "",
+      avance_decapage: "",
+    });
+  }
 
   const handleUpdate = async () => {
     try {
@@ -93,15 +86,6 @@ function EtatChantier() {
 
   const handleEdit = (item) => {
     setFormData(item);
-  };
-
-  const resetForm = () => {
-    setFormData({
-      date: "",
-      machine: "",
-      avance_foration: "",
-      avance_decapage: "",
-    });
   };
 
   const handleDeleteConfirmation = async () => {
@@ -168,6 +152,7 @@ function EtatChantier() {
             style={{ height: "35px" }}
             value={formData.machine}
             onChange={handleInputChange}
+            disabled
           >
             <option value="">select machine</option>
             <option value="7500|1">7500|1</option>
@@ -175,10 +160,10 @@ function EtatChantier() {
             <option value="PH1">PH1</option>
             <option value="PH2">PH2</option>
             <option value="ZD11">ZD11</option>
+            <option value="GNE">GNE</option>
             <option value="Procaneq">Procaneq</option>
             <option value="TechnoZaim">TechnoZaim</option>
             <option value="Transmine">Transwine</option>
-            <option value="GNE">GNE</option>
             <option value="EE">EE.</option>
           </select>
         </div>
@@ -201,15 +186,15 @@ function EtatChantier() {
           />
         </div>
       </div>
-      <button type="button" onClick={handleAddConfirmation} className="button">
-        Ajouter
-      </button>
-      <button type="button" onClick={handleUpdate} className="button">
-        Mise à jour
+      <button type="button" onClick={handleUpdateConfirmation} 
+      style={{ width: "300px"}}
+      className="button">
+        Mettre à jour
       </button>
       <div className="">
         <div className="tableContainer">
-          <table className="table table-etat">
+          <table className="table table-etat"
+            >
             <thead className="thead">
               <tr>
                 <th>Date</th>
@@ -299,11 +284,11 @@ function EtatChantier() {
           </ResponsiveContainer>
         </div>
       </div>
-      {isAddPopupOpen && (
+      {isUpdatePopupOpen && (
         <ConfirmationPopup
-          message="Êtes-vous sûr de vouloir ajouter les données ?"
-          onConfirm={handleAddConfirm}
-          onClose={() => setIsAddPopupOpen(false)}
+          message="Êtes-vous sûr de vouloir modifier les données de cette machine ?"
+          onConfirm={handleUpdateConfirm}
+          onClose={() => isUpdatePopupOpen(false)}
         />
       )}
       {isDeletePopupOpen && (

@@ -40,6 +40,15 @@ function GestionStock() {
     aei: "",
     etat_stock: "",
   });
+  const [initialStock, setInitialStock] = useState({
+    ammonix: 3282900, // Initial stock for ammonix
+    tovex: 45500, // Initial stock for tovex
+    detos_450ms: 17056, // Initial stock for detos 450ms
+    detos_500ms: 70000, // Initial stock for detos 500ms
+    raccord: 63608, // Initial stock for raccord
+    aei: 292, // Initial stock for aei
+    lign: 142000, // Initial stock for lign
+  });
 
   useEffect(() => {
     fetchData();
@@ -165,6 +174,29 @@ function GestionStock() {
     handleAdd();
   };
 
+  const cumulativeSum = data.reduce((acc, curr) => {
+    Object.keys(curr).forEach((key) => {
+      if (key !== "date_commande" && key !== "id" && key !== "etat_stock") {
+        acc[key] = (acc[key] || 0) + parseInt(curr[key]);
+      }
+    });
+    return acc;
+  }, {});
+
+  const remainingStock = Object.keys(initialStock).reduce((acc, key) => {
+    acc[key] = initialStock[key] - (cumulativeSum[key] || 0);
+    return acc;
+  }, {});
+
+  const chartData = Object.keys(cumulativeSum)
+  .filter(key => key !== "updated_at" && key !== "created_at" && key !== "raccord_100" && key !== "raccord_65" && key !== "raccord_42" && key !== "raccord_25" && key !== "raccord_17") 
+  .map((key) => ({
+    category: key,
+    cumulativeSum: cumulativeSum[key],
+    remainingStock: remainingStock[key],
+  }));
+
+  console.log(chartData);
   return (
     <div className="containerGetion">
       <h1
@@ -200,42 +232,30 @@ function GestionStock() {
                 <th>ID</th>
                 <th>Ammonix</th>
                 <th>Tovex</th>
-                <th>D450</th>
-                <th>D500</th>
-                <th>R17</th>
-                <th>R25</th>
-                <th>R42</th>
-                <th>R65</th>
-                <th>R100</th>
+                <th>Detonateur 450</th>
+                <th>Detonateur 500</th>
+                <th>Raccord</th>
                 <th>Ligne</th>
                 <th>AEI</th>
                 <th>État</th>
-                <th></th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
               <tr>
+                <td>{new Date().toLocaleDateString()}</td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{remainingStock.ammonix}</td>
+                <td>{remainingStock.tovex}</td>
+                <td>{remainingStock.detos_450ms}</td>
+                <td>{remainingStock.detos_500ms}</td>
+                <td>{remainingStock.raccord}</td>
+                <td>{remainingStock.lign}</td>
+                <td>{remainingStock.aei}</td>
+                <td>Stock Actuel</td>
               </tr>
               {isLoaded ? (
                 data
-                  .slice(-3)
+                  .slice(-1)
                   .reverse()
                   .map((item, index) => (
                     <tr key={index}>
@@ -245,34 +265,16 @@ function GestionStock() {
                       <td>{item.tovex}</td>
                       <td>{item.detos_450ms}</td>
                       <td>{item.detos_500ms}</td>
-                      <td>{item.raccord_17}</td>
-                      <td>{item.raccord_25}</td>
-                      <td>{item.raccord_42}</td>
-                      <td>{item.raccord_65}</td>
-                      <td>{item.raccord_100}</td>
+                      <td>
+                        {item.raccord_17 +
+                          item.raccord_25 +
+                          item.raccord_42 +
+                          item.raccord_65 +
+                          item.raccord_100}
+                      </td>
                       <td>{item.lign}</td>
                       <td>{item.aei}</td>
                       <td>{item.etat_stock}</td>
-                      <td>
-                        <button
-                          style={{ padding: "0px 0px", width: "60px" }}
-                          type="button"
-                          className="button"
-                          onClick={() => handleEdit(item)}
-                        >
-                          Modifier
-                        </button>
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          style={{ padding: "5px 0px", width: "80px" }}
-                          className="button"
-                          onClick={() => handleDeleteConfirmation(item.id)}
-                        >
-                          Supprimer
-                        </button>
-                      </td>
                     </tr>
                   ))
               ) : (
@@ -441,18 +443,27 @@ function GestionStock() {
               >
                 Ajouter
               </button>
-              {editItem && (
-                <button type="button" onClick={handleUpdate} className="button">
-                  Mettre à jour
-                </button>
-              )}
+              <button
+                type="button"
+                className="button"
+                onClick={() => handleEdit(formData.id_cout)}
+              >
+                Modifier
+              </button>
+              <button
+                type="button"
+                className="button"
+                onClick={() => handleDeleteConfirmation(formData.id_cout)}
+              >
+                Supprimer
+              </button>
             </div>
           </form>
         </div>
         <div className="chart-container">
-          <ResponsiveContainer width="100%" height={550} className={"chart1"}>
+          <ResponsiveContainer width="100%" height={550}>
             <BarChart
-              data={data}
+              data={chartData}
               margin={{
                 top: 5,
                 right: 30,
@@ -461,24 +472,21 @@ function GestionStock() {
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="Num_Stock" />
+              <XAxis dataKey="category" />
               <YAxis />
               <Tooltip />
               <Legend />
               <Bar
-                type="ammonix"
-                dataKey="ammonix"
-                fill="#6ED18F"
-                activeDot={{ r: 8 }}
+                dataKey="remainingStock"
+                fill="#FF6B6B"
+                name="Stock Actuel"
               />
-              <Bar type="tovex" dataKey="tovex" fill="#E91E63" />
-              <Bar type="detos" dataKey="detonateur_450" fill="#AF98C5" />
-              <Bar type="detos" dataKey="detonateur_500" fill="#56ffc6" />
-              <Bar type="raccord" dataKey="raccord_17" fill="#9576EB" />
-              <Bar type="raccord" dataKey="raccord_25" fill="#9C27B0" />
-              <Bar type="raccord" dataKey="raccord_42" fill="#b7b5f4" />
-              <Bar type="aei" dataKey="aei" fill="#FF5722" />
-              <Bar type="ligne" dataKey="ligne_tir" fill="#FFC107" />
+              <Bar
+                dataKey="cumulativeSum"
+                fill="#6ED18F"
+                name="Consommation"
+              />
+              
             </BarChart>
           </ResponsiveContainer>
         </div>
