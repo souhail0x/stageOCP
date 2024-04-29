@@ -153,7 +153,7 @@ function GestionStock() {
 
   const cumulativeSum = data.reduce((acc, curr) => {
     Object.keys(curr).forEach((key) => {
-      if (key !== "dateCommande" && key !== "id" && key !== "etatCout") {
+      if (key !== "dateCommande" && key !== "id" && key !== "etatCout" && key !== "id_cout" ) {
         acc[key] = (acc[key] || 0) + parseInt(curr[key]);
       }
     });
