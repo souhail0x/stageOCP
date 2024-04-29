@@ -10,41 +10,13 @@ import SuccessMessage from "./SuccessMessage";
 function CommandPage2() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isResetPopupOpen, setIsResetPopupOpen] = useState(false);
+  const [isEmptyPopupOpen, setIsEmptyPopupOpen] = useState(false);
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [updateItemId, setUpdateItemId] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [isGeneratePDFPopupOpen, setIsGeneratePDFPopupOpen] = useState(false);
-  const [machine, setMachine] = useState('');
-
-  const handleResetConfirmation = () => {
-    setIsResetPopupOpen(true);
-    handleCancel();
-  };
-
-  const handleAddConfirmation = () => {
-    setIsAddPopupOpen(true);
-  };
-
-  const handleGeneratePDFConfirmation = () => {
-    setIsGeneratePDFPopupOpen(true);
-  };
-
-  const handleResetConfirm = () => {
-    // Logique pour réinitialiser le formulaire
-    setIsResetPopupOpen(false);
-  };
-
-  const handleAddConfirm = () => {
-    // Logique pour ajouter les données
-    setIsAddPopupOpen(false);
-    handleAdd();
-  };
-
-  const handleGeneratePDFConfirm = () => {
-    // Logique pour générer le PDF
-    setIsGeneratePDFPopupOpen(false);
-    generatePDFHandler();
-  };
-
   const [formData, setFormData] = useState({
     date: "",
     Num_Commande: "",
@@ -65,35 +37,28 @@ function CommandPage2() {
     dosage_prevu: "",
     schema_tir: "",
   });
-
   const [data, setData] = useState(null);
   const [submittedData, setSubmittedData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  useEffect(() => {
-  if (machine) {
-    // Update the form data with the machine state response
-    setFormData({
-      ...formData,
-      date: machine.date || "",
-      Num_Commande: machine.Num_Commande || "",
-      panneau: machine.panneau || "",
-      tranche: machine.tranche || "",
-      niveau: machine.niveau || "",
-      mode_tir: machine.mode_tir || "",
-      foration: machine.foration || "",
-      nombre_trous: machine.nombre_trous || "",
-      nombre_ranges: machine.nombre_ranges || "",
-      trous_range: machine.trous_range || "",
-      maille_banquette: machine.maille_banquette || "",
-      decappage: machine.decappage || "",
-      profondeur: machine.profondeur || "",
-      zone_tir: machine.zone_tir || "",
-      mode_charge: machine.mode_charge || "",
-      dosage_prevu: machine.dosage_prevu || "",
-      schema_tir: machine.schema_tir || "",
-    });
-  }
-}, [machine]);
+
+  const handleResetConfirmation = () => {
+    setIsResetPopupOpen(true);
+    handleCancel();
+  };
+
+  const handleGeneratePDFConfirmation = () => {
+    setIsGeneratePDFPopupOpen(true);
+  };
+
+  const handleResetConfirm = () => {
+    setIsResetPopupOpen(false);
+  };
+
+  const handleGeneratePDFConfirm = () => {
+    setIsGeneratePDFPopupOpen(false);
+    generatePDFHandler();
+  };
+
   const togglePopup = () => {
     setIsOpen(!isOpen);
     console.log(formData.nombre_ranges);
@@ -137,6 +102,15 @@ function CommandPage2() {
     });
   };
 
+  const handleAddConfirmation = () => {
+    setIsAddPopupOpen(true);
+  };
+
+  const handleAddConfirm = () => {
+    setIsAddPopupOpen(false);
+    handleAdd();
+  };
+
   const handleAdd = async () => {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
@@ -152,9 +126,59 @@ function CommandPage2() {
     }
   };
 
+  const handleUpdateConfirmation = (id) => {
+    setUpdateItemId(id);
+    setIsUpdatePopupOpen(true);
+  };
+
+  const handleUpdateConfirm = () => {
+    setIsUpdatePopupOpen(false);
+    handleUpdate(updateItemId);
+  };
+
+  const handleUpdate = async (id) => {
+    try {
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/commandes/${id}`,
+        formData
+      );
+      console.log(response.data);
+      setSuccessMessage("Données mises à jour avec succès !");
+      fetchData();
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
+
+  const handleDeleteConfirmation = (id) => {
+    setUpdateItemId(id);
+    setIsDeletePopupOpen(true);
+  };
+  
+  const handleDeleteConfirm = () => {
+    setIsDeletePopupOpen(false);
+    console.log(updateItemId);
+    handleDelete(updateItemId);
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.delete(
+        `http://127.0.0.1:8000/api/commandes/${id}`
+      );
+      console.log(response.data);
+      setSuccessMessage("Données supprimées avec succès !");
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
+  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
     setFormData({
       ...formData,
       [name]: name === "profondeur" ? parseFloat(value) : value, // Convertir la profondeur en nombre décimal
@@ -313,33 +337,12 @@ function CommandPage2() {
       setSubmittedData(calculatedResults);
     } else {
       const fieldNames = emptyFields.join(", ");
-      alert(`Veuillez remplir les champs suivants : ${fieldNames}`);
+      setIsEmptyPopupOpen(true);
     }
   };
-  const chooseMachine = async (e) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value, // Update the form data with the selected value
-    });
-
-    try {
-      // Use the updated value of machine directly from the state
-      const response = await axios.get(`http://127.0.0.1:8000/api/commandes/machine/${value}`);
-      setMachine(response.data)
-      console.log(machine)
-      console.log(response.data);
-      // setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
 
   return (
     <div className="page-commande">
-
       <h2
         style={{
           textAlign: "left",
@@ -375,16 +378,16 @@ function CommandPage2() {
                   <select
                     id="niveau"
                     name="niveau"
-                    value={machine.niveau ? machine.niveau : ''}
+                    value={formData.niveau}
                     onChange={handleChange}
                   >
                     <option value="">select niveau</option>
-                    <option value="R/C1">R/C1</option>
-                    <option value="R/C2">R/C2</option>
-                    <option value="R/C3">R/C3</option>
-                    <option value="R/C4">R/C4</option>
-                    <option value="R/C5">R/C5</option>
-                    <option value="R/C6">R/C6</option>
+                    <option value="R+C1">R+C1</option>
+                    <option value="R+C2">R+C2</option>
+                    <option value="R+C3">R+C3</option>
+                    <option value="R+C4">R+C4</option>
+                    <option value="R+C5">R+C5</option>
+                    <option value="R+C6">R+C6</option>
                     <option value="Int1/2">Int1/2</option>
                     <option value="Int2/3">Int2/3</option>
                     <option value="Int3/4">Int3/4</option>
@@ -464,13 +467,12 @@ function CommandPage2() {
                   <select
                     id="foration"
                     name="foration"
-
-                    onChange={(e) => chooseMachine(e)}
-
+                    value={formData.foration}
+                    onChange={handleChange}
                   >
                     <option value="">select Foration</option>
                     <option value="PV1">PV1</option>
-                    <option value="DK6">DK6</option>
+                    <option value="DK6">DKS</option>
                     <option value="SKF1">SKF1</option>
                     <option value="SNF2">SNF2</option>
                     <option value="D500">D500</option>
@@ -514,8 +516,7 @@ function CommandPage2() {
                   <div
                     style={{
                       display: "flex",
-                      // justifyContent:"space-between",
-                      marginRight: "30px",
+                      padding: " 0 15px",
                     }}
                   >
                     <select
@@ -525,7 +526,7 @@ function CommandPage2() {
                       value={formData.espacement}
                       onChange={handleChange}
                       style={{
-                        width: "calc((100% - 22px));",
+                        width: "170px",
                         // margin:"1px"
                       }}
                     >
@@ -679,15 +680,23 @@ function CommandPage2() {
           </table>
 
           <div className="form-row">
-            <button type="submit" onClick={handleAddConfirmation} className="button">
+            <button type="submit" className="button">
               Calculer
             </button>
+            {isEmptyPopupOpen && (
+              <ConfirmationPopup
+                message="Veuillez remplir tous les champs du formulaire"
+                onConfirm={() => setIsEmptyPopupOpen(false)}
+                onClose={() => setIsEmptyPopupOpen(false)}
+              />
+            )}
 
             <button
               type="reset"
               className="button"
               onClick={handleResetConfirmation}
               disabled={isSubmitted}
+              style={{ backgroundColor: isSubmitted && "grey" }}
             >
               Effacer
             </button>
@@ -700,9 +709,7 @@ function CommandPage2() {
             )}
           </div>
         </form>
-
         <br />
-
         {submittedData && (
           <div>
             <center>
@@ -1093,25 +1100,38 @@ function CommandPage2() {
                 </tr>
               </table>
             </form>
-            {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+            {successMessage && (
+              <SuccessMessage>{successMessage}</SuccessMessage>
+            )}
 
             <br />
             <div className="form-row">
-
               <button
                 className="button"
                 type="submit"
+                style={{ marginBottom: "10px" }}
                 onClick={handleAddConfirmation}
               >
                 Ajouter
               </button>
-              {isAddPopupOpen && (
-                <ConfirmationPopup
-                  message="Êtes-vous sûr de vouloir ajouter les données ?"
-                  onConfirm={handleAddConfirm}
-                  onClose={() => setIsAddPopupOpen(false)}
-                />
-              )}
+              <button
+                className="button"
+                type="submit"
+                style={{ marginBottom: "10px" }}
+                onClick={() => handleUpdateConfirmation(formData.Num_Commande)}
+              >
+                Modifier
+              </button>
+              <button
+                className="button"
+                type="submit"
+                style={{ marginBottom: "10px" }}
+                onClick={() => handleDeleteConfirmation(formData.Num_Commande)}
+              >
+                Supprimer
+              </button>
+
+              <br />
               <button
                 className="button"
                 onClick={handleGeneratePDFConfirmation}
@@ -1148,10 +1168,22 @@ function CommandPage2() {
       </div>
       {isAddPopupOpen && (
         <ConfirmationPopup
-          message="Êtes-vous sûr de vouloir calculer la commande ?"
-          onConfirm={handleSubmit}
+          message="Êtes-vous sûr de vouloir ajouter la commande à la base de données ?"
+          onConfirm={handleAddConfirm}
           onClose={() => setIsAddPopupOpen(false)}
         />
+      )}
+      {isUpdatePopupOpen && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir modifier cette commande ?"
+          onConfirm={handleUpdateConfirm}
+          onClose={() => setIsUpdatePopupOpen(false)} />
+      )}
+      {isDeletePopupOpen && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir supprimer cette commande ?"
+          onConfirm={handleDeleteConfirm}
+          onClose={() => setIsDeletePopupOpen(false)} />
       )}
     </div>
   );

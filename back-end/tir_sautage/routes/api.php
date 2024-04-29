@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //sautage
 Route::get('/sautage', [SautageGestionController::class, 'index']);
 Route::post('/sautage', [SautageGestionController::class, 'store']);
+Route::put('/sautage/{sautage}', [SautageGestionController::class, 'update']);
+Route::delete('/sautage/{sautage}', [SautageGestionController::class, 'destroy']);
 
 //commande
 Route::get('/commandes', [CommandeController::class, 'index']);
