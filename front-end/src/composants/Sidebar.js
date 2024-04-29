@@ -54,7 +54,7 @@ function SidBar(props) {
 
                 {/* // Assuming you have a state variable called `isDisabled` */}
                 <Link to="/sautage">
-                  <i className="bx bx-wrench"></i>
+                  <i class='bx bx-cog'></i>
                   <span className="links_name">Saisir à sautage</span>
                 </Link>
 
@@ -62,35 +62,35 @@ function SidBar(props) {
               </li>
               <li>
                 <Link to="/gestion-stock">
-                  <i className="bx bx-box"></i>
+                  <i class='bx bxs-cart-download'></i>
                   <span className="links_name">Gestion du stock</span>
                 </Link>
                 <span className="tooltip">Gestion du stock</span>
               </li>
               <li>
                 <Link to="/gestion-cout">
-                  <i className="bx bx-money"></i>
+                  <i class='bx bx-calculator'></i>
                   <span className="links_name">Gestion des couts</span>
                 </Link>
                 <span className="tooltip">Gestion des couts</span>
               </li>
               <li>
                 <Link to="/etat-chantier">
-                  <i className="bx bx-cart-alt"></i>
+                  <i class="bx bxs-truck"></i>
                   <span className="links_name">Etat du chantier</span>
                 </Link>
                 <span className="tooltip">Etat du chantier</span>
               </li>
               <li>
                 <Link to="/security">
-                  <i className="bx bx-shield"></i>
+                  <i class='bx bxs-error'></i>
                   <span className="links_name">Securité</span>
                 </Link>
                 <span className="tooltip">Securité</span>
               </li>
               <li>
                 <Link to="/Gerer-utilisateurs">
-                  <i class='bx bxs-user'></i>
+                  <i class='bx bx-user-circle'></i>
                   <span className="links_name">Gérer les utilisateurs</span>
                 </Link>
                 <span className="tooltip">Gérer les utilisateurs</span>
@@ -107,7 +107,7 @@ function SidBar(props) {
         </li>
         <li>
           <Link to="/archive">
-            <i className="bx bx-archive"></i>
+            <i class='bx bxs-archive-in'></i>
             <span className="links_name">Archive</span>
           </Link>
           <span className="tooltip">Archive</span>
