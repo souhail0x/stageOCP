@@ -85,28 +85,12 @@ function GestionStock() {
       );
       setData([...data, response.data]);
       setSuccessMessage("Données ajoutées avec succès !");
-      setFormData({
-        date_commande: "",
-        id: "",
-        ammonix: "",
-        tovex: "",
-        detos_500ms: "",
-        detos_450ms: "",
-        raccord_17: "",
-        raccord_25: "",
-        raccord_42: "",
-        raccord_65: "",
-        raccord_100: "",
-        lign: "",
-        aei: "",
-        etat_stock: "",
-      });
     } catch (error) {
       console.error("Error adding data:", error);
     }
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (id) => {
     try {
       if (editItem) {
         // Check if editItem is set
@@ -116,7 +100,6 @@ function GestionStock() {
           formData
         );
         setEditItem(null); // Clear editItem after updating
-        setFormData({}); // Clear formData after updating
         setSuccessMessage("Données mis à jour avec succès !");
         fetchData(); // Fetch data after updating
       } else {
@@ -290,6 +273,8 @@ function GestionStock() {
           {/* Partie 2: Formulaire */}
 
           <form>
+          <h5 style={{ color: "rgba(255, 255, 255, 0.95)" }}>Formulaire de Gestion Stock</h5>
+
             <div className="formRow">
               <div className="formGroup">
                 <label>Date:</label>
@@ -446,21 +431,21 @@ function GestionStock() {
               <button
                 type="button"
                 className="button"
-                onClick={() => handleEdit(formData.id_cout)}
+                onClick={() => handleUpdate(formData.id)}
               >
                 Modifier
               </button>
               <button
                 type="button"
                 className="button"
-                onClick={() => handleDeleteConfirmation(formData.id_cout)}
+                onClick={() => handleDeleteConfirmation(formData.id)}
               >
                 Supprimer
               </button>
             </div>
           </form>
         </div>
-        <div className="chart-container">
+        <div className="chart-container chart1">
           <ResponsiveContainer width="100%" height={550}>
             <BarChart
               data={chartData}
