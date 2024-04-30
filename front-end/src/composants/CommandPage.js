@@ -17,6 +17,7 @@ function CommandPage2() {
   const [updateItemId, setUpdateItemId] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [isGeneratePDFPopupOpen, setIsGeneratePDFPopupOpen] = useState(false);
+  const [machine, setMachine] = useState([]);
   const [formData, setFormData] = useState({
     date: "",
     Num_Commande: "",
@@ -37,6 +38,7 @@ function CommandPage2() {
     dosage_prevu: "",
     schema_tir: "",
   });
+
   const [data, setData] = useState(null);
   const [submittedData, setSubmittedData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -155,7 +157,7 @@ function CommandPage2() {
     setUpdateItemId(id);
     setIsDeletePopupOpen(true);
   };
-  
+
   const handleDeleteConfirm = () => {
     setIsDeletePopupOpen(false);
     console.log(updateItemId);
@@ -175,7 +177,7 @@ function CommandPage2() {
       console.error("Error deleting data:", error);
     }
   };
-  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -340,6 +342,70 @@ function CommandPage2() {
       setIsEmptyPopupOpen(true);
     }
   };
+  const chooseMachine = async (e) => {
+    const { name, value } = e.target;
+  
+    setFormData({
+      ...formData,
+      [name]: value, // Update the form data with the selected value
+    });
+  
+    try {
+      // Use the updated value of machine directly from the state
+      const response = await axios.get(`http://127.0.0.1:8000/api/commandes/machine/${value}`);
+      setMachine(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
+  useEffect(() => {
+    if (machine && machine.length > 0) {
+      // Update the form data with the machine data
+      setFormData({
+        ...formData,
+        date: machine[0].date || "",
+        Num_Commande: machine[0].Num_Commande || "",
+        panneau: machine[0].panneau || "",
+        tranche: machine[0].tranche || "",
+        niveau: machine[0].niveau || "",
+        mode_tir: machine[0].mode_tir || "",
+        foration: machine[0].foration || "",
+        nombre_trous: machine[0].nombre_trous || "",
+        nombre_ranges: machine[0].nombre_ranges || "",
+        trous_range: machine[0].trous_range || "",
+        maille_banquette: machine[0].maille_banquette || "",
+        decappage: machine[0].decappage || "",
+        profondeur: machine[0].profondeur || "",
+        zone_tir: machine[0].zone_tir || "",
+        mode_charge: machine[0].mode_charge || "",
+        dosage_prevu: machine[0].dosage_prevu || "",
+        schema_tir: machine[0].schema_tir || "",
+      });
+    }else{
+      setFormData({
+        ...formData,
+        date:  "",
+        Num_Commande: "",
+        panneau:  "",
+        tranche:"",
+        niveau:  "",
+        mode_tir: "",
+        foration: "",
+        nombre_trous:"",
+        nombre_ranges:  "",
+        trous_range:  "",
+        maille_banquette:"",
+        decappage:  "",
+        profondeur:  "",
+        zone_tir: "",
+        mode_charge:  "",
+        dosage_prevu:  "",
+        schema_tir:  "",
+      })
+    }
+  }, [machine]);
+  
 
   return (
     <div className="page-commande">
@@ -468,11 +534,11 @@ function CommandPage2() {
                     id="foration"
                     name="foration"
                     value={formData.foration}
-                    onChange={handleChange}
+                    onChange={(e) => { chooseMachine(e) }}
                   >
                     <option value="">select Foration</option>
                     <option value="PV1">PV1</option>
-                    <option value="DK6">DKS</option>
+                    <option value="DK6">DK6</option>
                     <option value="SKF1">SKF1</option>
                     <option value="SNF2">SNF2</option>
                     <option value="D500">D500</option>

@@ -9,6 +9,7 @@ use App\Http\Controllers\CoutController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\EtatChantierController;
+use App\Http\Controllers\HandleResultat;
 use App\Http\Middleware\CheckTokenAbilities;
 
 /*
@@ -35,6 +36,7 @@ Route::delete('/sautage/{sautage}', [SautageGestionController::class, 'destroy']
 //commande
 Route::get('/commandes', [CommandeController::class, 'index']);
 Route::post('/commandes', [CommandeController::class, 'store']);
+Route::post('/commandes/resultats', [HandleResultat::class, 'store']);
 Route::get('/commandes/{id}', [CommandeController::class, 'show']);
 Route::get('/commandes/machine/{mach}', [CommandeController::class, 'showByMachine']);
 Route::put('/commandes/{id}', [CommandeController::class, 'update']);
