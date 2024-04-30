@@ -173,7 +173,6 @@ function GestionStock() {
     remainingStock: remainingStock[key],
   }));
 
-  console.log(chartData);
   return (
     <div className="containerGetion">
       <h1
