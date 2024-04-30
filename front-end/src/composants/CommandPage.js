@@ -112,7 +112,48 @@ function CommandPage2() {
     setIsAddPopupOpen(false);
     handleAdd();
   };
-
+  const addCalcules = async () => {
+    try {
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/commandes/resultats",
+        {
+          id: 1,
+          longeur: submittedData.longeur ,
+          dosage:submittedData.dosage,
+          largeur:submittedData.largeur ,
+          surface:submittedData.surface ,
+          volume:submittedData.volume ,
+          ligneDeTir:submittedData.ligneDeTir ,
+          ammonix:submittedData.ammonix ,
+          tovex:submittedData.tovex ,
+          aei:submittedData.aei,
+          profondeur:formData.profondeur,
+          repartition:submittedData.repartition ,
+          chargeInstantanee:submittedData.chargeInstantanee ,
+          r_prevu:submittedData.rendement ,
+          m_f:submittedData.metrageFore ,
+          detonateur:submittedData.detonateur500,
+          r17:submittedData.r17,
+          r25:submittedData.r25,
+          r42:submittedData.r42,
+          r65:submittedData.r65,
+          r100:submittedData.r100 ,
+          prix_aei:submittedData.prix_aei ,
+          prix_detonateur:submittedData.prix_detonateur ,
+          prix_raccord:submittedData.prix_raccord ,
+          prix_ammonix:submittedData.prix_ammonix ,
+          prix_lingeTir:submittedData.prix_lingeTir , // Corrected key name
+          prix_tovex:submittedData.prix_tovex ,
+      }
+      );
+      console.log(response.data);
+      setSuccessMessage("Caclules ajoutées avec succès !");
+      fetchData();
+    } catch (error) {
+      console.error("Error adding data:", error);
+    }
+  };
   const handleAdd = async () => {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
@@ -329,11 +370,11 @@ function CommandPage2() {
         r42: r42,
         r65: r65,
         r100: r100,
-        prix_a_e_i: prix_a_e_i,
+        prix_aei: prix_a_e_i,
         prix_detonateur: prix_detonateur,
         prix_raccord: prix_raccord,
         prix_ammonix: prix_ammonix,
-        prix_ligne_de_tir: prix_ligne_de_tir,
+        prix_lingeTir: prix_ligne_de_tir?prix_ligne_de_tir:0,
         prix_tovex: prix_tovex,
       };
       setSubmittedData(calculatedResults);
@@ -1080,12 +1121,12 @@ function CommandPage2() {
                 <tr>
                   <td>
                     <div className="form-group">
-                      <label htmlFor="prix_a_e_i">AEI (8.00dh/Unité):</label>
+                      <label htmlFor="prix_aei">AEI (8.00dh/Unité):</label>
                       <input
                         type="TEXT"
                         id=""
                         name=""
-                        value={submittedData.prix_a_e_i.toFixed(2) + " Dh"}
+                        value={submittedData.prix_aei.toFixed(2) + " Dh"}
                         readOnly // Rendre le champ en lecture seule
                       />
                     </div>
@@ -1145,7 +1186,7 @@ function CommandPage2() {
                         id=""
                         name=""
                         value={
-                          submittedData.prix_ligne_de_tir.toFixed(2) + " Dh"
+                          submittedData.prix_prix_lingeTir.toFixed(2) + " Dh"
                         }
                         readOnly // Rendre le champ en lecture seule
                       />
@@ -1179,6 +1220,14 @@ function CommandPage2() {
                 onClick={handleAddConfirmation}
               >
                 Ajouter
+              </button>
+              <button
+                className="button"
+                type="submit"
+                style={{ marginBottom: "10px" }}
+                onClick={addCalcules}
+              >
+                Ajouter Calcules
               </button>
               <button
                 className="button"
