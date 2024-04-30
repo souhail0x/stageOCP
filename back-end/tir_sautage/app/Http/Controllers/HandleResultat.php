@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Resultat;
+use App\Models\Resultat_commandes;
+use App\Models\Resultats_commandes;
 use Illuminate\Http\Request;
 
 class HandleResultat extends Controller
@@ -18,12 +20,12 @@ class HandleResultat extends Controller
         'ammonix' => 'required|string',
         'dosage' => 'required|string',
         'tovex' => 'required|string',
-        'm.f' => 'required|string',
+        'm_f' => 'required|string',
         'ligneDeTir' => 'required|string',
         'aei' => 'required|string',
         'chargeInstantanee' => 'required|string',
         'repartition' => 'required|string',
-        'r.prevu' => 'required|string',
+        'r_prevu' => 'required|string',
         'profondeur' => 'required|numeric',
         'detonateur' => 'required|string',
         'r17' => 'required|string',
@@ -31,15 +33,15 @@ class HandleResultat extends Controller
         'r42' => 'required|string',
         'r65' => 'required|string',
         'r100' => 'required|string',
-        'prix-aei' => 'required|string',
-        'prix-detonateur' => 'required|string',
-        'prix-raccord' => 'required|string',
-        'prix-ammonix' => 'required|string',
-        'prix-lingeTir' => 'required|string',
-        'prix-tovex' => 'required|string',
+        'prix_aei' => 'required|string',
+        'prix_detonateur' => 'required|string',
+        'prix_raccord' => 'required|string',
+        'prix_ammonix' => 'required|string',
+        'prix_lingeTir' => 'required|string',
+        'prix_tovex' => 'required|string',
     ]);
 
-    $commande = Resultat::create($validatedData);
+    $commande = Resultat_commandes::create($validatedData);
 
     return response()->json($commande, 201);
 }

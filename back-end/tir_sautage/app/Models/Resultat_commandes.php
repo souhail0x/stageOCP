@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Resultat extends Model
+class Resultat_commandes extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -31,12 +31,12 @@ class Resultat extends Model
         'r42',
         'r65',
         'r100',
-        'prix-aei',
-        'prix-detonateur',
-        'prix-raccord',
-        'prix-ammonix',
-        'prix-lingeTir',
-        'prix-tovex',
+        'prix_aei',
+        'prix_detonateur',
+        'prix_raccord',
+        'prix_ammonix',
+        'prix_lingeTir',
+        'prix_tovex',
     ];
-    
+
 }
