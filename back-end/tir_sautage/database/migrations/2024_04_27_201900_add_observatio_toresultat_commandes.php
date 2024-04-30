@@ -12,32 +12,32 @@ return new class extends Migration
     {
         Schema::table('resultat_commandes', function (Blueprint $table) {
             
-            $table->string('longeur');
-            $table->string('largeur');
-            $table->string('surface');
-            $table->string('volume');
-            $table->string('ammonix');
-            $table->string('dosage');
-            $table->string('tovex');
-            $table->string('m_f');
-            $table->string('ligneDeTir');
-            $table->string('aei');
-            $table->string('chargeInstantanee');
-            $table->string('repartition');
-            $table->string('r_prevu');
-            $table->string('profondeur');
-            $table->string('detonateur');
-            $table->string('r17');
-            $table->string('r25');
-            $table->string('r42');
-            $table->string('r65');
-            $table->string('r100');
-            $table->string('prix_aei');
-            $table->string('prix_detonateur');
-            $table->string('prix_raccord');
-            $table->string('prix_ammonix');
-            $table->string('prix_lingeTir');
-            $table->string('prix_tovex');
+            $table->float('longeur');
+            $table->float('largeur');
+            $table->float('surface');
+            $table->float('volume');
+            $table->float('ammonix');
+            $table->float('dosage');
+            $table->float('tovex');
+            $table->float('m_f');
+            $table->float('ligneDeTir');
+            $table->float('aei');
+            $table->float('chargeInstantanee');
+            $table->float('repartition');
+            $table->float('r_prevu');
+            $table->float('profondeur');
+            $table->float('detonateur');
+            $table->float('r17');
+            $table->float('r25');
+            $table->float('r42');
+            $table->float('r65');
+            $table->float('r100');
+            $table->float('prix_aei');
+            $table->float('prix_detonateur');
+            $table->float('prix_raccord');
+            $table->float('prix_ammonix');
+            $table->float('prix_lingeTir')->nullable();
+            $table->float('prix_tovex');
             $table->text('observation')->nullable();
             
         });
@@ -48,9 +48,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('resultat_commandes', function (Blueprint $table) {
-            $table->dropForeign(['commande_id']);
-        });
+       
         Schema::dropIfExists('resultat_commandes');
     }
 };
