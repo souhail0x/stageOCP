@@ -11,6 +11,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\EtatChantierController;
 use App\Http\Controllers\HandleResultat;
 use App\Http\Middleware\CheckTokenAbilities;
+use App\Http\Controllers\ArchiveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,3 +80,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+// Archive
+Route::get('/archive', [ArchiveController::class, 'index']);

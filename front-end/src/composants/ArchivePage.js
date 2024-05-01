@@ -24,6 +24,7 @@ function ArchivePage() {
         axios.get("http://localhost:8000/sanctum/csrf-cookie");
         const response = await axios.get(
           "http://127.0.0.1:8000/api/archive");
+        console.log(response.data);
         setArchiveData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
