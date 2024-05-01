@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import "../styles/ArchivePage.css";
 import Loader from "./spinnerLoader";
+import axios from "axios";
 
 function ArchivePage() {
   const [archiveData, setArchiveData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [filteredData, setFilteredData] = useState([]); // Initialize filteredData
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -20,34 +21,10 @@ function ArchivePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responses = await Promise.all([
-          fetch("http://127.0.0.1:8000/api/commandes"),
-          fetch("http://127.0.0.1:8000/api/sautage"),
-          fetch("http://127.0.0.1:8000/api/gestion-stocks"),
-        ]);
-
-        const jsonResponses = await Promise.all(
-          responses.map((response) => response.json())
-        );
-        const [data1, data2, data3] = jsonResponses;
-
-        const combinedArchiveData = [...data1, ...data2, ...data3];
-
-        const mergedData = [];
-
-        for (let i = 0; i < 4; i++) {
-          const mergedItem = {
-            ...combinedArchiveData[i], // Take properties from the first set of data
-            ...combinedArchiveData[i + 4], // Take properties from the second set of data
-            ...combinedArchiveData[i + 8], // Take properties from the third set of data
-          };
-          mergedData.push(mergedItem);
-        }
-
-        setArchiveData(mergedData);
-        setFilteredData(mergedData);
-        console.log(combinedArchiveData);
-        console.log(mergedData);
+        axios.get("http://localhost:8000/sanctum/csrf-cookie");
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/archive");
+        setArchiveData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
