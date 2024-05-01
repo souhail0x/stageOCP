@@ -276,7 +276,7 @@ const SautagePage = () => {
                     value={formData.numero_commande}
                     onChange={handleChange}
                     style={{ backgroundColor: "white" }}
-                    disabled
+                    
                   />
                 </div>
               </td>

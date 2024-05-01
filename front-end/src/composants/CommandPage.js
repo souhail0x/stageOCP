@@ -17,6 +17,7 @@ function CommandPage2() {
   const [updateItemId, setUpdateItemId] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [isGeneratePDFPopupOpen, setIsGeneratePDFPopupOpen] = useState(false);
+  const [commandId,setCommandId]=useState('')
   const [machine, setMachine] = useState([]);
   const [formData, setFormData] = useState({
     date: "",
@@ -118,7 +119,7 @@ function CommandPage2() {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/commandes/resultats",
         {
-          id: 1,
+          cmd_id: parseInt(commandId),
           longeur: submittedData.longeur ,
           dosage:submittedData.dosage,
           largeur:submittedData.largeur ,
@@ -212,6 +213,7 @@ function CommandPage2() {
         `http://127.0.0.1:8000/api/commandes/${id}`
       );
       console.log(response.data);
+      
       setSuccessMessage("Données supprimées avec succès !");
       fetchData();
     } catch (error) {
@@ -374,7 +376,7 @@ function CommandPage2() {
         prix_detonateur: prix_detonateur,
         prix_raccord: prix_raccord,
         prix_ammonix: prix_ammonix,
-        prix_lingeTir: prix_ligne_de_tir?prix_ligne_de_tir:0,
+        prix_lingeTir: prix_ligne_de_tir?parseFloat(prix_ligne_de_tir):0,
         prix_tovex: prix_tovex,
       };
       setSubmittedData(calculatedResults);
@@ -394,6 +396,8 @@ function CommandPage2() {
     try {
       // Use the updated value of machine directly from the state
       const response = await axios.get(`http://127.0.0.1:8000/api/commandes/machine/${value}`);
+      
+      console.log(commandId);
       setMachine(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -403,6 +407,7 @@ function CommandPage2() {
   useEffect(() => {
     if (machine && machine.length > 0) {
       // Update the form data with the machine data
+      setCommandId(machine[0].id)
       setFormData({
         ...formData,
         date: machine[0].date || "",
@@ -848,7 +853,7 @@ function CommandPage2() {
                         type="TEXT"
                         id=""
                         name=""
-                        value={submittedData.longeur.toFixed(2) + " m"}
+                        value={parseFloat(submittedData.longeur).toFixed(2) + " m"}
                         readOnly // Rendre le champ en lecture seule
                       />
                     </div>
@@ -1021,7 +1026,7 @@ function CommandPage2() {
                         type="TEXT"
                         id=""
                         name=""
-                        value={formData.profondeur.toFixed(2) + " m"}
+                        value={parseFloat(formData.profondeur).toFixed(2) + " m"}
                         readOnly // Rendre le champ en lecture seule
                       />
                     </div>
@@ -1186,7 +1191,7 @@ function CommandPage2() {
                         id=""
                         name=""
                         value={
-                          submittedData.prix_prix_lingeTir.toFixed(2) + " Dh"
+                          parseFloat(submittedData.prix_prix_lingeTir).toFixed(2) + " Dh"
                         }
                         readOnly // Rendre le champ en lecture seule
                       />
