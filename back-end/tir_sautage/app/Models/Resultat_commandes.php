@@ -36,6 +36,7 @@ class Resultat_commandes extends Model
         'prix_raccord',
         'prix_ammonix',
         'prix_lingeTir',
+        'cmd_id',
         'prix_tovex',
     ];
 
