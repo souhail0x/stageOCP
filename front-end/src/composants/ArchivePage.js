@@ -6,28 +6,24 @@ import axios from "axios";
 
 function ArchivePage() {
   const [archiveData, setArchiveData] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredData, setFilteredData] = useState([]); // Initialize filteredData
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        axios.get("http://localhost:8000/sanctum/csrf-cookie");
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/archive");
-        console.log(response.data);
-        setArchiveData(response.data);
+        await axios.get("http://localhost:8000/sanctum/csrf-cookie");
+        const response = await axios.get("http://127.0.0.1:8000/api/archive");
+        if (response.status === 200) {
+          setArchiveData(response.data);
+          setIsLoaded(false); // Set isLoaded to false when data is loaded
+        } else {
+          throw new Error("Failed to fetch data");
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsLoaded(false); // Set isLoaded to false in case of error
       }
     };
 
@@ -53,17 +49,23 @@ function ArchivePage() {
   const handleSearch = (e) => {
     const { value } = e.target;
     setSearchQuery(value);
-
-    const filtered = archiveData.filter((item) =>
-      Object.values(item).some(
-        (val) =>
-          typeof val === "string" &&
-          val.toLowerCase().includes(value.toLowerCase())
-      )
-    );
-
-    setFilteredData(filtered);
+  
+    if (Array.isArray(archiveData)) {
+      const filtered = archiveData.filter((item) =>
+        Object.values(item).some(
+          (val) =>
+            typeof val === "string" &&
+            val.toLowerCase().includes(value.toLowerCase())
+        )
+      );
+      setFilteredData(filtered);
+    }
   };
+  
+  
+  useEffect(() => {
+    console.log('filteredData', filteredData);
+  }, [filteredData]);
 
   return (
     <>
