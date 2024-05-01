@@ -111,7 +111,10 @@ function CommandPage2() {
 
   const handleAddConfirm = () => {
     setIsAddPopupOpen(false);
-    handleAdd();
+    if ( handleAdd()) {
+      addCalcules();
+    }
+    
   };
   const addCalcules = async () => {
     try {
@@ -119,7 +122,6 @@ function CommandPage2() {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/commandes/resultats",
         {
-          cmd_id: parseInt(commandId),
           longeur: submittedData.longeur ,
           dosage:submittedData.dosage,
           largeur:submittedData.largeur ,
@@ -220,7 +222,6 @@ function CommandPage2() {
       console.error("Error deleting data:", error);
     }
   };
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -385,6 +386,7 @@ function CommandPage2() {
       setIsEmptyPopupOpen(true);
     }
   };
+  
   const chooseMachine = async (e) => {
     const { name, value } = e.target;
   
@@ -1225,14 +1227,6 @@ function CommandPage2() {
                 onClick={handleAddConfirmation}
               >
                 Ajouter
-              </button>
-              <button
-                className="button"
-                type="submit"
-                style={{ marginBottom: "10px" }}
-                onClick={addCalcules}
-              >
-                Ajouter Calcules
               </button>
               <button
                 className="button"

@@ -12,7 +12,6 @@ class HandleResultat extends Controller
     public function store(Request $request)
 {
     $validatedData = $request->validate([
-        'id' => 'required|integer',
         'longeur' => 'required|numeric',
         'largeur' => 'required|numeric',
         'surface' => 'required|numeric',
