@@ -12,7 +12,7 @@ class HandleResultat extends Controller
     public function store(Request $request)
 {
     $validatedData = $request->validate([
-        'id' => 'required|integer',
+        
         'longeur' => 'required|numeric',
         'largeur' => 'required|numeric',
         'surface' => 'required|numeric',
@@ -39,6 +39,7 @@ class HandleResultat extends Controller
         'prix_ammonix' => 'required|numeric',
         'prix_lingeTir' => 'numeric',
         'prix_tovex' => 'required|numeric',
+        'cmd_id' => 'required|numeric',
     ]);
 
     $commande = Resultat_commandes::create($validatedData);
