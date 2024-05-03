@@ -27,4 +27,6 @@ class Sautage extends Model
         'vitesse',
         'observation',
     ];
+
+    
 }

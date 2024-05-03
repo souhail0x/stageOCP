@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Sautage;
+use App\Models\Resultat_commandes;
+
 class Commande extends Model
 {
     use HasFactory;
@@ -28,6 +31,15 @@ class Commande extends Model
         'dosage_prevu',
         'schema_tir',
         'espacement',
-        
     ];
+
+    public function sautage()
+    {
+        return $this->hasOne(Sautage::class, 'numero_execution', 'Num_Commande');
+    }
+
+    public function resultat()
+    {
+        return $this->hasOne(Resultat_commandes::class, 'id', 'Num_Commande');
+    }
 }

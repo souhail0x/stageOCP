@@ -13,6 +13,7 @@ function CommandPage2() {
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isGeneratePDFPopupOpen, setIsGeneratePDFPopupOpen] = useState(false);
+<<<<<<< HEAD
 
   const handleResetConfirmation = () => {
     setIsResetPopupOpen(true);
@@ -44,6 +45,10 @@ function CommandPage2() {
     generatePDFHandler();
   };
 
+=======
+  const [commandId,setCommandId]=useState('')
+  const [machine, setMachine] = useState([]);
+>>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
   const [formData, setFormData] = useState({
     date: "",
     Num_Commande: "",
@@ -112,6 +117,61 @@ function CommandPage2() {
     });
   };
 
+<<<<<<< HEAD
+=======
+  const handleAddConfirmation = () => {
+    setIsAddPopupOpen(true);
+  };
+
+  const handleAddConfirm = () => {
+    setIsAddPopupOpen(false);
+    if ( handleAdd()) {
+      addCalcules();
+    }
+    
+  };
+  const addCalcules = async () => {
+    try {
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/commandes/resultats",
+        {
+          longeur: submittedData.longeur ,
+          dosage:submittedData.dosage,
+          largeur:submittedData.largeur ,
+          surface:submittedData.surface ,
+          volume:submittedData.volume ,
+          ligneDeTir:submittedData.ligneDeTir ,
+          ammonix:submittedData.ammonix ,
+          tovex:submittedData.tovex ,
+          aei:submittedData.aei,
+          profondeur:formData.profondeur,
+          repartition:submittedData.repartition ,
+          chargeInstantanee:submittedData.chargeInstantanee ,
+          r_prevu:submittedData.rendement ,
+          m_f:submittedData.metrageFore ,
+          detonateur:submittedData.detonateur500,
+          r17:submittedData.r17,
+          r25:submittedData.r25,
+          r42:submittedData.r42,
+          r65:submittedData.r65,
+          r100:submittedData.r100 ,
+          prix_aei:submittedData.prix_aei ,
+          prix_detonateur:submittedData.prix_detonateur ,
+          prix_raccord:submittedData.prix_raccord ,
+          prix_ammonix:submittedData.prix_ammonix ,
+          prix_lingeTir:submittedData.prix_lingeTir , // Corrected key name
+          prix_tovex:submittedData.prix_tovex ,
+      }
+      );
+      console.log(response.data);
+      setSuccessMessage("Caclules ajoutées avec succès !");
+      fetchData();
+    } catch (error) {
+      console.error("Error adding data:", error);
+    }
+  };
+>>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
   const handleAdd = async () => {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
@@ -127,6 +187,60 @@ function CommandPage2() {
     }
   };
 
+<<<<<<< HEAD
+=======
+  const handleUpdateConfirmation = (id) => {
+    setUpdateItemId(id);
+    setIsUpdatePopupOpen(true);
+  };
+
+  const handleUpdateConfirm = () => {
+    setIsUpdatePopupOpen(false);
+    handleUpdate(updateItemId);
+  };
+
+  const handleUpdate = async (id) => {
+    try {
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/commandes/${id}`,
+        formData
+      );
+      console.log(response.data);
+      setSuccessMessage("Données mises à jour avec succès !");
+      fetchData();
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
+
+  const handleDeleteConfirmation = (id) => {
+    setUpdateItemId(id);
+    setIsDeletePopupOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setIsDeletePopupOpen(false);
+    console.log(updateItemId);
+    handleDelete(updateItemId);
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      const response = await axios.delete(
+        `http://127.0.0.1:8000/api/commandes/${id}`
+      );
+      console.log(response.data);
+      
+      setSuccessMessage("Données supprimées avec succès !");
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
+
+>>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -281,7 +395,11 @@ function CommandPage2() {
         prix_detonateur: prix_detonateur,
         prix_raccord: prix_raccord,
         prix_ammonix: prix_ammonix,
+<<<<<<< HEAD
         prix_ligne_de_tir: prix_ligne_de_tir,
+=======
+        prix_lingeTir: prix_ligne_de_tir?parseFloat(prix_ligne_de_tir):0,
+>>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
         prix_tovex: prix_tovex,
       };
       setSubmittedData(calculatedResults);
@@ -290,6 +408,77 @@ function CommandPage2() {
       alert(`Veuillez remplir les champs suivants : ${fieldNames}`);
     }
   };
+<<<<<<< HEAD
+=======
+  
+  const chooseMachine = async (e) => {
+    const { name, value } = e.target;
+  
+    setFormData({
+      ...formData,
+      [name]: value, // Update the form data with the selected value
+    });
+  
+    try {
+      // Use the updated value of machine directly from the state
+      const response = await axios.get(`http://127.0.0.1:8000/api/commandes/machine/${value}`);
+      
+      console.log(commandId);
+      setMachine(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
+  useEffect(() => {
+    if (machine && machine.length > 0) {
+      // Update the form data with the machine data
+      setCommandId(machine[0].id)
+      setFormData({
+        ...formData,
+        date: machine[0].date || "",
+        Num_Commande: machine[0].Num_Commande || "",
+        panneau: machine[0].panneau || "",
+        tranche: machine[0].tranche || "",
+        niveau: machine[0].niveau || "",
+        mode_tir: machine[0].mode_tir || "",
+        foration: machine[0].foration || "",
+        nombre_trous: machine[0].nombre_trous || "",
+        nombre_ranges: machine[0].nombre_ranges || "",
+        trous_range: machine[0].trous_range || "",
+        maille_banquette: machine[0].maille_banquette || "",
+        decappage: machine[0].decappage || "",
+        profondeur: machine[0].profondeur || "",
+        zone_tir: machine[0].zone_tir || "",
+        mode_charge: machine[0].mode_charge || "",
+        dosage_prevu: machine[0].dosage_prevu || "",
+        schema_tir: machine[0].schema_tir || "",
+      });
+    }else{
+      setFormData({
+        ...formData,
+        date:  "",
+        Num_Commande: "",
+        panneau:  "",
+        tranche:"",
+        niveau:  "",
+        mode_tir: "",
+        foration: "",
+        nombre_trous:"",
+        nombre_ranges:  "",
+        trous_range:  "",
+        maille_banquette:"",
+        decappage:  "",
+        profondeur:  "",
+        zone_tir: "",
+        mode_charge:  "",
+        dosage_prevu:  "",
+        schema_tir:  "",
+      })
+    }
+  }, [machine]);
+  
+>>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
 
   return (
     <div className="page-commande">
@@ -695,7 +884,7 @@ function CommandPage2() {
                         type="TEXT"
                         id=""
                         name=""
-                        value={submittedData.longeur.toFixed(2) + " m"}
+                        value={parseFloat(submittedData.longeur).toFixed(2) + " m"}
                         readOnly // Rendre le champ en lecture seule
                       />
                     </div>
@@ -868,7 +1057,7 @@ function CommandPage2() {
                         type="TEXT"
                         id=""
                         name=""
-                        value={formData.profondeur.toFixed(2) + " m"}
+                        value={parseFloat(formData.profondeur).toFixed(2) + " m"}
                         readOnly // Rendre le champ en lecture seule
                       />
                     </div>
@@ -1033,7 +1222,11 @@ function CommandPage2() {
                         id=""
                         name=""
                         value={
+<<<<<<< HEAD
                           submittedData.prix_ligne_de_tir.toFixed(2) + " Dh"
+=======
+                          parseFloat(submittedData.prix_prix_lingeTir).toFixed(2) + " Dh"
+>>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
                         }
                         readOnly // Rendre le champ en lecture seule
                       />
@@ -1066,6 +1259,7 @@ function CommandPage2() {
               >
                 Ajouter
               </button>
+<<<<<<< HEAD
               {isAddPopupOpen && (
                 <ConfirmationPopup
                   message="Êtes-vous sûr de vouloir ajouter les données ?"
@@ -1073,6 +1267,26 @@ function CommandPage2() {
                   onClose={() => setIsAddPopupOpen(false)}
                 />
               )}
+=======
+              <button
+                className="button"
+                type="submit"
+                style={{ marginBottom: "10px" }}
+                onClick={() => handleUpdateConfirmation(formData.Num_Commande)}
+              >
+                Modifier
+              </button>
+              <button
+                className="button"
+                type="submit"
+                style={{ marginBottom: "10px" }}
+                onClick={() => handleDeleteConfirmation(formData.Num_Commande)}
+              >
+                Supprimer
+              </button>
+
+              <br />
+>>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
               <button
                 className="button"
                 onClick={handleGeneratePDFConfirmation}
