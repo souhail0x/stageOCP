@@ -17,7 +17,7 @@ function CommandPage2() {
   const [updateItemId, setUpdateItemId] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [isGeneratePDFPopupOpen, setIsGeneratePDFPopupOpen] = useState(false);
-  const [commandId,setCommandId]=useState('')
+  const [commandId, setCommandId] = useState('')
   const [machine, setMachine] = useState([]);
   const [formData, setFormData] = useState({
     date: "",
@@ -119,35 +119,35 @@ function CommandPage2() {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/commandes/resultats",
         {
-          
-          longeur: submittedData.longeur ,
-          dosage:submittedData.dosage,
-          largeur:submittedData.largeur ,
-          surface:submittedData.surface ,
-          volume:submittedData.volume ,
-          ligneDeTir:submittedData.ligneDeTir ,
-          ammonix:submittedData.ammonix ,
-          tovex:submittedData.tovex ,
-          aei:submittedData.aei,
-          profondeur:formData.profondeur,
-          repartition:submittedData.repartition ,
-          chargeInstantanee:submittedData.chargeInstantanee ,
-          r_prevu:submittedData.rendement ,
-          m_f:submittedData.metrageFore ,
-          detonateur:submittedData.detonateur500,
-          r17:submittedData.r17,
-          r25:submittedData.r25,
-          r42:submittedData.r42,
-          r65:submittedData.r65,
-          r100:submittedData.r100 ,
-          prix_aei:submittedData.prix_aei ,
-          prix_detonateur:submittedData.prix_detonateur ,
-          prix_raccord:submittedData.prix_raccord ,
-          prix_ammonix:submittedData.prix_ammonix ,
-          prix_lingeTir:submittedData.prix_lingeTir , // Corrected key name
-          prix_tovex:submittedData.prix_tovex ,
+
+          longeur: submittedData.longeur,
+          dosage: submittedData.dosage,
+          largeur: submittedData.largeur,
+          surface: submittedData.surface,
+          volume: submittedData.volume,
+          ligneDeTir: submittedData.ligneDeTir,
+          ammonix: submittedData.ammonix,
+          tovex: submittedData.tovex,
+          aei: submittedData.aei,
+          profondeur: formData.profondeur,
+          repartition: submittedData.repartition,
+          chargeInstantanee: submittedData.chargeInstantanee,
+          r_prevu: submittedData.rendement,
+          m_f: submittedData.metrageFore,
+          detonateur: submittedData.detonateur500,
+          r17: submittedData.r17,
+          r25: submittedData.r25,
+          r42: submittedData.r42,
+          r65: submittedData.r65,
+          r100: submittedData.r100,
+          prix_aei: submittedData.prix_aei,
+          prix_detonateur: submittedData.prix_detonateur,
+          prix_raccord: submittedData.prix_raccord,
+          prix_ammonix: submittedData.prix_ammonix,
+          prix_lingeTir: submittedData.prix_lingeTir, // Corrected key name
+          prix_tovex: submittedData.prix_tovex,
           cmd_id: parseInt(commandId),
-      }
+        }
       );
       console.log(response.data);
       setSuccessMessage("Caclules ajoutées avec succès !");
@@ -214,7 +214,7 @@ function CommandPage2() {
         `http://127.0.0.1:8000/api/commandes/${id}`
       );
       console.log(response.data);
-      
+
       setSuccessMessage("Données supprimées avec succès !");
       fetchData();
     } catch (error) {
@@ -377,7 +377,7 @@ function CommandPage2() {
         prix_detonateur: prix_detonateur,
         prix_raccord: prix_raccord,
         prix_ammonix: prix_ammonix,
-        prix_lingeTir: prix_ligne_de_tir?parseFloat(prix_ligne_de_tir):0,
+        prix_lingeTir: prix_ligne_de_tir ? parseFloat(prix_ligne_de_tir) : 0,
         prix_tovex: prix_tovex,
       };
       setSubmittedData(calculatedResults);
@@ -388,23 +388,23 @@ function CommandPage2() {
   };
   const chooseMachine = async (e) => {
     const { name, value } = e.target;
-  
+
     setFormData({
       ...formData,
       [name]: value, // Update the form data with the selected value
     });
-  
+
     try {
       // Use the updated value of machine directly from the state
       const response = await axios.get(`http://127.0.0.1:8000/api/commandes/machine/${value}`);
-      
+
       console.log(commandId);
       setMachine(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   useEffect(() => {
     if (machine && machine.length > 0) {
       // Update the form data with the machine data
@@ -429,30 +429,30 @@ function CommandPage2() {
         dosage_prevu: machine[0].dosage_prevu || "",
         schema_tir: machine[0].schema_tir || "",
       });
-    }else{
+    } else {
       setFormData({
         ...formData,
-        date:  "",
+        date: "",
         Num_Commande: "",
-        panneau:  "",
-        tranche:"",
-        niveau:  "",
+        panneau: "",
+        tranche: "",
+        niveau: "",
         mode_tir: "",
         foration: "",
-        nombre_trous:"",
-        nombre_ranges:  "",
-        trous_range:  "",
-        maille_banquette:"",
-        decappage:  "",
-        profondeur:  "",
+        nombre_trous: "",
+        nombre_ranges: "",
+        trous_range: "",
+        maille_banquette: "",
+        decappage: "",
+        profondeur: "",
         zone_tir: "",
-        mode_charge:  "",
-        dosage_prevu:  "",
-        schema_tir:  "",
+        mode_charge: "",
+        dosage_prevu: "",
+        schema_tir: "",
       })
     }
   }, [machine]);
-  
+
 
   return (
     <div className="page-commande">
@@ -684,6 +684,10 @@ function CommandPage2() {
                     <option value="7500|2">7500|2</option>
                     <option value="PH1">PH1</option>
                     <option value="PH2">PH2</option>
+                    <option value="Procaneq">Procaneq</option>
+                    <option value="NGE">NGE</option>
+                    <option value="Transwin">Transwin</option>
+                    <option value="Tenchnozaim">Tenchnozaim</option>
                   </select>
                 </div>
               </td>
@@ -717,7 +721,7 @@ function CommandPage2() {
                   >
                     <option value="">select zone de tir </option>
                     <option value="LBRAYKIYIN">LBRAYKIYIN</option>
-                    <option value="LBRAHLA">LBRAHLA</option>
+                    <option value="LBRHIRA">LBRHIRA</option>
                   </select>
                 </div>
               </td>
@@ -843,433 +847,442 @@ function CommandPage2() {
               }}
             >
               Résultats du dernier calcul :
-            </h3>
-            <form>
-              <table>
-                <tr>
-                  <td>
-                    <div className="form-group">
-                      <label>longeur :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={parseFloat(submittedData.longeur).toFixed(2) + " m"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
+            </h3><br />
+            {
+              formData.mode_tir === 'Électrique' ? (
+                <h1 style={{ color: 'white' }}>Mode de tir non disponible</h1>
+              ) : (
+                <>
+                  <form>
+                    <table>
+                      <tr>
+                        <td>
+                          <div className="form-group">
+                            <label>longeur :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={parseFloat(submittedData.longeur).toFixed(2) + " m"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
 
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="largeur">largeur:</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.largeur.toFixed(2) + " m"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="largeur">largeur:</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.largeur.toFixed(2) + " m"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
 
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="surface">surface :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.surface.toFixed(2) + " m²"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="surface">surface :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.surface.toFixed(2) + " m²"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
 
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="volume">volume :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.volume.toFixed(2) + " m³"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="Ammonix">Ammonix :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.ammonix + " Kg"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="dosage">dosage :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.dosage.toFixed(2) + " g/m³"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="tovex">tovex :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.tovex + " Kg"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="metrageFore">M.F :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.metrageFore.toFixed(2) + " ml"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="ligneDeTir">ligne De Tir :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.ligneDeTir + " m"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="A_E_I">A-E-I :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.aei + " U"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="charge_nstantanee">
-                        charge instantanee :
-                      </label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={
-                          submittedData.chargeInstantanee.toFixed(2) + " Kg"
-                        }
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="repartition">repartition :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={
-                          submittedData.repartition.toFixed(2) + " Sac/trou"
-                        }
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                </tr>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="volume">volume :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.volume.toFixed(2) + " m³"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="Ammonix">Ammonix :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.ammonix + " Kg"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="dosage">dosage :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.dosage.toFixed(2) + " g/m³"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="tovex">tovex :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.tovex + " Kg"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="metrageFore">M.F :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.metrageFore.toFixed(2) + " ml"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="ligneDeTir">ligne De Tir :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.ligneDeTir + " m"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="A_E_I">A-E-I :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.aei + " U"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="charge_nstantanee">
+                              charge instantanee :
+                            </label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={
+                                submittedData.chargeInstantanee.toFixed(2) + " Kg"
+                              }
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="repartition">repartition :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={
+                                submittedData.repartition.toFixed(2) + " Sac/trou"
+                              }
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                      </tr>
 
-                <tr>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="rendement">R.prevu :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.rendement.toFixed(2) + " m³/h"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
+                      <tr>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="rendement">R.prevu :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.rendement.toFixed(2) + " m³/h"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
 
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="profondeur">profondeur :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={parseFloat(formData.profondeur).toFixed(2) + " m"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="detonateur">detonateur :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={
-                          submittedData.detonateur500.toFixed(2) +
-                          " (500ms)  /  " +
-                          submittedData.detonateur450.toFixed(2) +
-                          " (450ms)"
-                        }
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="R17">R17 :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.r17 + " U"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="R25">R25 :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.r25 + " U"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="R42">R42 :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.r42 + " U"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="R65">R65 :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.r65 + " U"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="R100">R100 :</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.r100 + " U"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <h3
-                  style={{
-                    textAlign: "left",
-                    textTransform: "uppercase",
-                    color: "white",
-                    paddingLeft: "20px",
-                    padding: "20px",
-                  }}
-                >
-                  {" "}
-                  Prix Résultats :
-                </h3>
-                <tr>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="prix_aei">AEI (8.00dh/Unité):</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.prix_aei.toFixed(2) + " Dh"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="profondeur">profondeur :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={parseFloat(formData.profondeur).toFixed(2) + " m"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="detonateur">detonateur :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={
+                                submittedData.detonateur500.toFixed(2) +
+                                " (500ms)  /  " +
+                                submittedData.detonateur450.toFixed(2) +
+                                " (450ms)"
+                              }
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="R17">R17 :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.r17 + " U"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="R25">R25 :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.r25 + " U"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="R42">R42 :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.r42 + " U"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="R65">R65 :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.r65 + " U"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="R100">R100 :</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.r100 + " U"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                      <h3
+                        style={{
+                          textAlign: "left",
+                          textTransform: "uppercase",
+                          color: "white",
+                          paddingLeft: "20px",
+                          padding: "20px",
+                        }}
+                      >
+                        {" "}
+                        Prix Résultats :
+                      </h3>
+                      <tr>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="prix_aei">AEI (8.00dh/Unité):</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.prix_aei.toFixed(2) + " Dh"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
 
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="prix_detonateur">
-                        Detonateur (49.90dh/Unité):
-                      </label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.prix_detonateur.toFixed(2) + " Dh"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="prix_detonateur">
+                              Detonateur (49.90dh/Unité):
+                            </label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.prix_detonateur.toFixed(2) + " Dh"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
 
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="prix_raccord">
-                        Raccord (34.90dh/Unité):
-                      </label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.prix_raccord.toFixed(2) + " Dh"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="prix_raccord">
+                              Raccord (34.90dh/Unité):
+                            </label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.prix_raccord.toFixed(2) + " Dh"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
 
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="prix_ammonix">Ammonix (7.00dh/Kg):</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.prix_ammonix.toFixed(2) + " Dh"}
-                        readOnly // Rendre le champ en lecture seule
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="prix_ammonix">Ammonix (7.00dh/Kg):</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.prix_ammonix.toFixed(2) + " Dh"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="prix_ligne_de_tir">
+                              Ligne de tir (1.25dh/m):
+                            </label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={
+                                parseFloat(submittedData.prix_prix_lingeTir).toFixed(2) + " Dh"
+                              }
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <label htmlFor="prix_tovex">Tovex (18.45dh/Kg):</label>
+                            <input
+                              type="TEXT"
+                              id=""
+                              name=""
+                              value={submittedData.prix_tovex.toFixed(2) + " Dh"}
+                              readOnly // Rendre le champ en lecture seule
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </form>
+                  <div className="form-row">
+                    <button
+                      className="button"
+                      type="submit"
+                      style={{ marginBottom: "10px" }}
+                      onClick={handleAddConfirmation}
+                    >
+                      Ajouter
+                    </button>
+                    <button
+                      className="button"
+                      type="submit"
+                      style={{ marginBottom: "10px" }}
+                      onClick={addCalcules}
+                    >
+                      Ajouter Calcules
+                    </button>
+                    <button
+                      className="button"
+                      type="submit"
+                      style={{ marginBottom: "10px" }}
+                      onClick={() => handleUpdateConfirmation(formData.Num_Commande)}
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      className="button"
+                      type="submit"
+                      style={{ marginBottom: "10px" }}
+                      onClick={() => handleDeleteConfirmation(formData.Num_Commande)}
+                    >
+                      Supprimer
+                    </button>
+
+                    <br />
+                    <button
+                      className="button"
+                      onClick={handleGeneratePDFConfirmation}
+                    >
+                      Générer PDF
+                    </button>
+                    {isGeneratePDFPopupOpen && (
+                      <ConfirmationPopup
+                        message="Êtes-vous sûr de vouloir générer le PDF ?"
+                        onConfirm={handleGeneratePDFConfirm}
+                        onClose={() => setIsGeneratePDFPopupOpen(false)}
                       />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="prix_ligne_de_tir">
-                        Ligne de tir (1.25dh/m):
-                      </label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={
-                          parseFloat(submittedData.prix_prix_lingeTir).toFixed(2) + " Dh"
-                        }
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <label htmlFor="prix_tovex">Tovex (18.45dh/Kg):</label>
-                      <input
-                        type="TEXT"
-                        id=""
-                        name=""
-                        value={submittedData.prix_tovex.toFixed(2) + " Dh"}
-                        readOnly // Rendre le champ en lecture seule
-                      />
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </form>
+                    )}
+                    <button className="button" onClick={togglePopup}>
+                      Générer Schéma Tir
+                    </button>
+                  </div>
+                </>
+              )
+            }
             {successMessage && (
               <SuccessMessage>{successMessage}</SuccessMessage>
             )}
 
             <br />
-            <div className="form-row">
-              <button
-                className="button"
-                type="submit"
-                style={{ marginBottom: "10px" }}
-                onClick={handleAddConfirmation}
-              >
-                Ajouter
-              </button>
-              <button
-                className="button"
-                type="submit"
-                style={{ marginBottom: "10px" }}
-                onClick={addCalcules}
-              >
-                Ajouter Calcules
-              </button>
-              <button
-                className="button"
-                type="submit"
-                style={{ marginBottom: "10px" }}
-                onClick={() => handleUpdateConfirmation(formData.Num_Commande)}
-              >
-                Modifier
-              </button>
-              <button
-                className="button"
-                type="submit"
-                style={{ marginBottom: "10px" }}
-                onClick={() => handleDeleteConfirmation(formData.Num_Commande)}
-              >
-                Supprimer
-              </button>
 
-              <br />
-              <button
-                className="button"
-                onClick={handleGeneratePDFConfirmation}
-              >
-                Générer PDF
-              </button>
-              {isGeneratePDFPopupOpen && (
-                <ConfirmationPopup
-                  message="Êtes-vous sûr de vouloir générer le PDF ?"
-                  onConfirm={handleGeneratePDFConfirm}
-                  onClose={() => setIsGeneratePDFPopupOpen(false)}
-                />
-              )}
-              <button className="button" onClick={togglePopup}>
-                Générer Schéma Tir
-              </button>
-            </div>
             {isOpen && (
               <Popup
                 onClose={togglePopup}

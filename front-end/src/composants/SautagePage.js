@@ -277,7 +277,7 @@ const SautagePage = () => {
                     onChange={handleChange}
                     style={{ backgroundColor: "white" }}
                     disabled
-                    
+
                   />
                 </div>
               </td>
@@ -369,13 +369,12 @@ const SautagePage = () => {
               <td>
                 <div className="form-group">
                   <label htmlFor="type">Type:</label>
-                  <input
-                    type="text"
-                    name="type"
-                    value={formData.type}
-                    onChange={handleChange}
-                    required
-                  />
+                  <select name="type">
+                    <option value="">select type </option>
+                    <option value="YARA">YARA</option>
+                    <option value="EGYPT">EGYPT</option>
+
+                  </select>
                 </div>
               </td>
               <td>
