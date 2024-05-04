@@ -10,45 +10,15 @@ import SuccessMessage from "./SuccessMessage";
 function CommandPage2() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isResetPopupOpen, setIsResetPopupOpen] = useState(false);
+  const [isEmptyPopupOpen, setIsEmptyPopupOpen] = useState(false);
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [updateItemId, setUpdateItemId] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [isGeneratePDFPopupOpen, setIsGeneratePDFPopupOpen] = useState(false);
-<<<<<<< HEAD
-
-  const handleResetConfirmation = () => {
-    setIsResetPopupOpen(true);
-    handleCancel();
-  };
-
-  const handleAddConfirmation = () => {
-    setIsAddPopupOpen(true);
-  };
-
-  const handleGeneratePDFConfirmation = () => {
-    setIsGeneratePDFPopupOpen(true);
-  };
-
-  const handleResetConfirm = () => {
-    // Logique pour réinitialiser le formulaire
-    setIsResetPopupOpen(false);
-  };
-
-  const handleAddConfirm = () => {
-    // Logique pour ajouter les données
-    setIsAddPopupOpen(false);
-    handleAdd();
-  };
-
-  const handleGeneratePDFConfirm = () => {
-    // Logique pour générer le PDF
-    setIsGeneratePDFPopupOpen(false);
-    generatePDFHandler();
-  };
-
-=======
   const [commandId,setCommandId]=useState('')
   const [machine, setMachine] = useState([]);
->>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
   const [formData, setFormData] = useState({
     date: "",
     Num_Commande: "",
@@ -73,6 +43,24 @@ function CommandPage2() {
   const [data, setData] = useState(null);
   const [submittedData, setSubmittedData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleResetConfirmation = () => {
+    setIsResetPopupOpen(true);
+    handleCancel();
+  };
+
+  const handleGeneratePDFConfirmation = () => {
+    setIsGeneratePDFPopupOpen(true);
+  };
+
+  const handleResetConfirm = () => {
+    setIsResetPopupOpen(false);
+  };
+
+  const handleGeneratePDFConfirm = () => {
+    setIsGeneratePDFPopupOpen(false);
+    generatePDFHandler();
+  };
 
   const togglePopup = () => {
     setIsOpen(!isOpen);
@@ -117,18 +105,13 @@ function CommandPage2() {
     });
   };
 
-<<<<<<< HEAD
-=======
   const handleAddConfirmation = () => {
     setIsAddPopupOpen(true);
   };
 
   const handleAddConfirm = () => {
     setIsAddPopupOpen(false);
-    if ( handleAdd()) {
-      addCalcules();
-    }
-    
+    handleAdd();
   };
   const addCalcules = async () => {
     try {
@@ -136,6 +119,7 @@ function CommandPage2() {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/commandes/resultats",
         {
+          
           longeur: submittedData.longeur ,
           dosage:submittedData.dosage,
           largeur:submittedData.largeur ,
@@ -162,6 +146,7 @@ function CommandPage2() {
           prix_ammonix:submittedData.prix_ammonix ,
           prix_lingeTir:submittedData.prix_lingeTir , // Corrected key name
           prix_tovex:submittedData.prix_tovex ,
+          cmd_id: parseInt(commandId),
       }
       );
       console.log(response.data);
@@ -171,7 +156,6 @@ function CommandPage2() {
       console.error("Error adding data:", error);
     }
   };
->>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
   const handleAdd = async () => {
     try {
       axios.get("http://localhost:8000/sanctum/csrf-cookie");
@@ -187,8 +171,6 @@ function CommandPage2() {
     }
   };
 
-<<<<<<< HEAD
-=======
   const handleUpdateConfirmation = (id) => {
     setUpdateItemId(id);
     setIsUpdatePopupOpen(true);
@@ -240,7 +222,7 @@ function CommandPage2() {
     }
   };
 
->>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -249,7 +231,7 @@ function CommandPage2() {
     });
   };
   const generatePDFHandler = () => {
-    generatePDF(formData, submittedData); 
+    generatePDF(formData, submittedData);
     setSuccessMessage("PDF genéré avec succès !");
   };
 
@@ -391,26 +373,19 @@ function CommandPage2() {
         r42: r42,
         r65: r65,
         r100: r100,
-        prix_a_e_i: prix_a_e_i,
+        prix_aei: prix_a_e_i,
         prix_detonateur: prix_detonateur,
         prix_raccord: prix_raccord,
         prix_ammonix: prix_ammonix,
-<<<<<<< HEAD
-        prix_ligne_de_tir: prix_ligne_de_tir,
-=======
         prix_lingeTir: prix_ligne_de_tir?parseFloat(prix_ligne_de_tir):0,
->>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
         prix_tovex: prix_tovex,
       };
       setSubmittedData(calculatedResults);
     } else {
       const fieldNames = emptyFields.join(", ");
-      alert(`Veuillez remplir les champs suivants : ${fieldNames}`);
+      setIsEmptyPopupOpen(true);
     }
   };
-<<<<<<< HEAD
-=======
-  
   const chooseMachine = async (e) => {
     const { name, value } = e.target;
   
@@ -478,11 +453,9 @@ function CommandPage2() {
     }
   }, [machine]);
   
->>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
 
   return (
     <div className="page-commande">
-      
       <h2
         style={{
           textAlign: "left",
@@ -522,15 +495,12 @@ function CommandPage2() {
                     onChange={handleChange}
                   >
                     <option value="">select niveau</option>
-                    <option value="R/C1">R/C1</option>
-                    <option value="R/C2">R/C2</option>
-                    <option value="R/C3">R/C3</option>
-                    <option value="R/C4">R/C4</option>
-                    <option value="R/C5">R/C5</option>
-                    <option value="R/C6">R/C6</option>
-                    <option value="R/SB">R/SB</option>
-                    <option value="R/SA1">R/SA1</option>
-                    <option value="R/SA2">R/SA2</option>
+                    <option value="R+C1">R+C1</option>
+                    <option value="R+C2">R+C2</option>
+                    <option value="R+C3">R+C3</option>
+                    <option value="R+C4">R+C4</option>
+                    <option value="R+C5">R+C5</option>
+                    <option value="R+C6">R+C6</option>
                     <option value="Int1/2">Int1/2</option>
                     <option value="Int2/3">Int2/3</option>
                     <option value="Int3/4">Int3/4</option>
@@ -611,11 +581,11 @@ function CommandPage2() {
                     id="foration"
                     name="foration"
                     value={formData.foration}
-                    onChange={handleChange}
+                    onChange={(e) => { chooseMachine(e) }}
                   >
                     <option value="">select Foration</option>
                     <option value="PV1">PV1</option>
-                    <option value="DK6">DKS</option>
+                    <option value="DK6">DK6</option>
                     <option value="SKF1">SKF1</option>
                     <option value="SNF2">SNF2</option>
                     <option value="D500">D500</option>
@@ -659,8 +629,7 @@ function CommandPage2() {
                   <div
                     style={{
                       display: "flex",
-                      // justifyContent:"space-between",
-                      marginRight: "30px",
+                      padding: " 0 15px",
                     }}
                   >
                     <select
@@ -670,7 +639,7 @@ function CommandPage2() {
                       value={formData.espacement}
                       onChange={handleChange}
                       style={{
-                        width: "calc((100% - 22px));",
+                        width: "170px",
                         // margin:"1px"
                       }}
                     >
@@ -715,11 +684,6 @@ function CommandPage2() {
                     <option value="7500|2">7500|2</option>
                     <option value="PH1">PH1</option>
                     <option value="PH2">PH2</option>
-                    <option value="PROCANEQ">PROCANEQ</option>
-                    <option value="TRANSWIN">TRANSWIN</option>
-                    <option value="NGE">NGE</option>
-                    <option value="EE">EE</option>
-
                   </select>
                 </div>
               </td>
@@ -829,15 +793,23 @@ function CommandPage2() {
           </table>
 
           <div className="form-row">
-            <button type="submit" onClick={handleAddConfirmation} className="button">
+            <button type="submit" className="button">
               Calculer
             </button>
+            {isEmptyPopupOpen && (
+              <ConfirmationPopup
+                message="Veuillez remplir tous les champs du formulaire"
+                onConfirm={() => setIsEmptyPopupOpen(false)}
+                onClose={() => setIsEmptyPopupOpen(false)}
+              />
+            )}
 
             <button
               type="reset"
               className="button"
               onClick={handleResetConfirmation}
               disabled={isSubmitted}
+              style={{ backgroundColor: isSubmitted && "grey" }}
             >
               Effacer
             </button>
@@ -850,9 +822,7 @@ function CommandPage2() {
             )}
           </div>
         </form>
-
         <br />
-
         {submittedData && (
           <div>
             <center>
@@ -944,7 +914,7 @@ function CommandPage2() {
                   </td>
                   <td>
                     <div className="form-group">
-                      <label htmlFor="dosage réalisé">dosage réalisé :</label>
+                      <label htmlFor="dosage">dosage :</label>
                       <input
                         type="TEXT"
                         id=""
@@ -1157,12 +1127,12 @@ function CommandPage2() {
                 <tr>
                   <td>
                     <div className="form-group">
-                      <label htmlFor="prix_a_e_i">AEI (8.00dh/Unité):</label>
+                      <label htmlFor="prix_aei">AEI (8.00dh/Unité):</label>
                       <input
                         type="TEXT"
                         id=""
                         name=""
-                        value={submittedData.prix_a_e_i.toFixed(2) + " Dh"}
+                        value={submittedData.prix_aei.toFixed(2) + " Dh"}
                         readOnly // Rendre le champ en lecture seule
                       />
                     </div>
@@ -1222,11 +1192,7 @@ function CommandPage2() {
                         id=""
                         name=""
                         value={
-<<<<<<< HEAD
-                          submittedData.prix_ligne_de_tir.toFixed(2) + " Dh"
-=======
                           parseFloat(submittedData.prix_prix_lingeTir).toFixed(2) + " Dh"
->>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
                         }
                         readOnly // Rendre le champ en lecture seule
                       />
@@ -1247,27 +1213,28 @@ function CommandPage2() {
                 </tr>
               </table>
             </form>
-            { successMessage && <SuccessMessage>{successMessage}</SuccessMessage> }
+            {successMessage && (
+              <SuccessMessage>{successMessage}</SuccessMessage>
+            )}
 
             <br />
             <div className="form-row">
-
               <button
                 className="button"
                 type="submit"
+                style={{ marginBottom: "10px" }}
                 onClick={handleAddConfirmation}
               >
                 Ajouter
               </button>
-<<<<<<< HEAD
-              {isAddPopupOpen && (
-                <ConfirmationPopup
-                  message="Êtes-vous sûr de vouloir ajouter les données ?"
-                  onConfirm={handleAddConfirm}
-                  onClose={() => setIsAddPopupOpen(false)}
-                />
-              )}
-=======
+              <button
+                className="button"
+                type="submit"
+                style={{ marginBottom: "10px" }}
+                onClick={addCalcules}
+              >
+                Ajouter Calcules
+              </button>
               <button
                 className="button"
                 type="submit"
@@ -1286,7 +1253,6 @@ function CommandPage2() {
               </button>
 
               <br />
->>>>>>> 3a14d8adcd23c7bb92250c7203a1c1516273cfa2
               <button
                 className="button"
                 onClick={handleGeneratePDFConfirmation}
@@ -1322,12 +1288,24 @@ function CommandPage2() {
         )}
       </div>
       {isAddPopupOpen && (
-                <ConfirmationPopup
-                  message="Êtes-vous sûr de vouloir calculer la commande ?"
-                  onConfirm={handleSubmit}
-                  onClose={() => setIsAddPopupOpen(false)}
-                />
-              )}
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir ajouter la commande à la base de données ?"
+          onConfirm={handleAddConfirm}
+          onClose={() => setIsAddPopupOpen(false)}
+        />
+      )}
+      {isUpdatePopupOpen && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir modifier cette commande ?"
+          onConfirm={handleUpdateConfirm}
+          onClose={() => setIsUpdatePopupOpen(false)} />
+      )}
+      {isDeletePopupOpen && (
+        <ConfirmationPopup
+          message="Êtes-vous sûr de vouloir supprimer cette commande ?"
+          onConfirm={handleDeleteConfirm}
+          onClose={() => setIsDeletePopupOpen(false)} />
+      )}
     </div>
   );
 }
