@@ -38,6 +38,7 @@ Route::delete('/sautage/{sautage}', [SautageGestionController::class, 'destroy']
 Route::get('/commandes', [CommandeController::class, 'index']);
 Route::post('/commandes', [CommandeController::class, 'store']);
 Route::post('/commandes/resultats', [HandleResultat::class, 'store']);
+Route::get('/commandes/resultats', [HandleResultat::class, 'join']);
 Route::get('/commandes/{id}', [CommandeController::class, 'show']);
 Route::get('/commandes/machine/{mach}', [CommandeController::class, 'showByMachine']);
 Route::put('/commandes/{id}', [CommandeController::class, 'update']);
@@ -82,4 +83,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 // Archive
-Route::get('/archive', [ArchiveController::class, 'index']);
+Route::get('/archive', [ArchiveController::class, 'join']);

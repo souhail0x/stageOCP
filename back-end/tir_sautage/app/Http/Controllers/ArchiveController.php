@@ -27,4 +27,13 @@ class ArchiveController extends Controller
 
         return response()->json($groupedData);
     }
+    public function join(){
+        $data = Sautage::join('commandes','sautages.numero_commande','=','commandes.Num_Commande')->get();
+        if(!$data){
+            return response()->json(['error'=>'no data has been sended']);
+        }
+        return response()->json(['message'=>$data]);
+    
+    
+    }
 }

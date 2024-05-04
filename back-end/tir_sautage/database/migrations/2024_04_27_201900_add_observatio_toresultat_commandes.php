@@ -39,7 +39,8 @@ return new class extends Migration
             $table->float('prix_lingeTir')->nullable();
             $table->float('prix_tovex');
             $table->text('observation')->nullable();
-            $table->integer('cmd_id');
+            $table->integer('cmd_id')->default(1);
+            
             
         });
     }

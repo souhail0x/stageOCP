@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commande;
 use App\Models\Resultat;
 use App\Models\Resultat_commandes;
 use App\Models\Resultats_commandes;
@@ -39,11 +40,21 @@ class HandleResultat extends Controller
         'prix_ammonix' => 'required|numeric',
         'prix_lingeTir' => 'numeric',
         'prix_tovex' => 'required|numeric',
+        'cmd_id' => 'required|numeric',
     ]);
 
     $commande = Resultat_commandes::create($validatedData);
 
     return response()->json($commande, 201);
+}
+public function join(){
+    $data = Resultat_commandes::join('commandes','resultat_commandes.cmd_id','=','commandes.id')->get();
+    if(!$data){
+        return response()->json(['error'=>'no data has been sended']);
+    }
+    return response()->json(['message'=>$data]);
+
+
 }
 
 }
