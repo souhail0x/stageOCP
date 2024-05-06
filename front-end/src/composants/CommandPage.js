@@ -495,12 +495,15 @@ function CommandPage2() {
                     onChange={handleChange}
                   >
                     <option value="">select niveau</option>
-                    <option value="R+C1">R+C1</option>
-                    <option value="R+C2">R+C2</option>
-                    <option value="R+C3">R+C3</option>
-                    <option value="R+C4">R+C4</option>
-                    <option value="R+C5">R+C5</option>
-                    <option value="R+C6">R+C6</option>
+                    <option value="R/C1">R/C1</option>
+                    <option value="R/C2">R/C2</option>
+                    <option value="R/C3">R/C3</option>
+                    <option value="R/C4">R/C4</option>
+                    <option value="R/C5">R/C5</option>
+                    <option value="R/C6">R/C6</option>
+                    <option value="R/SB">R/SB</option>
+                    <option value="R/SA1">R/SA1</option>
+                    <option value="R/SA2">R/SA2</option>
                     <option value="Int1/2">Int1/2</option>
                     <option value="Int2/3">Int2/3</option>
                     <option value="Int3/4">Int3/4</option>
@@ -686,6 +689,7 @@ function CommandPage2() {
                     <option value="PH2">PH2</option>
                     <option value="Procaneq">Procaneq</option>
                     <option value="NGE">NGE</option>
+                    <option value="EE">EE</option>
                     <option value="Transwin">Transwin</option>
                     <option value="Tenchnozaim">Tenchnozaim</option>
                   </select>
