@@ -112,6 +112,9 @@ function CommandPage2() {
   const handleAddConfirm = () => {
     setIsAddPopupOpen(false);
     handleAdd();
+    if ( handleAdd()) {
+      addCalcules();
+    }
   };
   const addCalcules = async () => {
     try {
@@ -119,7 +122,6 @@ function CommandPage2() {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/commandes/resultats",
         {
-
           longeur: submittedData.longeur,
           dosage: submittedData.dosage,
           largeur: submittedData.largeur,
@@ -146,7 +148,6 @@ function CommandPage2() {
           prix_ammonix: submittedData.prix_ammonix,
           prix_lingeTir: submittedData.prix_lingeTir, // Corrected key name
           prix_tovex: submittedData.prix_tovex,
-          cmd_id: parseInt(commandId),
         }
       );
       console.log(response.data);
@@ -257,7 +258,7 @@ function CommandPage2() {
 
       let ammonix =
         parseFloat(formData.dosage_prevu) * volume * Math.pow(10, -3);
-      let dosage = (ammonix / volume) * parseInt(1000);
+      let dosage = ammonix / (parseInt(formData.nombre_trous) * parseInt(formData.maille_banquette) * parseInt(formData.espacement) * parseInt(formData.profondeur));
       let tovex;
       if (formData.mode_charge === "unique") {
         tovex = parseInt(formData.nombre_trous) / parseInt(2);
@@ -342,7 +343,8 @@ function CommandPage2() {
         parseFloat(34.9) * parseFloat(r42) +
         parseFloat(34.9) * parseFloat(r65) +
         parseFloat(34.9) * parseFloat(r100);
-      const prix_ammonix = 7.64 * ammonix;
+
+      const prix_ammonix = 7 * ammonix;
       const prix_ligne_de_tir = 4000;
       const prix_tovex = 18.45 * parseFloat(tovex);
       const metrageFore =
@@ -1205,7 +1207,7 @@ function CommandPage2() {
                               id=""
                               name=""
                               value={
-                                parseFloat(submittedData.prix_prix_lingeTir).toFixed(2) + " Dh"
+                                parseFloat(submittedData.prix_lingeTir).toFixed(2) + " Dh"
                               }
                               readOnly // Rendre le champ en lecture seule
                             />
@@ -1234,14 +1236,6 @@ function CommandPage2() {
                       onClick={handleAddConfirmation}
                     >
                       Ajouter
-                    </button>
-                    <button
-                      className="button"
-                      type="submit"
-                      style={{ marginBottom: "10px" }}
-                      onClick={addCalcules}
-                    >
-                      Ajouter Calcules
                     </button>
                     <button
                       className="button"

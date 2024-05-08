@@ -21,7 +21,7 @@ function GestionStock() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
-
+  const [minusData, setMinusData] = useState([]);
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
@@ -53,21 +53,32 @@ function GestionStock() {
   useEffect(() => {
     fetchData();
   }, []);
-
+  
   const fetchData = async () => {
     try {
-      // Set isLoaded to true after 2000 milliseconds
       setTimeout(() => {
         setIsLoaded(true);
       }, 750);
+
+      // Données du stock entrant 
       const response = await axios.get(
         "http://localhost:8000/api/gestion-stocks"
       );
       setData(response.data);
+
+      // Données du stock sortant
+      const res = await axios.get(
+        "http://localhost:8000/api/commandes/resultat"
+      );
+      setMinusData(res.data);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  console.log("data", data);
+  console.log("minusData", minusData);
 
   const [editItem, setEditItem] = useState(null);
 
@@ -157,26 +168,53 @@ function GestionStock() {
     handleAdd();
   };
 
-  const cumulativeSum = data.reduce((acc, curr) => {
-    Object.keys(curr).forEach((key) => {
-      if (key !== "date_commande" && key !== "id" && key !== "etat_stock") {
-        acc[key] = (acc[key] || 0) + parseInt(curr[key]);
+  // Calculer la somme des valeurs dans les données initiales et réduites
+  const sum = data.reduce((acc, item) => {
+    for (const key in item) {
+      if (key in acc) {
+        // Vérifier si la clé existe dans le stock initial
+        acc[key] += item[key]; // Ajouter la valeur de la clé à la somme
+      } else {
+        acc[key] = item[key]; // Ajouter la clé au stock initial si elle n'existe pas
       }
-    });
+    }
+    return acc;
+  }, { ...initialStock }); // Passer le stock initial comme valeur initiale
+
+  // Utiliser reduce pour effectuer la somme
+  const remainingStock = Object.keys(sum).reduce((acc, key) => {
+    acc[key] = initialStock[key] + sum[key];
     return acc;
   }, {});
 
-  const remainingStock = Object.keys(initialStock).reduce((acc, key) => {
-    acc[key] = initialStock[key] - (cumulativeSum[key] || 0);
+  const sum2 = minusData.reduce((acc, item) => {
+    for (const key in item) {
+      if (key in acc) {
+        // Vérifier si la clé existe dans le stock initial
+        acc[key] += item[key]; // Ajouter la valeur de la clé à la somme
+      } else {
+        acc[key] = item[key]; // Ajouter la clé au stock initial si elle n'existe pas
+      }
+    }
     return acc;
   }, {});
 
-  const chartData = Object.keys(cumulativeSum)
-  .filter(key => key !== "updated_at" && key !== "created_at" && key !== "raccord_100" && key !== "raccord_65" && key !== "raccord_42" && key !== "raccord_25" && key !== "raccord_17") 
+  const minusStock = Object.keys(sum2).reduce((acc, key) => {
+    acc[key] = remainingStock[key] - sum2[key];
+    return acc;
+  }, {});
+
+  console.log("remainingStock", remainingStock);
+  console.log("sum", sum);
+  console.log("sum2", sum2);
+  console.log("minusStock", minusStock);
+
+  const chartData = Object.keys(sum)
+  .filter(key => key !== "updated_at" && key !== "created_at" && key !== "raccord_100" && key !== "raccord_65" && key !== "raccord_42" && key !== "raccord_25" && key !== "raccord_17" && key !== "detos_450ms" && key !== "detos_500ms" && key !== "etat_stock" && key !== "date_commande" && key !== "id") 
   .map((key) => ({
     category: key,
-    cumulativeSum: cumulativeSum[key],
-    remainingStock: remainingStock[key],
+    initialStock: remainingStock[key],
+    sum2: sum2[key],
   }));
 
   console.log(chartData);
@@ -227,37 +265,37 @@ function GestionStock() {
               <tr>
                 <td>{new Date().toLocaleDateString()}</td>
                 <td></td>
-                <td>{remainingStock.ammonix}</td>
-                <td>{remainingStock.tovex}</td>
-                <td>{remainingStock.detos_450ms}</td>
-                <td>{remainingStock.detos_500ms}</td>
-                <td>{remainingStock.raccord}</td>
-                <td>{remainingStock.lign}</td>
-                <td>{remainingStock.aei}</td>
+                <td>{minusStock.ammonix}</td>
+                <td>{minusStock.tovex}</td>
+                <td>{remainingStock.detos_450ms - sum2.detonateur/2}</td>
+                <td>{remainingStock.detos_500ms  - sum2.detonateur/2}</td>
+                <td>{remainingStock.raccord - sum2.r17 - sum2.r25 - sum2.r42 - sum2.r65 - sum2.r100}</td>
+                <td>{remainingStock.lign - sum2.ligneDeTir}</td>
+                <td>{minusStock.aei}</td>
                 <td>Stock Actuel</td>
               </tr>
               {isLoaded ? (
-                data
+                minusData
                   .slice(-1)
                   .reverse()
                   .map((item, index) => (
                     <tr key={index}>
-                      <td>{item.date_commande}</td>
+                      <td>{item.created_at.split("T")[0]}</td>
                       <td>{item.id}</td>
                       <td>{item.ammonix}</td>
                       <td>{item.tovex}</td>
-                      <td>{item.detos_450ms}</td>
-                      <td>{item.detos_500ms}</td>
+                      <td>{item.detonateur}</td>
+                      <td>{item.detonateur}</td>
                       <td>
-                        {item.raccord_17 +
-                          item.raccord_25 +
-                          item.raccord_42 +
-                          item.raccord_65 +
-                          item.raccord_100}
+                        {item.r17 +
+                          item.r25 +
+                          item.r42 +
+                          item.r65 +
+                          item.r100}
                       </td>
-                      <td>{item.lign}</td>
+                      <td>{item.ligneDeTir}</td>
                       <td>{item.aei}</td>
-                      <td>{item.etat_stock}</td>
+                      <td>Consommation</td>
                     </tr>
                   ))
               ) : (
@@ -462,12 +500,12 @@ function GestionStock() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="remainingStock"
+                dataKey="initialStock"
                 fill="#FF6B6B"
-                name="Stock Actuel"
+                name="Stock Initial"
               />
               <Bar
-                dataKey="cumulativeSum"
+                dataKey="sum2"
                 fill="#6ED18F"
                 name="Consommation"
               />
