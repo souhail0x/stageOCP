@@ -19,6 +19,7 @@ import "../styles/DashboardPage.css";
 
 function DashboardPage() {
   const [data, setData] = useState([]);
+  const [res, setRes] = useState([]);
 
   const COLORS = [
     "#388e3c",
@@ -68,6 +69,11 @@ function DashboardPage() {
           "http://127.0.0.1:8000/api/gestion-stocks"
         );
         setData(response.data);
+
+        const res = await axios.get(
+          "http://127.0.0.1:8000/api/commandes/resultat"
+        );
+        setRes(res.data)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -75,6 +81,8 @@ function DashboardPage() {
 
     fetchData();
   }, []);
+
+  console.log(res);
 
   const calculateSum = () => {
     let sum = {
@@ -86,35 +94,28 @@ function DashboardPage() {
       raccord_42: 0,
       raccord_65: 0,
       raccord_100: 0,
-      detos_450ms: 0,
-      detos_500ms: 0,
       lign: 0,
       raccord: 0,
       aei: 0,
     };
 
-    data.forEach((item) => {
-      sum.lign += parseFloat(item.lign);
+    res.forEach((item) => {
+      sum.lign += parseFloat(item.ligneDeTir);
       sum.ammonix += parseInt(item.ammonix);
       sum.tovex += parseInt(item.tovex);
-      sum.detos +=
-        parseInt(item.detos_450ms) +
-        parseInt(item.detos_500ms);
-      sum.raccord_17 += parseInt(item.raccord_17);
-      sum.raccord_25 += parseInt(item.raccord_25);
-      sum.raccord_42 += parseInt(item.raccord_42);
-      sum.raccord_65 += parseInt(item.raccord_65);
-      sum.raccord_100 += parseInt(item.raccord_100);
-      sum.detos_450ms += parseInt(item.detos_450ms);
-      sum.detos_500ms += parseInt(item.detos_500ms);
+      sum.detos += parseInt(item.detonateur);
+      sum.raccord_17 += parseInt(item.r17);
+      sum.raccord_25 += parseInt(item.r25);
+      sum.raccord_42 += parseInt(item.r42);
+      sum.raccord_65 += parseInt(item.r65);
+      sum.raccord_100 += parseInt(item.r100);
       sum.aei += parseInt(item.aei);
       sum.raccord +=
-        parseInt(item.raccord_17) +
-        parseInt(item.raccord_25) +
-        parseInt(item.raccord_42) +
-        parseInt(item.raccord_65) +
-        parseInt(item.raccord_100);
-
+        parseInt(item.r17) +
+        parseInt(item.r25) +
+        parseInt(item.r42) +
+        parseInt(item.r65) +
+        parseInt(item.r100);
     });
 
     return sum;
@@ -122,22 +123,67 @@ function DashboardPage() {
 
   const sum = calculateSum();
 
+  const calculateSum2 = () => {
+    let sum2 = {
+      ammonix: 0,
+      tovex: 0,
+      detos_450s: 0,
+      detos_500s: 0,
+      detos: 0,
+      raccord_17: 0,
+      raccord_25: 0,
+      raccord_42: 0,
+      raccord_65: 0,
+      raccord_100: 0,
+      lign: 0,
+      raccord: 0,
+      aei: 0,
+    };
+
+    console.log("data",data);
+    data.forEach((item) => {
+      sum2.lign += parseFloat(item.lign);
+      sum2.ammonix += parseInt(item.ammonix);
+      sum2.tovex += parseInt(item.tovex);
+      sum2.detos_450s += parseInt(item.detos_450ms);
+      sum2.detos_500s += parseInt(item.detos_500ms);
+      sum2.detos += parseInt(item.detos_450ms)+ parseInt(item.detos_500ms);
+      sum2.raccord_17 += parseInt(item.raccord_17);
+      sum2.raccord_25 += parseInt(item.raccord_25);
+      sum2.raccord_42 += parseInt(item.raccord_42);
+      sum2.raccord_65 += parseInt(item.raccord_65);
+      sum2.raccord_100 += parseInt(item.raccord_100);
+      sum2.aei += parseInt(item.aei);
+      sum2.raccord +=
+        parseInt(item.raccord_17) +
+        parseInt(item.raccord_25) +
+        parseInt(item.raccord_42) +
+        parseInt(item.raccord_65) +
+        parseInt(item.raccord_100);
+    });
+
+    return sum2;
+  };
+
+  const sum2 = calculateSum2();
+
   const pieData1 = [
-    { name: "Ammonix", value: sum.ammonix },
-    { name: "Tovex", value: sum.tovex },
+    { name: "Consommation Tovex (kg)", value: sum.tovex },
+    { name: "Consommation Ammonix (kg)", value: sum.ammonix },
+    { name: "Ligne de tir (m)", value: sum.lign },
   ];
 
   const pieData2 = [
-    { name: "Raccord_17", value: sum.raccord_17 },
-    { name: "Raccord_25", value: sum.raccord_25 },
-    { name: "Raccord_42", value: sum.raccord_42 },
-    { name: "Raccord_65", value: sum.raccord_65 },
-    { name: "Raccord_100", value: sum.raccord_100 },
-    { name: "Detonateur_450", value: sum.detos_450ms },
-    { name: "Detonateur_500", value: sum.detos_500ms },
+    { name: "Raccord 17", value: sum.raccord_17 },
+    { name: "Raccord 25", value: sum.raccord_25 },
+    { name: "Raccord 42", value: sum.raccord_42 },
+    { name: "Raccord 65", value: sum.raccord_65 },
+    { name: "Raccord 100", value: sum.raccord_100 },
+    { name: "Detonateurs", value: sum.detos },
     { name: "Aei", value: sum.aei },
-    { name: "Ligne_tir", value: sum.lign },
   ];
+
+  console.log("sum 2 ", sum2);
 
   return (
     <main className="main-cont">
@@ -160,7 +206,7 @@ function DashboardPage() {
           <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>3282900 kg</h1>
+          <h1>{ 3282900 + sum2.ammonix } kg</h1>
           <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
           <div className="card-inner">
             <h3>Consommation</h3>
@@ -173,7 +219,7 @@ function DashboardPage() {
           <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>45500 kg</h1>
+          <h1>{ sum2.tovex + 45500} kg</h1>
           <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
           <div className="card-inner">
             <h3>Consommation</h3>
@@ -186,7 +232,7 @@ function DashboardPage() {
         <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>87056 U</h1>
+          <h1>{87056+ sum2.detos} U</h1>
           <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
           <div className="card-inner">
             <h3>Consommation</h3>
@@ -199,7 +245,7 @@ function DashboardPage() {
           <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>63608 U</h1>
+          <h1>{63608+ sum2.raccord} U</h1>
           <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
           <div className="card-inner">
             <h3>Consommation</h3>
@@ -212,7 +258,7 @@ function DashboardPage() {
           <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>142000 m</h1>
+          <h1>{142000+ sum2.lign} m</h1>
           <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
           <div className="card-inner">
             <h3>Consommation</h3>
@@ -225,7 +271,7 @@ function DashboardPage() {
           <div className="card-inner">
             <h3>Stock Initial</h3>
           </div>
-          <h1>292</h1>
+          <h1>{292+ sum2.aei}</h1>
           <hr style={{ marginTop: "10px", marginBottom: "10px" }} />
           <div className="card-inner">
             <h3>Consommation</h3>
@@ -238,8 +284,9 @@ function DashboardPage() {
       <div className="charts">
         <ResponsiveContainer width="100%" height={300} className={"chart1"} >
           <BarChart
-            data={data}
+            data={[sum2 , sum]} 
             margin={{
+
               top: 5,
               right: 30,
               left: 20,
@@ -247,14 +294,16 @@ function DashboardPage() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="id" />
+            <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Legend />
             <Bar dataKey="ammonix" name="Ammonix" fill="#8884d8" />
             <Bar dataKey="tovex" name="Tovex" fill="#82ca9d" />
-            <Bar dataKey="detos_500ms" name="Detos" fill="#9c27b0" />
-            <Bar dataKey="raccord_17" name="Raccord" fill="#43a047" />
+            <Bar dataKey="detos" name="Detos" fill="#9c27b0" />
+            <Bar dataKey="raccord" name="Raccord" fill="#43a047" />
+            <Bar datakey="lign" name="Ligne de tir" fill="#ffc107" />
+            <Bar dataKey="aei" name="Aei" fill="#f44336" />
           </BarChart>
         </ResponsiveContainer>
 
@@ -264,7 +313,7 @@ function DashboardPage() {
               {pieData1.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={index === 0 ? "#8884d8" : "#82ca9d"}
+                  fill={COLORS[index % COLORS.length]}
                 />
               ))}
             </Pie>
@@ -274,7 +323,7 @@ function DashboardPage() {
 
         <ResponsiveContainer width="100%" height={300} className={"chart1"} >
           <LineChart
-            data={data}
+            data={[sum2, sum]} 
             margin={{
               top: 5,
               right: 30,
@@ -283,23 +332,16 @@ function DashboardPage() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="id" />
+            <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line
-              type="tovex"
-              dataKey="tovex"
-              stroke="#6ED18F"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="detos" dataKey="detos_450ms" stroke="#AF98C5" />
-            <Line type="detos" dataKey="detos_500ms" stroke="#56ffc6" />
-            <Line type="raccord" dataKey="raccord_17" stroke="#9576EB" />
-            <Line type="raccord" dataKey="raccord_25" stroke="#9C27B0" />
-            <Line type="raccord" dataKey="raccord_42" stroke="#b7b5f4" />
-            <Line type="raccord" dataKey="raccord_65" stroke="#94e05e" />
-            <Line type="raccord" dataKey="raccord_100" stroke="#d975ea" />
+            <Line type="ammonix" dataKey="ammonix" stroke="#8884d8" activeDot={{ r: 8 }} />
+            <Line type="tovex" dataKey="tovex" stroke="#6ED18F" />
+            <Line type="detos" dataKey="detos" stroke="#AF98C5" />
+            <Line type="raccord" dataKey="raccord" stroke="#9576EB" />
+            <Line type="lign" dataKey="lign" stroke="#FF6B6B" />
+            <Line type="aei" dataKey="aei" stroke="#FFC107" />
           </LineChart>
         </ResponsiveContainer>
 
@@ -317,7 +359,7 @@ function DashboardPage() {
             >
               {pieData2.map((entry, index) => (
                 <Cell
-                  key={`cell-${index}`}
+                  key={`cell-${index}`} 
                   fill={COLORS[index % COLORS.length]}
                 />
               ))}
