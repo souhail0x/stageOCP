@@ -84,4 +84,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 // Archive
-Route::get('/archive', [ArchiveController::class, 'join']);
+Route::get('/archive', [ArchiveController::class, 'index']);

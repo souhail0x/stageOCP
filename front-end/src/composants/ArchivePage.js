@@ -63,6 +63,8 @@ function ArchivePage() {
     );
     setFilteredData(filtered);
   };
+  
+  console.log(archiveData);
 
   return (
     <div className="archiveContainer">
@@ -171,7 +173,7 @@ const renderRow = (item, index) => (
     <td>{item.resultat ? item.resultat.r42 : ""}</td>
     <td>{item.resultat ? item.resultat.r65 : ""}</td>
     <td>{item.resultat ? item.resultat.r100 : ""}</td>
-    <td>{item.resultat ? item.resultat.detos_450ms : "0"}</td>
+    <td>{item.resultat ? item.resultat.detos_450s : "0"}</td>
     <td>{item.resultat ? item.resultat.detonateur : ""}</td>
     <td>{item.resultat ? item.resultat.tovex : ""}</td>
     <td>{item.resultat ? item.resultat.ligneDeTir : ""}</td>

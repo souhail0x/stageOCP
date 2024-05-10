@@ -111,7 +111,6 @@ function CommandPage2() {
 
   const handleAddConfirm = () => {
     setIsAddPopupOpen(false);
-    handleAdd();
     if ( handleAdd()) {
       addCalcules();
     }
@@ -586,7 +585,8 @@ function CommandPage2() {
                     id="foration"
                     name="foration"
                     value={formData.foration}
-                    onChange={(e) => { chooseMachine(e) }}
+                    // onChange={(e) => { chooseMachine(e) }}
+                    onChange={ handleChange }
                   >
                     <option value="">select Foration</option>
                     <option value="PV1">PV1</option>
@@ -727,7 +727,7 @@ function CommandPage2() {
                   >
                     <option value="">select zone de tir </option>
                     <option value="LBRAYKIYIN">LBRAYKIYIN</option>
-                    <option value="LBRHIRA">LBRHIRA</option>
+                    <option value="LBRAHLA">LBRAHLA</option>
                   </select>
                 </div>
               </td>

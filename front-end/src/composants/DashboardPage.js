@@ -82,8 +82,6 @@ function DashboardPage() {
     fetchData();
   }, []);
 
-  console.log(res);
-
   const calculateSum = () => {
     let sum = {
       ammonix: 0,
@@ -140,7 +138,6 @@ function DashboardPage() {
       aei: 0,
     };
 
-    console.log("data",data);
     data.forEach((item) => {
       sum2.lign += parseFloat(item.lign);
       sum2.ammonix += parseInt(item.ammonix);
@@ -167,6 +164,16 @@ function DashboardPage() {
 
   const sum2 = calculateSum2();
 
+  const initData = {
+    ammonix: 3282900,
+    tovex: 45500,
+    detos: 87056,
+    raccord: 63608,
+    lign: 142000,
+    aei: 292,
+  };
+
+  console.log("init :",sum2);
   const pieData1 = [
     { name: "Consommation Tovex (kg)", value: sum.tovex },
     { name: "Consommation Ammonix (kg)", value: sum.ammonix },
@@ -182,8 +189,6 @@ function DashboardPage() {
     { name: "Detonateurs", value: sum.detos },
     { name: "Aei", value: sum.aei },
   ];
-
-  console.log("sum 2 ", sum2);
 
   return (
     <main className="main-cont">
@@ -284,9 +289,8 @@ function DashboardPage() {
       <div className="charts">
         <ResponsiveContainer width="100%" height={300} className={"chart1"} >
           <BarChart
-            data={[sum2 , sum]} 
+            data={[initData , sum]} 
             margin={{
-
               top: 5,
               right: 30,
               left: 20,
@@ -323,7 +327,7 @@ function DashboardPage() {
 
         <ResponsiveContainer width="100%" height={300} className={"chart1"} >
           <LineChart
-            data={[sum2, sum]} 
+            data={[initData, sum]} 
             margin={{
               top: 5,
               right: 30,

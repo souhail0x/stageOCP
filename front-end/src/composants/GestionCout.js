@@ -174,7 +174,7 @@ function GestionStock() {
 
   // Utiliser reduce pour effectuer la somme
   const remainingStock = Object.keys(sum).reduce((acc, key) => {
-    acc[key] = initialStock[key] + sum[key];
+    acc[key] = (initialStock[key] + sum[key]);
     return acc;
   }, {});
 
@@ -191,7 +191,7 @@ function GestionStock() {
   }, {});
 
   const minusStock = Object.keys(sum2).reduce((acc, key) => {
-    acc[key] = remainingStock[key] - sum2[key];
+    acc[key] = (remainingStock[key] - sum2[key])/2 ;
     return acc;
   }, {});
 
@@ -201,10 +201,10 @@ function GestionStock() {
   console.log("minusStock", minusStock);
 
   const chartData = Object.keys(sum)
-  .filter(key => key !== "updated_at" && key !== "created_at" && key !== "raccord_100" && key !== "raccord_65" && key !== "raccord_42" && key !== "raccord_25" && key !== "raccord_17" && key !== "detos_450ms" && key !== "detos_500ms" && key !== "etat_stock" && key !== "date_commande" && key !== "id") 
+  .filter(key => key !== "updated_at" && key !== "created_at" && key !== "raccord100" && key !== "raccord65" && key !== "raccord42" && key !== "raccord25" && key !== "raccord17" && key !== "detos450ms" && key !== "detos500ms" && key !== "etatCout" && key !== "dateCommande" && key !== "id_cout" && key !== "id" ) 
   .map((key) => ({
     category: key,
-    initialStock: remainingStock[key],
+    initialStock: initialStock[key],
     sum2: sum2[key],
   }));
 
@@ -243,8 +243,7 @@ function GestionStock() {
                 <th>ID</th>
                 <th>Ammonix</th>
                 <th>Tovex</th>
-                <th>Detonateur 450</th>
-                <th>Detonateur 500</th>
+                <th>Detonateur</th>
                 <th>Raccord</th>
                 <th>Ligne</th>
                 <th>AEI</th>
@@ -254,13 +253,12 @@ function GestionStock() {
             <tbody>
               <tr>
                 <td>{new Date().toLocaleDateString()}</td>
-                <td></td>
+                <td>-</td>
                 <td>{remainingStock.ammonix - sum2.prix_ammonix}</td>
                 <td>{remainingStock.tovex - sum2.prix_tovex}</td>
-                <td>{remainingStock.detos_450ms - sum2.prix_detonateur/2 }</td>
-                <td>{remainingStock.detos_500ms - sum2.prix_detonateur/2 }</td>
+                <td>{remainingStock.detos_450ms + remainingStock.detos_500ms - sum2.prix_detonateur }</td>
                 <td>{remainingStock.raccord - sum2.prix_raccord}</td>
-                <td>{remainingStock.lign - sum2.lingeTir }</td>
+                <td>{remainingStock.lign - sum2.ligneDeTir }</td>
                 <td>{remainingStock.aei - sum2.prix_aei}</td>
                 <td>Cout Actuel</td>
               </tr>
@@ -274,7 +272,6 @@ function GestionStock() {
                       <td>{item.id}</td>
                       <td>{item.prix_ammonix}</td>
                       <td>{item.prix_tovex}</td>
-                      <td>{item.prix_detonateur}</td>
                       <td>{item.prix_detonateur}</td>
                       <td>{item.prix_raccord}</td>
                       <td>{item.prix_lingeTir}</td>
@@ -307,7 +304,7 @@ function GestionStock() {
                 />
               </div>
               <div className="formGroup">
-                <label>Num_Stock :</label>
+                <label>Num_Cout :</label>
                 <input
                   type="number"
                   name="id_cout"

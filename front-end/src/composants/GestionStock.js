@@ -77,6 +77,15 @@ function GestionStock() {
     }
   };
 
+  const initData = {
+    ammonix: 3282900,
+    tovex: 45500,
+    detos: 87056,
+    raccord: 63608,
+    lign: 142000,
+    aei: 292,
+  };
+  
   console.log("data", data);
   console.log("minusData", minusData);
 
@@ -200,7 +209,7 @@ function GestionStock() {
   }, {});
 
   const minusStock = Object.keys(sum2).reduce((acc, key) => {
-    acc[key] = remainingStock[key] - sum2[key];
+    acc[key] = ((remainingStock[key] - sum2[key]) /2 ); 
     return acc;
   }, {});
 
@@ -213,7 +222,7 @@ function GestionStock() {
   .filter(key => key !== "updated_at" && key !== "created_at" && key !== "raccord_100" && key !== "raccord_65" && key !== "raccord_42" && key !== "raccord_25" && key !== "raccord_17" && key !== "detos_450ms" && key !== "detos_500ms" && key !== "etat_stock" && key !== "date_commande" && key !== "id") 
   .map((key) => ({
     category: key,
-    initialStock: remainingStock[key],
+    initialStock: initialStock[key],
     sum2: sum2[key],
   }));
 
@@ -253,8 +262,7 @@ function GestionStock() {
                 <th>ID</th>
                 <th>Ammonix</th>
                 <th>Tovex</th>
-                <th>Detonateur 450</th>
-                <th>Detonateur 500</th>
+                <th>Detonateur</th>
                 <th>Raccord</th>
                 <th>Ligne</th>
                 <th>AEI</th>
@@ -264,11 +272,10 @@ function GestionStock() {
             <tbody>
               <tr>
                 <td>{new Date().toLocaleDateString()}</td>
-                <td></td>
-                <td>{minusStock.ammonix}</td>
+                <td>-</td>
+                <td>{parseInt(minusStock.ammonix)}</td>
                 <td>{minusStock.tovex}</td>
-                <td>{remainingStock.detos_450ms - sum2.detonateur/2}</td>
-                <td>{remainingStock.detos_500ms  - sum2.detonateur/2}</td>
+                <td>{remainingStock.detos_450ms - sum2.detonateur + remainingStock.detos_500ms }</td>
                 <td>{remainingStock.raccord - sum2.r17 - sum2.r25 - sum2.r42 - sum2.r65 - sum2.r100}</td>
                 <td>{remainingStock.lign - sum2.ligneDeTir}</td>
                 <td>{minusStock.aei}</td>
@@ -284,7 +291,6 @@ function GestionStock() {
                       <td>{item.id}</td>
                       <td>{item.ammonix}</td>
                       <td>{item.tovex}</td>
-                      <td>{item.detonateur}</td>
                       <td>{item.detonateur}</td>
                       <td>
                         {item.r17 +

@@ -13,8 +13,10 @@ class ArchiveController extends Controller
     public function index()
     {
         // Récupérer les données groupées par ID
-        $data = Commande::with('sautage', 'resultat')->get();
-
+        $data = Commande::with('sautage', 'resultat')
+        ->join('sautages', 'commandes.Num_Commande', '=', 'sautages.numero_commande')
+        ->get();
+    
         // Organiser les données par ID
         $groupedData = [];
         foreach ($data as $item) {
@@ -26,14 +28,5 @@ class ArchiveController extends Controller
         }
 
         return response()->json($groupedData);
-    }
-    public function join(){
-        $data = Sautage::join('commandes','sautages.numero_commande','=','commandes.Num_Commande')->get();
-        if(!$data){
-            return response()->json(['error'=>'no data has been sended']);
-        }
-        return response()->json(['message'=>$data]);
-    
-    
     }
 }
