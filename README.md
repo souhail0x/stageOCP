@@ -1,6 +1,6 @@
 # README
 
-## Chapitre II : Présentation du Projet
+## Présentation du Projet
 
 ### Gestion des Données pour Tir et Sautage
 
